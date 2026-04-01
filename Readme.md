@@ -1,22 +1,17 @@
-# Ordenador de Registros de Deportistas
+# Proyecto 1 — Algoritmos iterativos
+#### Andres Barbosa, Milton Hernández, Iván Gallardo.
 
-Este es un programa de línea de comandos escrito en C que permite ordenar un registro de deportistas (estructuras) basándose en diferentes criterios y direcciones (ascendente o descendente). Utiliza la función `qsort` de la biblioteca estándar de C y punteros a funciones para lograr una ordenación dinámica y eficiente.
+El presente repositorio tiene como objetivo la comparación y comprobación de los órdenes de complejidad de distintos algoritmos de ordenamiento y búsqueda, mediante su implementación y evaluación sobre datos artificialmente generados de deportistas.
 
-## Características
+El sistema se desarrolla en lenguaje C y considera la generación de registros con atributos como ID, nombre, equipo, puntaje y cantidad de competencias, los cuales servirán como base para el análisis teórico y experimental del comportamiento de los algoritmos en distintos tamaños de entrada.
 
-* Ordenamiento dinámico desde la consola mediante argumentos (`argc` y `argv`).
-* Soporte para múltiples tipos de datos:
-    * Enteros (`int`): Para IDs y cantidad de competencias.
-    * Cadenas de texto (`char[]`): Para ordenamiento alfabético de nombres y equipos.
-    * Punto flotante (`double`): Para ordenamiento preciso de puntajes.
-* Implementación escalable: Fácil de extender para nuevos campos de la estructura `Deportista`.
+En esta primera etapa, el repositorio está orientado a la construcción de la base del sistema, incluyendo la generación y almacenamiento de datos. La explicación detallada de los algoritmos de ordenamiento, búsqueda y su implementación será incorporada progresivamente a medida que el proyecto avance.
 
-## Requisitos previos
+## Objetivo general
 
-Para compilar y ejecutar este proyecto, necesitas tener instalado un compilador de C, como **GCC**, y una terminal funcional.
+Desarrollar un sistema que permita generar, almacenar, ordenar y buscar información de deportistas, con el fin de analizar empíricamente y contrastar teóricamente el rendimiento de distintos algoritmos clásicos de ordenamiento y búsqueda.
 
-## Instalación y Compilación
 
-1. Clona este repositorio en tu entorno local:
-   ```bash
-   git clone [https://github.com/AndrewhiteCode/ordenador-deportistas.git](https://github.com/AndrewhiteCode/ordenador-deportistas.git)
+## Nota
+
+Este README corresponde a una versión inicial del proyecto. La documentación será ampliada conforme se implementen las funcionalidades y algoritmos requeridos.
