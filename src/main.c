@@ -210,9 +210,9 @@ int main() {
             int result;
 
             printf(DARK_GREEN "\nChoose an array:\n" LIGHT_GREEN);
-            printf("1) Best case\n");
-            printf("2) Worst case\n");
-            printf("3) Shuffled case\n");
+            printf("1) Normal Array\n");
+            printf("2) Inverse Array\n");
+            printf("3) Shuffled Array\n");
             printf(DARK_GREEN "Option: ");
             scanf("%d", &array_option);
 
