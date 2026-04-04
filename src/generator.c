@@ -67,43 +67,43 @@ void generate_csv(int n)
 	fprintf(csv, "ID,NAME,TEAM,SCORE,COMPETITIONS,POTATOE\n");
 
 	printf(
-        DARK_GRAY "|" RESET " "
-        LIGHT_GRAY "%4s" RESET " "
-        DARK_GRAY "|" RESET " "
-        DARK_YELLOW "%10s" RESET " "
-        DARK_GRAY "|" RESET " "
-        DARK_BLUE "%7s" RESET " "
-        DARK_GRAY "|" RESET " "
-        DARK_GREEN "%4s" RESET " "
-        DARK_GRAY "|" RESET " "
-        PURPLE "%3s" RESET " "
-        DARK_GRAY "|" RESET "\n",
-        "ID", "NAME", "TEAM", "SCORE", "COMPS"
-    );
+		DARK_GRAY "|" RESET " "
+		LIGHT_GRAY "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_YELLOW "%10s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_BLUE "%7s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GREEN "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET "\n",
+		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+	);
 
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &player);
 		fprintf(csv, "%d,%s,%s,%.1f,%d,%s\n", player.id, player.name, player.team, player.score, player.competitions, player.potatoe ? "true" : "false");
 
 		printf(
-    	    DARK_GRAY "|" RESET " "
-    	    WHITE "%4d" RESET " "
-    	    DARK_GRAY "|" RESET " "
-    	    YELLOW "%10s" RESET " "
-    	    DARK_GRAY "|" RESET " "
-    	    LIGHT_BLUE "%7s" RESET " "
-    	    DARK_GRAY "|" RESET " "
-    	    LIGHT_GREEN "%5.1f" RESET " "
-    	    DARK_GRAY "|" RESET " "
-    	    MAGENTA "%5d" RESET " "
-    	    DARK_GRAY "|" RESET "\n",
-    	    player.id, player.name, player.team, player.score, player.competitions
-    	);
+			DARK_GRAY "|" RESET " "
+			WHITE "%4d" RESET " "
+			DARK_GRAY "|" RESET " "
+			YELLOW "%10s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_BLUE "%7s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_GREEN "%5.1f" RESET " "
+			DARK_GRAY "|" RESET " "
+			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET "\n",
+			player.id, player.name, player.team, player.score, player.competitions
+		);
 
 		}
 
 	fclose(csv);
-	printf("\nDatos guardados en players.csv\n");
+	printf(BG_GREEN"\nData generated and saved to players.csv\n");
 }
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

@@ -15,16 +15,16 @@
  * @return int r Indice de la busqueda, retorna n si no se encuentra
  */
 int linear_search(int V[], int n, int x) {
-    int r = n;
+	int r = n;
 
-    for (int i = 0; i < n; i++) {
-        if (V[i] == x) {
-            r = i;
-            break;
-        }
-    }
+	for (int i = 0; i < n; i++) {
+		if (V[i] == x) {
+			r = i;
+			break;
+		}
+	}
 
-    return r;
+	return r;
 }
 
 /**
@@ -37,17 +37,17 @@ int linear_search(int V[], int n, int x) {
  * @return int m Indice de la busqueda, retorna -1 si no se encuentra
  */
 int binary_search(int V[], int beg, int end, int x) {
-    while (beg <= end) {
-        int m = beg + (end - beg) / 2;
+	while (beg <= end) {
+		int m = beg + (end - beg) / 2;
 
-        if (V[m] == x) {
-            return m;
-        } else if (V[m] < x) {
-            beg = m + 1;
-        } else {
-            end = m - 1;
-        }
-    }
+		if (V[m] == x) {
+			return m;
+		} else if (V[m] < x) {
+			beg = m + 1;
+		} else {
+			end = m - 1;
+		}
+	}
 
-    return -1;
+	return -1;
 }
