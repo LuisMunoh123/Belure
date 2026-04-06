@@ -1,6 +1,6 @@
 /**
  * @file errors.c
- * @author Andres Barbosa, Milton Hernández, Iván Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
  * @brief Funciones para manejo de errores
  */
 #include "errors.h"

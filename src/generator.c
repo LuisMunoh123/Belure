@@ -1,12 +1,26 @@
 /**
  * @file generator.c
- * @author Andres Barbosa, Milton Hernández, Ivan Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
  * @brief Funciones de generacion de datos y archivo csv
  */
 
 #include "generator.h"
 
 static char *teams[] = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Theta", "Lambda", "Pi", "Tau"};
+
+/**
+ * @brief Funcion para desordenar los jugadores (Fisher-Yates)
+ * 
+ * @param players Arreglo de jugadores
+ * @param n Tamanho del arreglo
+ */
+static void shuffle_players(Player players[], int n)
+{
+	for (int i = n - 1; i > 0; i--) {
+		int j = rand() % (i + 1);
+		swap_player(&players[i], &players[j]);
+	}
+}
 
 /**
  * @brief Genera una letra aleatoria (Minus y mayus).
@@ -27,7 +41,7 @@ static char random_letter()
  * @brief Genera un jugador con campos ID, nombre, equipo, puntaje y cantidad de competencias.
  * 
  * @param id valor unico de identificacion
- * @param player puntero a la estructura Player donde se almacenarán los datos generados
+ * @param player puntero a la estructura Player donde se almacenaran los datos generados
  */
 static void generate_player(int id, Player *player) 
 {
@@ -46,7 +60,7 @@ static void generate_player(int id, Player *player)
 
 	// Aqui no hay nada que ver agente...
 	player->potatoe = rand() % 2 ? true : false;
-	// Usted no vio nada aquí agente...
+	// Usted no vio nada aqui agente...
 }
 
 /**
@@ -58,13 +72,37 @@ static void generate_player(int id, Player *player)
  */
 int generate_csv(int n) 
 {
-	Player player;
 	FILE *csv = fopen("build/db/players.csv", "w");
 
 	if (csv == NULL) {
 		print_error(101, "build/db/players.csv", NULL);
 		return 101;
 	}
+
+	Player *players;
+
+	// Reservamos memoria para los jugadores
+	size_t size = n * sizeof(Player);
+	char *size_string[10] = sprintf("%.3u GB", size / 1024 / 1024 / 1024);
+	if ((players = malloc(n * sizeof(Player))) == NULL) {
+		fclose(csv);
+		print_error(102, size_string, NULL);
+		return 102;
+	}
+	printf("%s De memoria reservados\n", size_string);
+	system("pause");
+
+	if (players == NULL) {
+		fclose(csv);
+		print_error(102, "malloc", NULL);
+		return 102;
+	}
+
+	for (int i = 0; i < n; i++) {
+		generate_player(i + 1, &players[i]);
+	}
+
+	shuffle_players(players, n);
 
 	fprintf(csv, "ID,NAME,TEAM,SCORE,COMPETITIONS,POTATOE\n");
 
@@ -84,8 +122,14 @@ int generate_csv(int n)
 	);
 
 	for (int i = 0; i < n; i++) {
-		generate_player(i + 1, &player);
-		fprintf(csv, "%d,%s,%s,%.1f,%d,%s\n", player.id, player.name, player.team, player.score, player.competitions, player.potatoe ? "true" : "false");
+		fprintf(csv, "%d,%s,%s,%.1f,%d,%s\n",
+			players[i].id,
+			players[i].name,
+			players[i].team,
+			players[i].score,
+			players[i].competitions,
+			players[i].potatoe ? "true" : "false"
+		);
 
 		printf(
 			DARK_GRAY "|" RESET " "
@@ -99,13 +143,19 @@ int generate_csv(int n)
 			DARK_GRAY "|" RESET " "
 			MAGENTA "%5d" RESET " "
 			DARK_GRAY "|" RESET "\n",
-			player.id, player.name, player.team, player.score, player.competitions
+			players[i].id,
+			players[i].name,
+			players[i].team,
+			players[i].score,
+			players[i].competitions
 		);
+	}
 
-		}
-
+	free(players);
 	fclose(csv);
-	printf(BG_GREEN"\nData generated and saved to players.csv"RESET"\n");
+	printf("\n" BG_GREEN "Data generated and saved to players.csv" RESET "\n");
+
+	return 0;
 }
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

@@ -1,6 +1,6 @@
 /**
  * @file sorting.c
- * @author Andres Barbosa, Milton Hernández, Ivan Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
  * @brief Funciones de ordenamiento
  */
 

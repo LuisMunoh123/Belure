@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @author Andres Barbosa, Milton Hernández, Iván Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
  * @brief Punto de inicio del programa y pruebas de ordenamiento, generacion y busqueda.
  */
 #include <stdio.h>
@@ -25,7 +25,7 @@ int main() {
 	// Arreglos
 	int V[DEBUG] = {7,5,1,9,3,8,4,2,6,10,20,18,12,14,16,11,19,17,15,13};
 
-	// Variables para la generación de datos (Opcion 1)
+	// Variables para la generacion de datos (Opcion 1)
 	int n; 
 
 	// Variables para ordenamiento (Opcion 2)
@@ -112,7 +112,7 @@ int main() {
 			}
 
 			else if (search_option == 2) {
-				insertion_sort(V, DEBUG); // Ordenamos con el arreglo previo a la búsqueda
+				insertion_sort(V, DEBUG); // Ordenamos con el arreglo previo a la busqueda
 
 				printf(LIGHT_GREEN "\nOrdered array used for binary search:\n");
 				print_array(V, DEBUG);

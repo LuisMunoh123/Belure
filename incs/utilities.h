@@ -1,6 +1,6 @@
 /**
  * @file utilities.h
- * @author Andres Barbosa, Milton Hernández, Iván Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
  * @brief Utilidades micelaneas
  */
 #ifndef UTILITIES_H
