@@ -35,6 +35,9 @@ void print_error(int num, char *target, char *obs)
     case 101:
         printf("No se pudo abrir el archivo %s\n", target);
         break;
+    case 102:
+        printf("No se pudieron reservar %s de memoria\n", target);
+        break;
     // Errores Fatales
     // Warnings
     // Default

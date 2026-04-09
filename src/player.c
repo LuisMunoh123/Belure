@@ -107,32 +107,65 @@ int compare_score(Player *p1, Player *p2) {
 int compare_competitions(Player *p1, Player *p2) {
     return p1->competitions - p2->competitions;
 }
-/**
- * @brief Imprime un arreglo de jugadores en consola.
- * 
- * @param players Arreglo de jugadores a imprimir.
- * @param n Tamanio del arreglo.
- */
+
+
 /**
  * @brief Imprime el arreglo de jugadores en formato de tabla
  * * @param players Arreglo de jugadores
  * @param n Tamanho del arreglo
  */
-void print_player_Array(Player *players, int n) {
+void print_player_array(Player *players, int n) {
     printf("\n");
-    // Imprimir cabecera de la tabla (Sin Potatoe)
-    printf("%-5s | %-10s | %-10s | %-6s | %-12s\n", 
-           "ID", "Name", "Team", "Score", "Competitions");
-    printf("-------------------------------------------------------\n");
-    
-    // Imprimir cada jugador (Sin Potatoe)
-    for (int i = 0; i < n; i++) {
-        printf("%-5d | %-10s | %-10s | %-6.1f | %-12d\n",
-               players[i].id,
-               players[i].name,
-               (players[i].team != NULL) ? players[i].team : "N/A",
-               players[i].score,
-               players[i].competitions);
-    }
-    printf("\n");
+    // Imprimimos cabecera
+	printf(
+		DARK_GRAY "|" RESET " "
+		LIGHT_GRAY "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_YELLOW "%10s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_BLUE "%7s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GREEN "%4s" RESET " "
+		DARK_GRAY "|" RESET " "
+		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET "\n",
+		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+	);
+
+	// Imprimimos los datos
+	for (int i = 0; i < n; i++) {
+		printf(
+			DARK_GRAY "|" RESET " "
+			WHITE "%4d" RESET " "
+			DARK_GRAY "|" RESET " "
+			YELLOW "%10s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_BLUE "%7s" RESET " "
+			DARK_GRAY "|" RESET " "
+			LIGHT_GREEN "%5.1f" RESET " "
+			DARK_GRAY "|" RESET " "
+			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET "\n",
+			players[i].id,
+			players[i].name,
+			players[i].team,
+			players[i].score,
+			players[i].competitions
+		);
+	}
+    printf(RESET"\n");
+}
+
+/**
+ * @brief Imprime un jugador por consola.
+ * 
+ * @param player Puntero al jugador a imprimir.
+ */
+void print_player(Player *player) {
+	printf(LIGHT_GRAY"ID: "DARK_GRAY"%d\n", player->id);
+	printf(DARK_YELLOW"Name: "YELLOW"%s\n", player->name);
+	printf(DARK_BLUE"Team: "LIGHT_BLUE"%s\n", player->team);
+	printf(DARK_GREEN"Score: "LIGHT_GREEN"%.1f\n", player->score);
+	printf(PURPLE"Competitions: "MAGENTA"%d\n", player->competitions);
+	printf(RESET"\n");
 }

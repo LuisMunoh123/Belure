@@ -69,7 +69,7 @@ int main() {
 
 		else if (option == 2) { // Opcion 2: Ordenar arreglo
 			printf(LIGHT_BLUE "\nOriginal array:\n" RESET);
-			print_player_Array(players, DEBUG); 
+			print_player_array(players, DEBUG); 
 
 			printf(DARK_BLUE "\nChoose a sorting algorithm:\n" LIGHT_BLUE);
 			printf("1) Swap Sort\n");
@@ -116,13 +116,13 @@ int main() {
 			}
 
 			printf(LIGHT_BLUE "\nSorted array (Ascending):\n" RESET);
-			print_player_Array(players, DEBUG);
+			print_player_array(players, DEBUG);
 		}
 
 		else if (option == 3) { // Opcion 3: Buscar valor
 			// Quitamos el RESET de esta linea para que la tabla herede el color
 			printf(LIGHT_GREEN"\nCurrent array:\n");
-			print_player_Array(players, DEBUG);
+			print_player_array(players, DEBUG);
 			printf(RESET); // Reseteamos despues de la tabla
 
 			printf(DARK_GREEN"\nChoose a searching algorithm:\n"LIGHT_GREEN);
@@ -141,40 +141,26 @@ int main() {
 					result = linear_search(players, DEBUG, &target, compare_id);
 
 					if (result == DEBUG) {
-						printf(BG_RED "Player with ID %d was not found." RESET "\n", search_id);
+						printf(BG_RED "Player with ID %d was not found." RESET "\n\n", search_id);
 					} else {
-						// RESET antes del \n para evitar que el fondo verde manche toda la pantalla
-						printf(BG_GREEN "Player found at index %d via Linear Search:" RESET "\n", result+1);
-						
-						// Imprimimos la cabecera sin Potatoe y forzando color LIGHT_GREEN
-						printf(LIGHT_GREEN "%-5s | %-10s | %-10s | %-6s | %-12s\n", "ID", "Name", "Team", "Score", "Competitions");
-						printf("-------------------------------------------------------\n");
-						printf("%-5d | %-10s | %-10s | %-6.1f | %-12d\n" RESET,
-							players[result].id, players[result].name, players[result].team,
-							players[result].score, players[result].competitions);
+						printf(BG_GREEN "Player found at index %d via Linear Search:" RESET "\n\n", result+1);
+						print_player(&players[result]);
 					}
 				} 
 				else if (search_option == 2) {
 					insertion_sort(players, DEBUG, compare_id);
 
 					printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:\n");
-					print_player_Array(players, DEBUG);
+					print_player_array(players, DEBUG);
 					printf(RESET); // Reseteamos despues de la tabla
 
 					result = binary_search(players, 0, DEBUG - 1, &target);
 
 					if (result == -1) {
-						printf(BG_RED "Player with ID %d was not found." RESET "\n", search_id);
+						printf(BG_RED "Player with ID %d was not found." RESET "\n\n", search_id);
 					} else {
-						// RESET antes del \n para evitar que el fondo verde manche toda la pantalla
-						printf(BG_GREEN "Player found at index %d via Binary Search:" RESET "\n", result+1);
-						
-						// Imprimimos la cabecera sin Potatoe y forzando color LIGHT_GREEN
-						printf(LIGHT_GREEN "%-5s | %-10s | %-10s | %-6s | %-12s\n", "ID", "Name", "Team", "Score", "Competitions");
-						printf("-------------------------------------------------------\n");
-						printf("%-5d | %-10s | %-10s | %-6.1f | %-12d\n" RESET,
-							players[result].id, players[result].name, players[result].team,
-							players[result].score, players[result].competitions);
+						printf(BG_GREEN "Player found at index %d via Binary Search:" RESET "\n\n", result+1);
+						print_player(&players[result]);
 					}
 				}
 			}

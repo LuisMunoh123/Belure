@@ -105,23 +105,10 @@ int generate_csv(int n)
 
 	shuffle_players(players, n);
 
+	// Imprimimos cabecera en el archivo csv
+	fprintf(csv, "%d\n", n);
 	fprintf(csv, "ID,NAME,TEAM,SCORE,COMPETITIONS,POTATOE\n");
-
-	printf(
-		DARK_GRAY "|" RESET " "
-		LIGHT_GRAY "%4s" RESET " "
-		DARK_GRAY "|" RESET " "
-		DARK_YELLOW "%10s" RESET " "
-		DARK_GRAY "|" RESET " "
-		DARK_BLUE "%7s" RESET " "
-		DARK_GRAY "|" RESET " "
-		DARK_GREEN "%4s" RESET " "
-		DARK_GRAY "|" RESET " "
-		PURPLE "%3s" RESET " "
-		DARK_GRAY "|" RESET "\n",
-		"ID", "NAME", "TEAM", "SCORE", "COMPS"
-	);
-
+	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
 		fprintf(csv, "%d,%s,%s,%.1f,%d,%s\n",
 			players[i].id,
@@ -131,26 +118,10 @@ int generate_csv(int n)
 			players[i].competitions,
 			players[i].potatoe ? "true" : "false"
 		);
-
-		printf(
-			DARK_GRAY "|" RESET " "
-			WHITE "%4d" RESET " "
-			DARK_GRAY "|" RESET " "
-			YELLOW "%10s" RESET " "
-			DARK_GRAY "|" RESET " "
-			LIGHT_BLUE "%7s" RESET " "
-			DARK_GRAY "|" RESET " "
-			LIGHT_GREEN "%5.1f" RESET " "
-			DARK_GRAY "|" RESET " "
-			MAGENTA "%5d" RESET " "
-			DARK_GRAY "|" RESET "\n",
-			players[i].id,
-			players[i].name,
-			players[i].team,
-			players[i].score,
-			players[i].competitions
-		);
 	}
+
+	// Imprimimos los datos por consola
+	print_player_array(players, n);
 
 	free(players);
 	fclose(csv);
@@ -158,5 +129,7 @@ int generate_csv(int n)
 
 	return 0;
 }
+
+
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

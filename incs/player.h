@@ -36,7 +36,8 @@ int compare_name(Player *p1, Player *p2);
 int compare_team(Player *p1, Player *p2);
 int compare_score(Player *p1, Player *p2);
 int compare_competitions(Player *p1, Player *p2);
-void print_player_Array(Player *players, int n);
+void print_player_array(Player *players, int n);
+void print_player(Player *player);
 bool are_players_equal(Player *p1, Player *p2);
 
 
