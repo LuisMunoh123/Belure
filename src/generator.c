@@ -83,7 +83,8 @@ int generate_csv(int n)
 
 	// Reservamos memoria para los jugadores
 	size_t size = n * sizeof(Player);
-	char *size_string[10] = sprintf("%.3u GB", size / 1024 / 1024 / 1024);
+	char size_string[32]; // 1. Declaras el buffer correctamente
+	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024)); // 2. Guardas el texto
 	if ((players = malloc(n * sizeof(Player))) == NULL) {
 		fclose(csv);
 		print_error(102, size_string, NULL);

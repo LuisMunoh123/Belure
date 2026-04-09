@@ -8,12 +8,18 @@
 #define SORTING_H
 
 #include <stdio.h>
+#include "player.h"
 
-void swap_sort(int V[], int n);
-void insertion_sort(int V[], int n);
-void selection_sort(int V[], int n);
-void cocktail_shaker_sort(int V[], int n);
+/**
+ * @file sorting.h
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @brief Funciones de ordenamiento
+ */
+void swap_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
+void insertion_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
+void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
+void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 
-#endif
+#endif // SORTING_H
 
 //a q kle peptega

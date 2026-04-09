@@ -5,6 +5,7 @@
  */
 
 #include"sorting.h"
+#include"player.h"
 
 /**
  * @brief Funcion interna de intercambio
@@ -12,8 +13,8 @@
  * @param a puntero a elemento a intercambiar por b
  * @param b puntero a elemento a intercambiar por a
  */
-static void swap(int *a, int *b) {
-	int temp = *a;
+static void swap(Player *a, Player *b) {
+	Player temp = *a;
 	*a = *b;
 	*b = temp;
 }
@@ -24,14 +25,14 @@ static void swap(int *a, int *b) {
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
  */
-void swap_sort(int V[], int n) {
+void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
 		int swapped = 0;
 
 		for (int j = 0; j <= n - 1 - i; j++) {
-			if (V[j] > V[j + 1]) {
-				swap(&V[j], &V[j + 1]);
-				swapped = 1;
+			if (comp_f(&V[j], &V[j + 1]) > 0) {
+                swap(&V[j], &V[j + 1]);
+                swapped = 1;
 			}
 		}
 
@@ -48,14 +49,14 @@ void swap_sort(int V[], int n) {
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
  */
-void insertion_sort(int V[], int n) {
+void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
-		int k = V[i];
+		Player k = V[i];
 		int j = i - 1;
 
-		while ((j >= 0) && (V[j] > k)) {
-			swap(&V[j + 1], &V[j]);
-			j--;
+		while ((j >= 0) && (comp_f(&V[j], &k) > 0)) {
+            V[j + 1] = V[j];
+            j--;
 		}
 
 		V[j + 1] = k;
@@ -68,20 +69,18 @@ void insertion_sort(int V[], int n) {
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
  */
-void selection_sort(int V[], int n) {
-	for (int i = 1; i <= n - 1; i++) {
-		int k = i - 1;
-
-		for (int j = i; j <= n - 1; j++) {
-			if (V[j] < V[k]) {
-				k = j;
-			}
-		}
-
-		if (k != i - 1) {
-			swap(&V[k], &V[i - 1]);
-		}
-	}
+void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
+    for (int i = 1; i <= n - 1; i++) {
+        int k = i - 1;
+        for (int j = i; j <= n - 1; j++) {
+            if (comp_f(&V[j], &V[k]) < 0) {
+                k = j;
+            }
+        }
+        if (k != i - 1) {
+            swap(&V[k], &V[i - 1]);
+        }
+    }
 }
 
 /**
@@ -90,34 +89,27 @@ void selection_sort(int V[], int n) {
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
  */
-void cocktail_shaker_sort(int V[], int n) {
-	int beg = 0;
-	int end = n - 1;
-	int swapped;
+void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
+    int beg = 0;
+    int end = n - 1;
+    int swapped;
 
-	while (beg < end) {
-		swapped = 0;
-
-		for (int i = beg; i <= end - 1; i++) {
-			if (V[i] > V[i + 1]) {
-				swap(&V[i], &V[i + 1]);
-				swapped = 1;
-			}
-		}
-
-		for (int i = end - 1; i >= beg + 1; i--) {
-			if (V[i] < V[i - 1]) {
-				swap(&V[i], &V[i - 1]);
-				swapped = 1;
-			}
-		}
-
-		if (swapped == 0) {
-			printf("In the last iteration there was no swapping\n");
-			break;
-		}
-
-		beg++;
-		end--;
-	}
+    while (beg < end) {
+        swapped = 0;
+        for (int i = beg; i <= end - 1; i++) {
+            if (comp_f(&V[i], &V[i + 1]) > 0) {
+                swap(&V[i], &V[i + 1]);
+                swapped = 1;
+            }
+        }
+        for (int i = end - 1; i >= beg + 1; i--) {
+            if (comp_f(&V[i], &V[i - 1]) < 0) {
+                swap(&V[i], &V[i - 1]);
+                swapped = 1;
+            }
+        }
+        if (swapped == 0) break;
+        beg++;
+        end--;
+    }
 }

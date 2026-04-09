@@ -31,12 +31,14 @@ typedef struct {
 } Player;
 
 void swap_player(Player *p1, Player *p2);
-int compare_id(const Player *p1, const Player *p2);
-int compare_name(const Player *p1, const Player *p2);
-int compare_team(const Player *p1, const Player *p2);
-int compare_score(const Player *p1, const Player *p2);
-int compare_competitions(const Player *p1, const Player *p2);
-void print_playerArray(Player *players, int n);
+int compare_id(Player *p1, Player *p2);
+int compare_name(Player *p1, Player *p2);
+int compare_team(Player *p1, Player *p2);
+int compare_score(Player *p1, Player *p2);
+int compare_competitions(Player *p1, Player *p2);
+void print_player_Array(Player *players, int n);
+bool are_players_equal(Player *p1, Player *p2);
 
 
 #endif // PLAYER_H
+// Dios es mudo pero a su vez es bastante sabio
