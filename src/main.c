@@ -12,6 +12,7 @@
 #include "searching.h"
 #include "utilities.h"
 #include "player.h" 
+#include "generate_exec_times.h"
 
 int main() {
 	// Variables de control
@@ -36,11 +37,12 @@ int main() {
 	printf(DARK_YELLOW "1)" YELLOW "Generate CSV\n");
 	printf(DARK_BLUE "2)" LIGHT_BLUE "Sort array\n");
 	printf(DARK_GREEN "3)" LIGHT_GREEN "Search value\n");
-	printf(PURPLE "4)" MAGENTA "Exit\n");
+	printf("4) Run experiment\n");
+	printf(PURPLE "5)" MAGENTA "Exit\n");
 	printf(DARK_GRAY"Choose an option: " RESET);
 	
 	check =	scanf("%d", &option);
-	while (check != 1 || option < 1 || option > 4) {
+	while (check != 1 || option < 1 || option > 5) {
 		printf(DARK_GRAY"Invalid option, try again: " RESET);
 		while (getchar() != '\n');
 		check = scanf("%d", &option);
@@ -192,7 +194,11 @@ int main() {
 		free(players);
 	}
 
-	else if (option == 4) { // Opcion 4: Salir
+	else if (option == 4) { // Opcion 4: Ejecutar experimento
+		run_experiment();
+	}
+
+	else if (option == 5) { // Opcion 5: Salir
 		printf(PURPLE "\nExiting program...\n" RESET);
 	}
 

@@ -37,7 +37,6 @@ void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 		}
 
 		if (swapped == 0) {
-			printf("There was no swapping\n");
 			break;
 		}
 	}
