@@ -34,16 +34,9 @@ bool are_players_equal(Player *p1, Player *p2) {
     if (p1->competitions != p2->competitions) return false;
     if (p1->potatoe != p2->potatoe) return false;
 
-    // Comparar arreglos de caracteres estaticos (name)
+    // Comparar arreglos de caracteres estaticos (name y team)
     if (strcmp(p1->name, p2->name) != 0) return false;
-
-    // Comparar punteros a caracteres (team)
-    // Manejo de casos donde uno o ambos punteros a team puedan ser NULL
-    if (p1->team == NULL && p2->team != NULL) return false;
-    if (p1->team != NULL && p2->team == NULL) return false;
-    if (p1->team != NULL && p2->team != NULL) {
-        if (strcmp(p1->team, p2->team) != 0) return false;
-    }
+	if (strcmp(p1->team, p2->team) != 0) return false;
 
     return true;
 }
@@ -78,11 +71,7 @@ int compare_name(Player *p1, Player *p2) {
  * @return -1 si el equipo de p1 va antes, 1 si va despues, 0 si son iguales.
  */
 int compare_team(Player *p1, Player *p2) {
-    // Proteccion en caso de que algun jugador no tenga equipo (NULL)
-    if (p1->team == NULL && p2->team == NULL) return 0;
-    if (p1->team == NULL) return -1;
-    if (p2->team == NULL) return 1;
-    return strcmp(p1->team, p2->team);
+	return strcmp(p1->team, p2->team);
 }
 
 /**
@@ -115,7 +104,10 @@ int compare_competitions(Player *p1, Player *p2) {
  * @param n Tamanho del arreglo
  */
 void print_player_array(Player *players, int n) {
-    printf("\n");
+	if (n > MAX_CONSOLE_READABLE_PLAYERS) {
+		n = MAX_CONSOLE_READABLE_PLAYERS;
+		print_error(301, NULL, NULL);
+	}
     // Imprimimos cabecera
 	printf(
 		DARK_GRAY "|" RESET " "

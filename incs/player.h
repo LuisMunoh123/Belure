@@ -10,10 +10,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "errors.h"
 #include "utilities.h"
 
 #define MIN_NAME_LENGTH 3
 #define MAX_NAME_LENGTH 10
+#define MAX_TEAM_LENGTH 10
+#define MAX_CONSOLE_READABLE_PLAYERS 100
 
 /**
  * @brief Estructura que representa a un jugador.
@@ -23,7 +26,7 @@ typedef struct {
     
     int id;                       // Identificador numerico unico del jugador.
     char name[MAX_NAME_LENGTH+1]; // Nombre del jugador
-    char *team;                   // Nombre del equipo al que pertenece el jugador.
+    char team[MAX_TEAM_LENGTH+1]; // Nombre del equipo al que pertenece el jugador.
     float score;                  // Puntuacion general o calificacion del jugador.
     int competitions;             // Cantidad total de competiciones en las que ha participado.
     bool potatoe;                 // Se usa para indicar si el jugador potatoe

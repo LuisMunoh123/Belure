@@ -30,19 +30,22 @@ void print_error(int num, char *target, char *obs)
     {
     // Errores generales
     case 100:
-        printf("No se pudo leer el archivo %s\n", target);
+        printf("File %s could not be read\n", target);
         break;
     case 101:
-        printf("No se pudo abrir el archivo %s\n", target);
+        printf("File %s could not be opened\n", target);
         break;
     case 102:
-        printf("No se pudieron reservar %s de memoria\n", target);
+        printf("It was not possible to allocate memory for %s\n", target);
         break;
     // Errores Fatales
     // Warnings
+    case 301:
+        printf("The number of players is too high, console will show the first %d players\n", MAX_CONSOLE_READABLE_PLAYERS);
+        break;
     // Default
     default:
-        printf("Codigo de error %d desconocido\n", num);
+        printf("unknown error %d\n", num);
     }
     if (obs != NULL)
     {

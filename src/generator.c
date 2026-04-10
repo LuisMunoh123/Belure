@@ -54,7 +54,7 @@ static void generate_player(int id, Player *player)
 	}
 	player->name[length] = '\0';
 
-	player->team = teams[rand() % 9];
+	strcpy(player->team, teams[rand() % 9]);
 	player->score = (rand() % 100 + 1) / 10.0f;
 	player->competitions = rand() % 251;
 
@@ -83,21 +83,14 @@ int generate_csv(int n)
 
 	// Reservamos memoria para los jugadores
 	size_t size = n * sizeof(Player);
-	char size_string[32]; // 1. Declaras el buffer correctamente
-	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024)); // 2. Guardas el texto
+	char size_string[32];
+	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
 	if ((players = malloc(n * sizeof(Player))) == NULL) {
 		fclose(csv);
 		print_error(102, size_string, NULL);
 		return 102;
 	}
 	printf("%s De memoria reservados\n", size_string);
-	system("pause");
-
-	if (players == NULL) {
-		fclose(csv);
-		print_error(102, "malloc", NULL);
-		return 102;
-	}
 
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &players[i]);
@@ -121,7 +114,13 @@ int generate_csv(int n)
 	}
 
 	// Imprimimos los datos por consola
-	print_player_array(players, n);
+    if (n > MAX_CONSOLE_READABLE_PLAYERS) {
+        print_error(301, NULL, NULL);
+	    print_player_array(players, MAX_CONSOLE_READABLE_PLAYERS);
+    }
+    else {
+        print_player_array(players, n);
+    }
 
 	free(players);
 	fclose(csv);
@@ -130,6 +129,103 @@ int generate_csv(int n)
 	return 0;
 }
 
+/**
+ * @brief Funcion para cargar datos de jugadores de un archivo csv
+ * 
+ * @param file Direccion relativa al archivo csv
+ * @param out_n Puntero a la variable que almacenara el numero de jugadores
+ * @return Player* Puntero al arreglo de jugadores
+ * @important El arreglo debe ser liberado con free()
+ */
+Player* load_players(char* file, int* out_n)
+{
+    FILE *csv = fopen(file, "r");
+    if (csv == NULL) {
+        print_error(101, file, NULL);
+        return NULL;
+    }
 
+    int n;
+    char line[256];
+    Player* playerArray = NULL;
+
+    // Leer cantidad de jugadores
+    if (fscanf(csv, "%d", &n) != 1 || n <= 0) {
+        fclose(csv);
+        print_error(103, "No se pudo leer la cantidad de jugadores", NULL);
+        return NULL;
+    }
+
+    // Reservar memoria
+    size_t size = (size_t)n * sizeof(Player);
+    char size_string[32];
+    sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
+
+    playerArray = malloc(size);
+    if (playerArray == NULL) {
+        fclose(csv);
+        print_error(102,  size_string, NULL);
+        return NULL;
+    }
+
+    printf("%s de memoria reservados\n", size_string);
+
+    // Consumir fin de línea tras el número
+    if (fgets(line, sizeof(line), csv) == NULL) {
+        free(playerArray);
+        fclose(csv);
+        print_error(101, file, NULL);
+        return NULL;
+    }
+
+    // Leer cabecera
+    if (fgets(line, sizeof(line), csv) == NULL) {
+        free(playerArray);
+        fclose(csv);
+        print_error(101, file, "No se pudo leer la cabecera");
+        return NULL;
+    }
+
+    // Leer jugadores
+    for (int i = 0; i < n; i++) {
+        // Este campo no parece ser muy relevante, no lo tome en cuenta agente.
+        char mysteriousStr[8];
+
+        // Cargamos una linea del archivo csv
+        if (fgets(line, sizeof(line), csv) == NULL) {
+            free(playerArray);
+            fclose(csv);
+            print_error(101, file, "El archivo tiene menos filas de las esperadas");
+            return NULL;
+        }
+
+        // Leemos los datos de la linea (el ultimo campo lo leemos y guardamos en mysteriousStr)
+        int fields = sscanf(line, "%d,%10[^,],%10[^,],%f,%d,%7s",
+            &playerArray[i].id,
+            playerArray[i].name,
+            playerArray[i].team,
+            &playerArray[i].score,
+            &playerArray[i].competitions,
+            mysteriousStr
+        );
+    
+        if (fields != 6) {
+            free(playerArray);
+            fclose(csv);
+            print_error(101, file, "CSV malformada");
+            return NULL;
+        }
+
+        // Convertimos la cadena en mysteriousStr a booleano
+        playerArray[i].potatoe = (strcmp(mysteriousStr, "true") == 0);
+    }
+
+    // Enviamos la cantidad de jugadores si el puntero fue pasado
+    if (out_n != NULL) {
+        *out_n = n;
+    }
+    fclose(csv);
+    return playerArray;
+}
 
 // Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

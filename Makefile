@@ -22,7 +22,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 .PHONY: clean folders send
 clean:
 	rm -f $(OBJ_FILES)
-	rm -rf build/*
+	rm -rf build/*.*
+	rm -rf build/db/*
 
 folders:
 	mkdir -p src obj incs build/db docs 

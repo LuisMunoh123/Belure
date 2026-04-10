@@ -11,13 +11,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#include <unistd.h>
 
 #include "utilities.h"
 #include "errors.h"
 #include "player.h"
 
 int generate_csv(int n);
+Player* load_players(char* file, int *out_n);
 
 #endif
 
