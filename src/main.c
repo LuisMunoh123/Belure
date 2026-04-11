@@ -17,6 +17,7 @@
 int main() {
 	// Variables de control
 	int option = 0;
+	int sortType = 0;
 	int check = 1;
 
 	Player* players = NULL;
@@ -56,7 +57,28 @@ int main() {
 			while (getchar() != '\n');
 			check = scanf("%d", &n);
 		}
-		generate_csv(n);
+
+		printf("\n" DARK_YELLOW "Choose the case type:" RESET "\n");
+		printf(DARK_YELLOW"1)" YELLOW" Best case\n");
+		printf(DARK_YELLOW"2)" YELLOW" Worst case\n");
+		printf(DARK_YELLOW"3)" YELLOW" Average case\n");
+		printf(DARK_YELLOW"Option: " YELLOW);
+		check = scanf("%d", &sortType);
+		while (check != 1 || n < 0) {
+			printf(DARK_GRAY"Invalid option, try again: " RESET);
+			while (getchar() != '\n');
+			check = scanf("%d", &sortType);
+		}
+
+		if (sortType == 1) {
+			printf(YELLOW "Generating BEST case...\n");
+		} else if (sortType == 2) {
+			printf(YELLOW "Generating WORST case...\n");
+		} else {
+			printf(YELLOW "Generating AVERAGE case...\n");
+		}
+
+		generate_csv(n, sortType);
 	}
 
 	else if (option == 2) { // Opcion 2: Ordenar arreglo}

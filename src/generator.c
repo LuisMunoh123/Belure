@@ -9,17 +9,35 @@
 static char *teams[] = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Theta", "Lambda", "Pi", "Tau"};
 
 /**
- * @brief Funcion para desordenar los jugadores (Fisher-Yates)
- * 
- * @param players Arreglo de jugadores
- * @param n Tamanho del arreglo
- */
+* @brief Funcion para desordenar los jugadores (Fisher-Yates)
+* 
+* @param players Arreglo de jugadores
+* @param n Tamanho del arreglo
+*/
 static void shuffle_players(Player players[], int n)
 {
 	for (int i = n - 1; i > 0; i--) {
 		int j = rand() % (i + 1);
 		swap_player(&players[i], &players[j]);
 	}
+}
+
+/**
+ * @brief Funcion para invertir el orden de los jugadores
+ * 
+ * @param players Arreglo de jugadores a invertir
+ * @param n Tamanho del arreglo
+ */
+static void reverse_players(Player players[], int n)
+{
+    int left = 0;
+    int right = n - 1;
+
+    while (left < right) {
+        swap_player(&players[left], &players[right]);
+        left++;
+        right--;
+    }
 }
 
 /**
@@ -45,7 +63,7 @@ static char random_letter()
  */
 static void generate_player(int id, Player *player) 
 {
-	int length = MIN_NAME_LENGTH + (rand() % (MAX_NAME_LENGTH-MIN_NAME_LENGTH));
+	int length = MIN_NAME_LENGTH + (rand() % (MAX_NAME_LENGTH - MIN_NAME_LENGTH + 1));
 
 	player->id = id;
 
@@ -70,7 +88,7 @@ static void generate_player(int id, Player *player)
  * 
  * @return int 0 si todo va bien, otro codigo de error en caso de error
  */
-int generate_csv(int n) 
+int generate_csv(int n, int sortType) 
 {
 	FILE *csv = fopen("build/db/players.csv", "w");
 
@@ -85,6 +103,7 @@ int generate_csv(int n)
 	size_t size = n * sizeof(Player);
 	char size_string[32];
 	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
+
 	if ((players = malloc(n * sizeof(Player))) == NULL) {
 		fclose(csv);
 		print_error(102, size_string, NULL);
@@ -96,11 +115,17 @@ int generate_csv(int n)
 		generate_player(i + 1, &players[i]);
 	}
 
-	shuffle_players(players, n);
+    if (sortType == 2) {
+        reverse_players(players, n);
+    } else if (sortType == 3) {
+        shuffle_players(players, n);
+    }
+    // El best case son los amigos que hicimos en el camino
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
 	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS POTATOE\n");
+
 	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
 		fprintf(csv, "%d %s %s %.1f %d %s\n",
@@ -124,7 +149,7 @@ int generate_csv(int n)
 
 	free(players);
 	fclose(csv);
-	printf("\n" BG_GREEN "Data generated and saved to players.csv" RESET "\n");
+	printf("\n" BG_GREEN "Data generated and saved to build/db/players.csv" RESET "\n");
 
 	return 0;
 }

@@ -16,7 +16,7 @@
 #include "errors.h"
 #include "player.h"
 
-int generate_csv(int n);
+int generate_csv(int n, int case_type);
 Player* load_players(char* file, int *out_n);
 
 #endif
