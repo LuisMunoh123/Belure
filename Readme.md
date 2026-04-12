@@ -17,6 +17,23 @@ Desarrollar un sistema que permita generar, almacenar, ordenar y buscar informac
 > [!NOTE] Nota
 > Este README corresponde a una versión inicial del proyecto. La documentación será ampliada conforme se implementen las funcionalidades y algoritmos requeridos.
 
+## Generación de gráficos y animaciones
+
+El repositorio incluye una utilidad en Python para visualizar los resultados experimentales a partir del archivo `experiment.csv`.
+
+### Comandos disponibles
+
+- `make install-allegro6`: instala las dependencias necesarias para la utilidad de visualización. Si el entorno actual no es adecuado, el instalador puede crear un entorno virtual dentro de `allegro6/`.
+- `make plot`: ejecuta la utilidad de graficación y genera una animación GIF junto con una imagen PNG del frame final.
+
+### Estructura relacionada
+
+La funcionalidad asociada a `make plot` se encuentra encapsulada en la carpeta `allegro6/`, donde se ubican el script principal en Python, el archivo de dependencias y el instalador correspondiente a sistemas **UNIX**.
+
+### Salida esperada
+
+Al ejecutar `make plot`, el programa procesa los datos experimentales y genera archivos gráficos que permiten visualizar la evolución y comparación de los algoritmos analizados en `docs/results/`.
+
 ## Manejo de errores
 
 Dentro del archivo [errors.c](src/errors.c) se encuentra la función `print_error` que se encarga de manejar los errores que puedan ocurrir en el programa. Los códigos de error que se manejan son los siguientes:
