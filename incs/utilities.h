@@ -26,12 +26,14 @@
 #define DARK_YELLOW "\x1b[38;5;220m"
 #define DARK_BLUE "\x1b[38;5;4m"
 #define LIGHT_BLUE "\x1b[38;5;153m"
-#define LIGHT_GREEN "\x1b[38;5;157m"
-#define DARK_GREEN "\x1b[38;5;34m"
 #define MAGENTA "\x1b[38;5;183m"
 #define PURPLE "\x1b[38;5;92m"
 #define LIGHT_RED "\x1b[38;5;210m"
 #define DARK_RED "\x1b[38;5;160m"
+#define LIGHT_GREEN "\x1b[38;5;157m"
+#define DARK_GREEN "\x1b[38;5;34m"
+#define EVEN_DARKER_GREEN "\x1b[38;5;2m"
+//EVEN DARKER ES MUCHO YAPO KJASHDKJHASD COMO VAS A NECESITAR TANTOS VERDES
 
 #define BG_RED "\x1b[41m"
 #define BG_GREEN "\x1b[42m"

@@ -17,7 +17,7 @@
 int main() {
 	// Variables de control
 	int option = 0;
-	int sortType = 0;
+	int generationType = 0;
 	int check = 1;
 
 	Player* players = NULL;
@@ -49,6 +49,8 @@ int main() {
 		check = scanf("%d", &option);
 	}
 
+	//getchar(); // Parche de paginador
+
 	if (option == 1) { // Opcion 1: Generar CSV
 		printf(DARK_YELLOW "\nType the number of players to generate: " YELLOW);
 		check = scanf("%d", &n);
@@ -63,32 +65,32 @@ int main() {
 		printf(DARK_YELLOW"2)" YELLOW" Worst case\n");
 		printf(DARK_YELLOW"3)" YELLOW" Average case\n");
 		printf(DARK_YELLOW"Option: " YELLOW);
-		check = scanf("%d", &sortType);
+		check = scanf("%d", &generationType);
 		while (check != 1 || n < 0) {
 			printf(DARK_GRAY"Invalid option, try again: " RESET);
 			while (getchar() != '\n');
-			check = scanf("%d", &sortType);
+			check = scanf("%d", &generationType);
 		}
 
-		if (sortType == 1) {
+		if (generationType == 1) {
 			printf(YELLOW "Generating BEST case...\n");
-		} else if (sortType == 2) {
+		} else if (generationType == 2) {
 			printf(YELLOW "Generating WORST case...\n");
 		} else {
 			printf(YELLOW "Generating AVERAGE case...\n");
 		}
 
-		generate_csv(n, sortType);
+		generate_csv(n, generationType);
 	}
 
-	else if (option == 2) { // Opcion 2: Ordenar arreglo}
+	else if (option == 2) { // Opcion 2: Ordenar arreglo
 		// Cargamos el arreglo de jugadores
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return 1;
 		}
 
 		printf(LIGHT_BLUE "\nOriginal array:\n" RESET);
-		print_player_array(players, n);
+		print_player_array_more(players, n);
 
 		printf(DARK_BLUE "\nChoose a sorting algorithm:\n" LIGHT_BLUE);
 		printf("1) Swap Sort\n");
@@ -104,13 +106,13 @@ int main() {
 			check = scanf("%d", &sortOption);
 		}
 
-		// NUEVO MENU: Elegir el campo a ordenar
+		// Elegir el campo a ordenar
 		printf(DARK_BLUE "\nChoose field to sort by (Ascending Order):\n" LIGHT_BLUE);
-		printf("1) ID\n");
-		printf("2) Name\n");
-		printf("3) Team\n");
-		printf("4) Score\n");
-		printf("5) Competitions\n");
+		printf(DARK_BLUE"1)"LIGHT_BLUE" ID\n");
+		printf(DARK_BLUE"2)"LIGHT_BLUE" Name\n");
+		printf(DARK_BLUE"3)"LIGHT_BLUE" Team\n");
+		printf(DARK_BLUE"4)"LIGHT_BLUE" Score\n");
+		printf(DARK_BLUE"5)"LIGHT_BLUE" Competitions\n");
 		printf(DARK_BLUE "Option: " LIGHT_BLUE);
 
 		check = scanf("%d", &sortCriteria);
@@ -145,7 +147,7 @@ int main() {
 		}
 
 		printf(LIGHT_BLUE "\nSorted array (Ascending):\n" RESET);
-		print_player_array(players, n);
+		print_player_array_more(players, n);
 		free(players);
 	}
 
@@ -157,7 +159,7 @@ int main() {
 	
 		// Quitamos el RESET de esta linea para que la tabla herede el color
 		printf(LIGHT_GREEN"\nCurrent array:\n");
-		print_player_array(players, n);
+		print_player_array_more(players, n);
 		printf(RESET); // Reseteamos despues de la tabla
 
 		printf(DARK_GREEN"\nChoose a searching algorithm:\n"LIGHT_GREEN);
@@ -196,7 +198,7 @@ int main() {
 				cocktail_shaker_sort(players, n, compare_id);
 
 				printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:\n");
-				print_player_array(players, n);
+				print_player_array_more(players, n);
 				printf(RESET); // Reseteamos despues de la tabla
 
 				result = binary_search(players, 0, n - 1, &target);

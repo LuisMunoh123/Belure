@@ -88,7 +88,7 @@ static void generate_player(int id, Player *player)
  * 
  * @return int 0 si todo va bien, otro codigo de error en caso de error
  */
-int generate_csv(int n, int sortType) 
+int generate_csv(int n, int generationType) 
 {
 	FILE *csv = fopen("build/db/players.csv", "w");
 
@@ -115,9 +115,9 @@ int generate_csv(int n, int sortType)
 		generate_player(i + 1, &players[i]);
 	}
 
-    if (sortType == 2) {
+    if (generationType == 2) {
         reverse_players(players, n);
-    } else if (sortType == 3) {
+    } else if (generationType == 3) {
         shuffle_players(players, n);
     }
     // El best case son los amigos que hicimos en el camino
@@ -139,13 +139,15 @@ int generate_csv(int n, int sortType)
 	}
 
 	// Imprimimos los datos por consola
-    if (n > MAX_CONSOLE_READABLE_PLAYERS) {
-        print_error(301, NULL, NULL);
-	    print_player_array(players, MAX_CONSOLE_READABLE_PLAYERS);
-    }
-    else {
-        print_player_array(players, n);
-    }
+    //if (n > MAX_CONSOLE_READABLE_PLAYERS) {
+    //    print_error(301, NULL, NULL);
+	//    print_player_array(players, MAX_CONSOLE_READABLE_PLAYERS);
+    //}
+    //else {
+    //    print_player_array(players, n);
+    //}
+
+    print_player_array_more(players, n);
 
 	free(players);
 	fclose(csv);

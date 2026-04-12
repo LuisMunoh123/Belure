@@ -18,6 +18,10 @@
 #define MAX_TEAM_LENGTH 10
 #define MAX_CONSOLE_READABLE_PLAYERS 100
 
+// Paginacion
+#define PAGE_SIZE 20
+#define PAGE_LINES 23
+
 /**
  * @brief Estructura que representa a un jugador.
  * 
@@ -40,6 +44,7 @@ int compare_team(Player *p1, Player *p2);
 int compare_score(Player *p1, Player *p2);
 int compare_competitions(Player *p1, Player *p2);
 void print_player_array(Player *players, int n);
+void print_player_array_more(Player *players, int n);
 void print_player(Player *player);
 bool are_players_equal(Player *p1, Player *p2);
 

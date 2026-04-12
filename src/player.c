@@ -5,6 +5,7 @@
  */
 
 #include "player.h"
+#include "utilities.h"
 
 /**
  * @brief Intercambia dos jugadores
@@ -99,11 +100,28 @@ int compare_competitions(Player *p1, Player *p2) {
 
 
 /**
+ * @brief Imprime un jugador por consola.
+ * 
+ * @param player Puntero al jugador a imprimir.
+ */
+void print_player(Player *player) {
+	printf(EVEN_DARKER_GREEN "╔════════════════════╗\n");
+	printf(EVEN_DARKER_GREEN "║ " LIGHT_GRAY"ID: "DARK_GRAY"%4d" EVEN_DARKER_GREEN "           ║\n", player->id);
+	printf(EVEN_DARKER_GREEN "║ " DARK_YELLOW"Name: "YELLOW"%10s" EVEN_DARKER_GREEN "   ║\n", player->name);
+	printf(EVEN_DARKER_GREEN "║ " DARK_BLUE"Team: "LIGHT_BLUE"%7s" EVEN_DARKER_GREEN "      ║\n", player->team);
+	printf(EVEN_DARKER_GREEN "║ " DARK_GREEN"Score: "LIGHT_GREEN"%.1f" EVEN_DARKER_GREEN "         ║\n", player->score);
+	printf(EVEN_DARKER_GREEN "║ " PURPLE"Competitions: "MAGENTA"%4d" EVEN_DARKER_GREEN " ║\n", player->competitions);
+	printf(EVEN_DARKER_GREEN "╚════════════════════╝\n");
+	printf(RESET"\n");
+}
+
+/**
  * @brief Imprime el arreglo de jugadores en formato de tabla
  * * @param players Arreglo de jugadores
  * @param n Tamanho del arreglo
  */
-void print_player_array(Player *players, int n) {
+void print_player_array(Player *players, int n)
+{
 	if (n > MAX_CONSOLE_READABLE_PLAYERS) {
 		n = MAX_CONSOLE_READABLE_PLAYERS;
 		print_error(301, NULL, NULL);
@@ -149,15 +167,112 @@ void print_player_array(Player *players, int n) {
 }
 
 /**
- * @brief Imprime un jugador por consola.
+ * @brief Funcion para imprimir un arreglo de jugadores en formato de pagina, se usara junto a TODO: print_player_array_more
  * 
- * @param player Puntero al jugador a imprimir.
+ * @param players Jugadores a imprimir
+ * @param start TODO: comentar
+ * @param end TODO: comentar
  */
-void print_player(Player *player) {
-	printf(LIGHT_GRAY"ID: "DARK_GRAY"%d\n", player->id);
-	printf(DARK_YELLOW"Name: "YELLOW"%s\n", player->name);
-	printf(DARK_BLUE"Team: "LIGHT_BLUE"%s\n", player->team);
-	printf(DARK_GREEN"Score: "LIGHT_GREEN"%.1f\n", player->score);
-	printf(PURPLE"Competitions: "MAGENTA"%d\n", player->competitions);
-	printf(RESET"\n");
+static void print_player_array_page(Player *players, int start, int end)
+{
+	printf(
+        DARK_GRAY "|" RESET " "
+        LIGHT_GRAY "%4s" RESET " "
+        DARK_GRAY "|" RESET " "
+        DARK_YELLOW "%10s" RESET " "
+        DARK_GRAY "|" RESET " "
+        DARK_BLUE "%7s" RESET " "
+        DARK_GRAY "|" RESET " "
+        DARK_GREEN "%4s" RESET " "
+        DARK_GRAY "|" RESET " "
+        PURPLE "%3s" RESET " "
+        DARK_GRAY "|" RESET "\n",
+        "ID", "NAME", "TEAM", "SCORE", "COMPS"
+    );
+
+	for (int i = start; i < end; i++) {
+        printf(
+            DARK_GRAY "|" RESET " "
+            WHITE "%4d" RESET " "
+            DARK_GRAY "|" RESET " "
+            YELLOW "%10s" RESET " "
+            DARK_GRAY "|" RESET " "
+            LIGHT_BLUE "%7s" RESET " "
+            DARK_GRAY "|" RESET " "
+            LIGHT_GREEN "%5.1f" RESET " "
+            DARK_GRAY "|" RESET " "
+            MAGENTA "%5d" RESET " "
+            DARK_GRAY "|" RESET "\n",
+            players[i].id,
+            players[i].name,
+            players[i].team,
+            players[i].score,
+            players[i].competitions
+        );
+    }
+}
+
+/**
+ * @brief Funcion para limpiar la pagina actual de print_player_array_page()
+ * 
+ */
+static void clear_player_page()
+{
+    for (int i = 0; i < PAGE_LINES; i++) {
+        printf("\r\033[2K"); // Mueve el cursor al inicio de la linea y limpia la linea
+        if (i < PAGE_LINES - 1) {
+            printf("\033[1A"); // Mueve el cursor hacia arriba una linea
+        }
+    }
+    printf("\r"); // Mueve el cursor al inicio de la linea
+    fflush(stdout);
+	printf(RESET);
+}
+
+/**
+ * @brief Funcion para ver a los jugadores al estilo 'more' de UNIX
+ * 
+ * @param players Jugadores a imprimir
+ * @param n TODO: cantidad de jugadores
+ */
+void print_player_array_more(Player *players, int n)
+{
+    int start = 0;
+
+	getchar(); // Parche para que el paginador print_player_array_more() funcione como corresponde
+    while (start < n) {
+        int end = start + PAGE_SIZE;
+        if (end > n) {
+            end = n;
+        }
+
+        print_player_array_page(players, start, end);
+
+        if (end == n) {
+            printf(RESET "\n");
+            return;
+        }
+
+        printf("\n" DARK_GRAY "--More--       |" LIGHT_GRAY " Enter: next " DARK_GRAY "|" LIGHT_GRAY " q: quit " DARK_GRAY "| ["LIGHT_GRAY"%d"DARK_GRAY"-"LIGHT_GRAY"%d" DARK_GRAY" of " LIGHT_GRAY "%d" DARK_GRAY "] Action:  " LIGHT_GRAY, start + 1, end, n);
+        fflush(stdout);
+
+        int c = getchar();
+
+        if (c == 'q' || c == 'Q') {
+            while (c != '\n' && c != EOF) {
+                c = getchar();
+            }
+            printf("\n");
+            return;
+        }
+
+        while (c != '\n' && c != EOF) {
+            c = getchar();
+        }
+
+        printf("\033[1A"); // Mueve el cursor hacia arriba una linea
+        clear_player_page();
+
+        start = end;
+    }
 }
