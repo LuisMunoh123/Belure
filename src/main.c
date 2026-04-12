@@ -1,7 +1,7 @@
 /**
  * @file main.c
  * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
- * @brief Punto de inicio del programa y pruebas de ordenamiento, generacion y busqueda.
+ * @brief Funciones principales del programa
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,16 +34,20 @@ int main() {
 
 	srand(time(0));
 
-	printf(RESET "\n===== MAIN MENU =====\n");
-	printf(DARK_YELLOW "1)" YELLOW " Generate CSV\n");
-	printf(DARK_BLUE "2)" LIGHT_BLUE " Sort array\n");
-	printf(DARK_GREEN "3)" LIGHT_GREEN " Search value\n");
-	printf(PURPLE "4)" MAGENTA " Run experiment\n");
-	printf(DARK_RED "5)" LIGHT_RED " Exit\n");
+	printf(RESET "          ╔═══════════╗\n");
+	printf( "          ║ MAIN MENU ║\n");
+	printf("╔═════════╩═══════════╩══════════╗\n");
+	printf("║ "DARK_YELLOW "1)" YELLOW " Generate new CSV" RESET "            ║\n");
+	printf("║ "BROWN "2)" ORANGE " Read actual CSV" RESET "             ║\n");
+	printf("║ "DARK_BLUE "3)" LIGHT_BLUE " Sort CSV" RESET "                    ║\n");
+	printf("║ "DARK_GREEN "4)" LIGHT_GREEN " Search value in CSV" RESET "         ║\n");
+	printf("║ "PURPLE "5)" MAGENTA " Run experiment" RESET "              ║\n");
+	printf("║ "DARK_RED "6)" LIGHT_RED " Exit" RESET "                        ║\n");
+	printf("╚════════════════════════════════╝\n");
 	printf(DARK_GRAY"Choose an option: " RESET);
 	
 	check =	scanf("%d", &option);
-	while (check != 1 || option < 1 || option > 5) {
+	while (check != 1 || option < 1 || option > 6) {
 		printf(DARK_GRAY"Invalid option, try again: " RESET);
 		while (getchar() != '\n');
 		check = scanf("%d", &option);
@@ -55,69 +59,94 @@ int main() {
 		printf(DARK_YELLOW "\nType the number of players to generate: " YELLOW);
 		check = scanf("%d", &n);
 		while (check != 1 || n < 0) {
-			printf(DARK_GRAY"Invalid number, try again: " RESET);
+			printf(BROWN "Invalid number, try again: " DARK_YELLOW);
 			while (getchar() != '\n');
 			check = scanf("%d", &n);
 		}
 
-		printf("\n" DARK_YELLOW "Choose the case type:" RESET "\n");
-		printf(DARK_YELLOW"1)" YELLOW" Best case\n");
-		printf(DARK_YELLOW"2)" YELLOW" Worst case\n");
-		printf(DARK_YELLOW"3)" YELLOW" Average case\n");
+		printf(BROWN "   ╔════════════════════════╗\n");
+		printf(BROWN "   ║" YELLOW "  Choose the case type  " BROWN "║" "\n");
+		printf(BROWN "╔══╩════════════════════════╩══╗\n");
+		printf(BROWN "║" DARK_YELLOW " 1)" YELLOW " Best case" BROWN "                 ║\n");
+		printf(BROWN "║" DARK_YELLOW " 2)" YELLOW " Worst case" BROWN "                ║\n");
+		printf(BROWN "║" DARK_YELLOW " 3)" YELLOW " Average case" BROWN "              ║\n");
+		printf(BROWN"╚══════════════════════════════╝\n");
+
 		printf(DARK_YELLOW"Option: " YELLOW);
 		check = scanf("%d", &generationType);
 		while (check != 1 || n < 0) {
-			printf(DARK_GRAY"Invalid option, try again: " RESET);
+			printf(BROWN "Invalid option, try again: " DARK_YELLOW);
 			while (getchar() != '\n');
 			check = scanf("%d", &generationType);
 		}
 
 		if (generationType == 1) {
-			printf(YELLOW "Generating BEST case...\n");
+			printf(YELLOW "\nGenerating BEST case...\n");
 		} else if (generationType == 2) {
-			printf(YELLOW "Generating WORST case...\n");
+			printf(YELLOW "\nGenerating WORST case...\n");
 		} else {
-			printf(YELLOW "Generating AVERAGE case...\n");
+			printf(YELLOW "\nGenerating AVERAGE case...\n");
 		}
 
 		generate_csv(n, generationType);
 	}
 
-	else if (option == 2) { // Opcion 2: Ordenar arreglo
+	else if (option == 2) { // Opcion 2: Leer CSV
+		// Cargamos el arreglo de jugadores
+		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
+			print_error(101, "build/db/players.csv", NULL);
+			return 1;
+		}
+
+		printf(ORANGE "\nplayers.csv:\n" RESET);
+		print_player_array_more(players, n);
+	}
+
+	else if (option == 3) { // Opcion 3: Ordenar arreglo
 		// Cargamos el arreglo de jugadores
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return 1;
 		}
 
-		printf(LIGHT_BLUE "\nOriginal array:\n" RESET);
+		printf(LIGHT_BLUE "\nOriginal file:\n" RESET);
 		print_player_array_more(players, n);
 
-		printf(DARK_BLUE "\nChoose a sorting algorithm:\n" LIGHT_BLUE);
-		printf("1) Swap Sort\n");
-		printf("2) Insertion Sort\n");
-		printf("3) Selection Sort\n");
-		printf("4) Cocktail Shaker Sort\n");
+		
+		printf(EVEN_DARKER_BLUE"    ╔════════════════════════════╗\n");
+		printf(EVEN_DARKER_BLUE"    ║" LIGHT_BLUE " Choose a sorting algorithm " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "╔═══╩════════════════════════════╩═══╗\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " Swap Sort                       " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Insertion Sort                  " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Selection Sort                  " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Cocktail Shaker Sort            " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "╚════════════════════════════════════╝\n");
 		printf(DARK_BLUE "Option: " LIGHT_BLUE);
 		
 		check = scanf("%d", &sortOption);
 		while (check != 1 || sortOption < 1 || sortOption > 4) {
-			printf(DARK_GRAY"Invalid option, try again: " RESET);
+			printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
 			while (getchar() != '\n');
 			check = scanf("%d", &sortOption);
 		}
 
 		// Elegir el campo a ordenar
-		printf(DARK_BLUE "\nChoose field to sort by (Ascending Order):\n" LIGHT_BLUE);
-		printf(DARK_BLUE"1)"LIGHT_BLUE" ID\n");
-		printf(DARK_BLUE"2)"LIGHT_BLUE" Name\n");
-		printf(DARK_BLUE"3)"LIGHT_BLUE" Team\n");
-		printf(DARK_BLUE"4)"LIGHT_BLUE" Score\n");
-		printf(DARK_BLUE"5)"LIGHT_BLUE" Competitions\n");
+		
+		printf(EVEN_DARKER_BLUE"   ╔══════════════════════╗\n");
+		printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE " Choose field to sort " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE"   ║" LIGHT_BLUE "    by (Ascending)    " EVEN_DARKER_BLUE "║\n");
+		printf(EVEN_DARKER_BLUE "╔══╩══════════════════════╩══╗\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 1)" LIGHT_BLUE " ID                      " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 2)" LIGHT_BLUE " Name                    " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 3)" LIGHT_BLUE " Team                    " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 4)" LIGHT_BLUE " Score                   " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "║" DARK_BLUE " 5)" LIGHT_BLUE " Competitions            " EVEN_DARKER_BLUE "║" "\n");
+		printf(EVEN_DARKER_BLUE "╚════════════════════════════╝\n");
+
 		printf(DARK_BLUE "Option: " LIGHT_BLUE);
 
 		check = scanf("%d", &sortCriteria);
 		while (check != 1 || sortCriteria < 1 || sortCriteria > 5) {
-			printf(DARK_GRAY"Invalid option, try again: " RESET);
+			printf(EVEN_DARKER_BLUE"Invalid option, try again: " DARK_BLUE);
 			while (getchar() != '\n');
 			check = scanf("%d", &sortCriteria);
 		}
@@ -146,38 +175,43 @@ int main() {
 			printf(RESET BG_RED "Invalid sorting option.\n" RESET);
 		}
 
-		printf(LIGHT_BLUE "\nSorted array (Ascending):\n" RESET);
+		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
 		print_player_array_more(players, n);
 		free(players);
 	}
 
-	else if (option == 3) { // Opcion 3: Buscar valor
+	else if (option == 4) { // Opcion 4: Buscar valor
 		// Cargamos el arreglo de jugadores
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return 1;
 		}
 	
 		// Quitamos el RESET de esta linea para que la tabla herede el color
-		printf(LIGHT_GREEN"\nCurrent array:\n");
+		printf(LIGHT_GREEN"\nCurrent file:\n");
 		print_player_array_more(players, n);
 		printf(RESET); // Reseteamos despues de la tabla
 
-		printf(DARK_GREEN"\nChoose a searching algorithm:\n"LIGHT_GREEN);
-		printf("1) Linear Search (By ID)\n");
-		printf("2) Binary Search (By ID)\n");
+		printf(EVEN_DARKER_GREEN "   ╔════════════════════════╗\n");
+		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "   Choose a searching   " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN " algorithm (Only by ID) " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "╔══╩════════════════════════╩══╗\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 1)" LIGHT_GREEN " Linear Search             " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "║" DARK_GREEN " 2)" LIGHT_GREEN " Binary Search             " EVEN_DARKER_GREEN "║" "\n");
+		printf(EVEN_DARKER_GREEN "╚══════════════════════════════╝\n");
+
 		printf(DARK_GREEN"Option: " LIGHT_GREEN);
 		check = scanf("%d", &searchOption);
 		while (check != 1 || searchOption < 1 || searchOption > 2) {
-			printf(DARK_GRAY"Invalid option, try again: " RESET);
+			printf(EVEN_DARKER_GREEN "Invalid option, try again: " DARK_GREEN);
 			while (getchar() != '\n');
 			check = scanf("%d", &searchOption);
 		}
 
 		if (searchOption == 1 || searchOption == 2) {
-			printf("Type the ID to search: ");
+			printf(DARK_GREEN "\nType the ID to search: " LIGHT_GREEN);
 			check = scanf("%d", &searchId);
 			while (check != 1) {
-				printf(DARK_GRAY"Invalid ID, try again: " RESET);
+				printf(EVEN_DARKER_GREEN"Invalid ID, try again: " DARK_GREEN);
 				while (getchar() != '\n');
 				check = scanf("%d", &searchId);
 			}
@@ -215,19 +249,43 @@ int main() {
 				}
 			}
 		}
-		else {
-			printf("Invalid searching option.\n");
-		}
-
 		free(players);
 	}
 
-	else if (option == 4) { // Opcion 4: Ejecutar experimento
+	else if (option == 5) { // Opcion 5: Ejecutar experimento
 		run_experiment();
 	}
 
-	else if (option == 5) { // Opcion 5: Salir
-		printf(DARK_RED "\nExiting program...\n" RESET);
+	else if (option == 6) { // Opcion 6: Salir del programa
+
+		// 1/2 de probablidad de salir crocodile o aligator
+		if (rand() % 2 == 0) {
+			printf(DARK_GREEN);
+			printf("   _____                                   _                            _     _ _        \n");
+			printf("  / ____|                                 (_)                          | |   (_) |       \n");
+			printf(" | (___   ___  ___    _   _  ___  _   _    _ _ __      __ _   __      _| |__  _| | ___   \n");
+			printf("  \\___ \\ / _ \\/ _ \\  | | | |/ _ \\| | | |  | | '_ \\    / _` |  \\ \\ /\\ / / '_ \\| | |/ _ \\  \n");
+			printf("  ____) |  __/  __/  | |_| | (_) | |_| |  | | | | |  | (_| |   \\ V  V /| | | | | |  __/  \n");
+			printf(" |_____/ \\___|\\___|   \\__, |\\___/_\\__,_|  |_|_| |_|   \\__,_|    \\_/\\_/ |_| |_|_|_|\\___|  \n");
+			printf("                       __/ |  | (_) |    | |                                             \n");
+			printf("   ___ _ __ ___   ___ |___/ __| |_| | ___| |                                             \n");
+			printf("  / __| '__/ _ \\ / __/ _ \\ / _` | | |/ _ \\ |                                             \n");
+			printf(" | (__| | | (_) | (_| (_) | (_| | | |  __/_|                                             \n");
+			printf("  \\___|_|  \\___/ \\___\\___/ \\__,_|_|_|\\___(_)                                             \n");
+			printf(RESET);
+			return 0;
+		}
+
+		printf(DARK_RED);
+		printf("   _____                                   _       _                     _ _             _             _ \n");
+		printf("  / ____|                                 | |     | |                   | (_)           | |           | |\n");
+		printf(" | (___   ___  ___    _   _  ___  _   _   | | __ _| |_ ___ _ __     __ _| |_  __ _  __ _| |_ ___  _ __| |\n");
+		printf("  \\___ \\ / _ \\/ _ \\  | | | |/ _ \\| | | |  | |/ _` | __/ _ \\ '__|   / _` | | |/ _` |/ _` | __/ _ \\| '__| |\n");
+		printf("  ____) |  __/  __/  | |_| | (_) | |_| |  | | (_| | ||  __/ |     | (_| | | | (_| | (_| | || (_) | |  |_|\n");
+		printf(" |_____/ \\___|\\___|   \\__, |\\___/ \\__,_|  |_|\\__,_|\\__\\___|_|      \\__,_|_|_|\\__, |\\__,_|\\__\\___/|_|  (_)\n");
+		printf("                       __/ |                                                  __/ |                      \n");
+		printf("                      |___/                                                  |___/                       \n");
+		printf(RESET);
 	}
 
 	return 0;

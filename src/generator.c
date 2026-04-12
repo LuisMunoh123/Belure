@@ -109,7 +109,7 @@ int generate_csv(int n, int generationType)
 		print_error(102, size_string, NULL);
 		return 102;
 	}
-	printf("%s De memoria reservados\n", size_string);
+	printf(BG_GREEN "%s De memoria reservados" RESET"\n", size_string);
 
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &players[i]);
