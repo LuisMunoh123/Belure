@@ -12,8 +12,10 @@ import imageio.v2 as imageio
 
 # config
 CSV_PATH = "build/db/experiment.csv"
-GIF_PATH = "docs/results/animation.gif"
-FINAL_FRAME_PATH = "docs/results/final_frame.png"
+SORTING_GIF_PATH = "docs/results/sorting_animation.gif"
+SORTING_FINAL_FRAME_PATH = "docs/results/sorting_graph.png"
+SEARCHING_GIF_PATH = "docs/results/searching_animation.gif"
+SEARCHING_FINAL_FRAME_PATH = "docs/results/searching_graph.png"
 
 FRAME_DURATION = 1.5
 FIG_WIDTH = 10
@@ -85,7 +87,7 @@ def compute_axis_limits(series: pd.Series, padding_ratio: float) -> tuple[float,
 
 
 # Generacion de frames
-def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], frame_number: int):
+def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], title: str):
 	"""
 	Renderiza un frame acumulativo y lo devuelve como imagen en memoria.
 	Cada frame dibuja todas las series hasta la fila actual.
@@ -108,14 +110,15 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 			s=MARKER_SIZE,
 		)
 
-	ax.set_title(f"{TITLE} (frame {frame_number})")
+	ax.set_title(f"{title}")
 	ax.set_xlabel(x_column)
 	ax.set_ylabel(Y_LABEL)
+	ax.set_yscale("log")
 
 	if SHOW_GRID:
 		ax.grid(True)
 
-	ax.legend()
+	ax.legend(loc="upper left")
 
 	visible_x = df_partial[x_column]
 	visible_y = pd.concat([df_partial[col] for col in y_columns], ignore_index=True)
@@ -136,7 +139,7 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 	return imageio.imread(buffer)
 
 
-def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str]):
+def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: str):
 	"""
 	Genera todos los frames en memoria.
 	El frame final corresponde al punto en que todas las funciones culminan.
@@ -145,7 +148,7 @@ def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str]):
 
 	for i in range(1, len(df) + 1):
 		df_partial = df.iloc[:i]
-		frame = render_frame(df_partial, x_column, y_columns, i)
+		frame = render_frame(df_partial, x_column, y_columns, title)
 		frames.append(frame)
 
 	return frames
@@ -167,23 +170,46 @@ def save_final_frame(frames: list, output_path: str) -> None:
 
 	imageio.imwrite(output_path, frames[-1])
 
+# generacion de outputs
+def generate_visual_outputs( df: pd.DataFrame, x_column: str, selected_columns: list[str], title: str, gif_path: str, png_path: str) -> None:
+	"""Genera GIF y PNG final para un grupo de columnas."""
+	if not selected_columns:
+		return
+
+	frames = build_frames(df, x_column, selected_columns, title)
+	create_gif(frames, gif_path, FRAME_DURATION)
+	save_final_frame(frames, png_path)
+
 def main() -> None:
-	try:
-		validate_csv_file(CSV_PATH)
-		df, x_column, y_columns = load_and_validate_data(CSV_PATH)
+    try:
+        validate_csv_file(CSV_PATH)
 
-		frames = build_frames(df, x_column, y_columns)
-		create_gif(frames, GIF_PATH, FRAME_DURATION)
-		save_final_frame(frames, FINAL_FRAME_PATH)
+        Path("docs/results").mkdir(parents=True, exist_ok=True)
 
-		print("Proceso completado correctamente.")
-		print(f"Columna X compartida: {x_column}")
-		print(f"Series graficadas: {', '.join(y_columns)}")
-		print(f"PNG final generado en: {Path(FINAL_FRAME_PATH).resolve()}")
-		print(f"GIF generado en: {Path(GIF_PATH).resolve()}")
+        df, x_column, y_columns = load_and_validate_data(CSV_PATH)
 
-	except Exception as e:
-		print(f"Error: {e}")
+        sorting_columns = [col for col in y_columns if "sort" in col.lower()]
+        searching_columns = [col for col in y_columns if "search" in col.lower()]
+
+        generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento",SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH)
+
+        generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH)
+
+        print("Proceso completado correctamente.")
+        print(f"Columna X compartida: {x_column}")
+
+        if sorting_columns:
+            print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
+            print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
+            print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
+
+        if searching_columns:
+            print(f"Series de búsqueda: {', '.join(searching_columns)}")
+            print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
+            print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
