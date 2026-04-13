@@ -39,8 +39,8 @@ bool are_players_equal(Player *p1, Player *p2) {
 	if (p1->potatoe != p2->potatoe) return false;
 
 	// Comparar arreglos de caracteres estaticos (name y team)
-	if (strcmp(p1->name, p2->name) != 0) return false;
-	if (strcmp(p1->team, p2->team) != 0) return false;
+	if (strcasecmp(p1->name, p2->name) != 0) return false;
+	if (strcasecmp(p1->team, p2->team) != 0) return false;
 
 	return true;
 }
@@ -64,7 +64,7 @@ int compare_id(Player *p1, Player *p2) {
  * @return -1 si el nombre de p1 va antes, 1 si va despues, 0 si son iguales.
  */
 int compare_name(Player *p1, Player *p2) {
-	return strcmp(p1->name, p2->name);
+	return strcasecmp(p1->name, p2->name);
 }
 
 /**
@@ -75,7 +75,7 @@ int compare_name(Player *p1, Player *p2) {
  * @return -1 si el equipo de p1 va antes, 1 si va despues, 0 si son iguales.
  */
 int compare_team(Player *p1, Player *p2) {
-	return strcmp(p1->team, p2->team);
+	return strcasecmp(p1->team, p2->team);
 }
 
 /**
