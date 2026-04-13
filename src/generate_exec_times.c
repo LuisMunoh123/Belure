@@ -173,6 +173,8 @@ void run_experiment()
 
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
+	// MILTON LE COPIO A ARIEL??? :O
+
 	free(players);
 	free(swapSortPlayers);
 	free(insertionSortPlayers);

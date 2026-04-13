@@ -53,3 +53,5 @@ int binary_search(Player V[], int beg, int end, Player *x) {
 	}
 	return -1;
 }
+
+// yo creo que

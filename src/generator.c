@@ -102,7 +102,7 @@ int generate_csv(int n, int generationType)
 	// Reservamos memoria para los jugadores
 	size_t size = n * sizeof(Player);
 	char size_string[32];
-	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
+	sprintf(size_string, "%lu MB", (unsigned long)(size / 1024 / 1024));
 
 	if ((players = malloc(n * sizeof(Player))) == NULL) {
 		fclose(csv);
@@ -137,15 +137,6 @@ int generate_csv(int n, int generationType)
 			players[i].potatoe ? "true" : "false"
 		);
 	}
-
-	// Imprimimos los datos por consola
-	//if (n > MAX_CONSOLE_READABLE_PLAYERS) {
-	//    print_error(301, NULL, NULL);
-	//    print_player_array(players, MAX_CONSOLE_READABLE_PLAYERS);
-	//}
-	//else {
-	//    print_player_array(players, n);
-	//}
 
 	print_player_array_more(players, n);
 
@@ -185,7 +176,7 @@ Player* load_players(char* file, int* out_n)
 	// Reservar memoria
 	size_t size = (size_t)n * sizeof(Player);
 	char size_string[32];
-	sprintf(size_string, "%lu GB", (unsigned long)(size / 1024 / 1024 / 1024));
+	sprintf(size_string, "%lu MB", (unsigned long)(size / 1024 / 1024));
 
 	playerArray = malloc(size);
 	if (playerArray == NULL) {

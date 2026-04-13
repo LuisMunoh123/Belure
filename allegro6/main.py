@@ -7,9 +7,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
 
-# TODO: FORZAR LEYENDA ARRIBA A LA IZQUIERDA
-# TODO: SEPARAR ORDENAMIENTOS Y BUSQUEDAS
-
 # config
 CSV_PATH = "build/db/experiment.csv"
 SORTING_GIF_PATH = "docs/results/sorting_animation.gif"
@@ -195,7 +192,7 @@ def create_gif(frames: list, gif_path: str, frame_duration: float) -> None:
 	if not frames:
 		raise ValueError("No hay frames para generar el GIF.")
 
-	imageio.mimsave(gif_path, frames, duration=frame_duration, loop=0)
+	imageio.mimsave(gif_path, frames, duration=frame_duration, loop=0) # loop=0 para que no quede bizagi...
 
 # guarda el frame final
 def save_final_frame(frames: list, output_path: str) -> None:

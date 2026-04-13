@@ -6,6 +6,9 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
+// Erase una vez dos sabios cavilando, cuando el azul pregunta: ?Que dia es el sabado?, 
+// a lo que el dorado responde con total seguridad: "Domingo"... 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

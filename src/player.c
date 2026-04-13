@@ -18,8 +18,11 @@ void swap_player(Player *p1, Player *p2) {
 	*p2 = temp;
 }
 
+
 // y c!u!ando la intente construir se rompa al ya haber transcurrido un laaargo tiempo tras eso... 
 // sorting.h
+
+
 
 /**
  * @brief Compara si dos jugadores son exactamente iguales en todos sus campos.
@@ -170,11 +173,11 @@ void print_player_array(Player *players, int n)
 }
 
 /**
- * @brief Funcion para imprimir un arreglo de jugadores en formato de pagina, se usara junto a TODO: print_player_array_more
+ * @brief Funcion para imprimir un arreglo de jugadores en formato de pagina, se usara junto a print_player_array_more
  * 
  * @param players Jugadores a imprimir
- * @param start TODO: comentar
- * @param end TODO: comentar
+ * @param start indice inicial de la pagina a mostrar (inclusivo)
+ * @param end indice final de la pagina a mostrar (exclusivo)
  */
 static void print_player_array_page(Player *players, int start, int end)
 {
@@ -236,7 +239,7 @@ static void clear_player_page()
  * @brief Funcion para ver a los jugadores al estilo 'more' de UNIX
  * 
  * @param players Jugadores a imprimir
- * @param n TODO: cantidad de jugadores
+ * @param n cantidad de jugadores
  */
 void print_player_array_more(Player *players, int n)
 {
@@ -261,6 +264,8 @@ void print_player_array_more(Player *players, int n)
 
 		int c = getchar();
 
+// Nota de jays: los \n son mis peores enemigos.
+		
 		if (c == 'q' || c == 'Q') {
 			while (c != '\n' && c != EOF) {
 				c = getchar();

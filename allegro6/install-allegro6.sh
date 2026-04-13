@@ -2,7 +2,7 @@
 set -e
 
 echo "=== ALLEGRO6 INSTALLER ==="
-echo ".- COPYRIGHT (C) 2026 Ivan Gallardo Andres Barbosa Milton Hernandez A.K.A. Guardians -."
+echo ".- COPYRIGHT (C) 2026 JAYS -."
 echo "This will install the Python dependencies required by 'make plot'."
 echo
 
@@ -17,7 +17,7 @@ else
 	echo -n "Do you want to try installing Python automatically in the current environment? [y/N]: "
 	read -r install_python
 
-# saber que dijo. Ahora es cuando me restan !0! años para eso,
+# saber que dijo. Ahora es cuando me restan !0! anhos para eso,
 # player.c
 
 	if [[ "$install_python" =~ ^[Yy]$ ]]; then
@@ -57,3 +57,32 @@ else
 fi
 
 # ?que hara patatoe en los deportistas?
+
+
+
+
+# YO IVAN GALLARDO A.K.A. JAYS, RECLAMO ESTE ARCHIVO COMO DE *MI* PROPIEDAD.
+
+#                  #.                                      
+#                   ##                                     
+#                    ##                        -##+        
+#                     ##                  -####-           
+#                      ##              #####                          _______   _______             
+#                      ###          #####                  |\     /| (  ___  ) (  ____ \            
+#                      ####       #####                    | )   ( | | (   ) | | (    \/            
+#                      .###     #####                      | | _ | | | (___) | | (_____             
+#                       ####   #####                       | |( )| | |  ___  | (_____  )            
+#      #               +#####  ##############++-           | || || | | (   ) |       ) |            
+#      -#              #######    +#################       | () () | | )   ( | /\____) |            
+#       ##+           #########               ####-        (_______) |/     \| \_______)            
+#       -##+         -#### +####            ####           
+#        ###+        ####   #####         ####                        _______   _______   _______   _ 
+#        +###-      ####+#########      +###.              |\     /| (  ____ \ (  ____ ) (  ____ \ ( )
+#         .####.  #####       #####   -####                | )   ( | | (    \/ | (    )| | (    \/ | |
+#           #########+          #########                  | (___) | | (__     | (____)| | (__     | |
+#                                ######                    |  ___  | |  __)    |     __) |  __)    | |
+#                               .####                      | (   ) | | (       | (\ (    | (       (_)
+#                             #####                        | )   ( | | (____/\ | ) \ \__ | (____/\  _ 
+#                          .#####                          |/     \| (_______/ |/   \__/ (_______/ (_)
+#                       ######                             
+#               -########+                                 

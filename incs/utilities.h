@@ -37,6 +37,7 @@
 
 // Colores de cajas (dado que "Even Darker _" resulto comico, asi quedara XD )
 #define EVEN_DARKER_GREEN "\x1b[38;5;34m"
+// EVEN DARKER ES MUCHO YAPO KJASHDKJHASD COMO VAS A NECESITAR TANTOS VERDES
 #define EVEN_DARKER_BLUE "\x1b[38;5;25m"
 #define EVEN_DARKER_RED "\x1b[38;5;124m"
 

@@ -12,7 +12,7 @@
 #include <time.h>
 #include <stdbool.h>
 
-// Quiza sea una referencia a algo de hace !5! años atras, 
+// Quiza sea una referencia a algo de hace !5! anhos atras, 
 // Makefile
 
 #include "utilities.h"

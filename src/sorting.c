@@ -115,3 +115,5 @@ void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) 
 		end--;
 	}
 }
+
+// Pues eso... Saludos =)

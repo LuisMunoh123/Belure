@@ -186,10 +186,8 @@ int main() {
 			return 1;
 		}
 	
-		// Quitamos el RESET de esta linea para que la tabla herede el color
-		printf(LIGHT_GREEN"\nCurrent file:\n");
+		printf(LIGHT_GREEN"\nCurrent file:" RESET "\n");
 		print_player_array_more(players, n);
-		printf(RESET); // Reseteamos despues de la tabla
 
 		printf(EVEN_DARKER_GREEN "   ╔════════════════════════╗\n");
 		printf(EVEN_DARKER_GREEN "   ║" LIGHT_GREEN "   Choose a searching   " EVEN_DARKER_GREEN "║" "\n");
@@ -231,15 +229,13 @@ int main() {
 			else if (searchOption == 2) {
 				cocktail_shaker_sort(players, n, compare_id);
 
-				printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:\n");
+				printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:" RESET "\n");
 				print_player_array_more(players, n);
-				printf(RESET); // Reseteamos despues de la tabla
 
 				result = binary_search(players, 0, n - 1, &target);
 
 				// Adios. o/
 				// main.py
-
 
 				if (result == -1) {
 					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -290,3 +286,6 @@ int main() {
 
 	return 0;
 }
+
+// MIAU !
+                                                                                
