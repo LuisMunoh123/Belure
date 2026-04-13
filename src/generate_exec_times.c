@@ -61,7 +61,10 @@ void run_experiment()
 		// k crece desde 1 hasta n, repartido en NUM_STEPS puntos.
 		// La fórmula evita k = 0 y garantiza que el último punto sea n.
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
-		Player target = {k-1, "", "", 0.0, 0, false}; // Jugador buscado de ejemplo
+
+		Player target = {n, "", "", 0.0, 0, false}; // Jugador buscado de ejemplo
+		
+
 		// !PARTIA! el aire de la nada y me preguntaba:
 		// utilites.h
 
@@ -126,7 +129,7 @@ void run_experiment()
 			start = clock();
 			linear_search(linearSearchPlayers, k, &target, compare_id);
 			end = clock();
-			timeLinearSearch += (double)(end - start) / CLOCKS_PER_SEC;
+			timeLinearSearch += (double)(end - start);
 		}
 		timeLinearSearch /= NUM_TRIALS;
 		printf( PURPLE "║" MAG5 "\tLinear Search:" WHITE " %f" PURPLE "            ║\n", timeLinearSearch);
@@ -139,7 +142,7 @@ void run_experiment()
 			start = clock();
 			binary_search(binarySearchPlayers, 0, k - 1, &target);
 			end = clock();
-			timeBinarySearch += (double)(end - start) / CLOCKS_PER_SEC;
+			timeBinarySearch += (double)(end - start);
 		}
 		timeBinarySearch /= NUM_TRIALS;
 		printf( PURPLE "║" MAG6 "\tBinary Search:" WHITE " %f" PURPLE "            ║\n", timeBinarySearch);

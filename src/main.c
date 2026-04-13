@@ -67,9 +67,9 @@ int main() {
 		printf(BROWN "   ╔════════════════════════╗\n");
 		printf(BROWN "   ║" YELLOW "  Choose the case type  " BROWN "║" "\n");
 		printf(BROWN "╔══╩════════════════════════╩══╗\n");
-		printf(BROWN "║" DARK_YELLOW " 1)" YELLOW " Best case" BROWN "                 ║\n");
-		printf(BROWN "║" DARK_YELLOW " 2)" YELLOW " Worst case" BROWN "                ║\n");
-		printf(BROWN "║" DARK_YELLOW " 3)" YELLOW " Average case" BROWN "              ║\n");
+		printf(BROWN "║" DARK_YELLOW " 1)" YELLOW " Sorted Array" BROWN "                 ║\n");
+		printf(BROWN "║" DARK_YELLOW " 2)" YELLOW " Inverse Array" BROWN "                ║\n");
+		printf(BROWN "║" DARK_YELLOW " 3)" YELLOW " Shuffled Array" BROWN "               ║\n");
 		printf(BROWN"╚══════════════════════════════╝\n");
 
 		printf(DARK_YELLOW"Option: " YELLOW);
@@ -81,11 +81,11 @@ int main() {
 		}
 
 		if (generationType == 1) {
-			printf(YELLOW "\nGenerating BEST case...\n");
+			printf(YELLOW "\nGenerating SORTED array...\n");
 		} else if (generationType == 2) {
-			printf(YELLOW "\nGenerating WORST case...\n");
+			printf(YELLOW "\nGenerating INVERSE array...\n");
 		} else {
-			printf(YELLOW "\nGenerating AVERAGE case...\n");
+			printf(YELLOW "\nGenerating SHUFFLED array...\n");
 		}
 
 		generate_csv(n, generationType);

@@ -106,7 +106,7 @@ def compute_log_axis_limits(series: pd.Series, padding_ratio: float, epsilon: fl
 	return y_min, y_max
 
 # Generacion de frames
-def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], title: str, use_log_scale: bool):
+def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], title: str, y_label: str, use_log_scale: bool):
 	"""
 	Renderiza un frame acumulativo y lo devuelve como imagen en memoria.
 	Cada frame dibuja todas las series hasta la fila actual.
@@ -140,7 +140,7 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 
 	ax.set_title(f"{title}")
 	ax.set_xlabel(x_column)
-	ax.set_ylabel(Y_LABEL)
+	ax.set_ylabel(y_label)
 
 	if SHOW_GRID:
 		ax.grid(True)
@@ -171,7 +171,7 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 	return imageio.imread(buffer)
 
 
-def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: str, use_log_scale: bool):
+def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: str, y_label: str, use_log_scale: bool):
 	"""
 	Genera todos los frames en memoria.
 	El frame final corresponde al punto en que todas las funciones culminan.
@@ -180,7 +180,7 @@ def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: s
 
 	for i in range(1, len(df) + 1):
 		df_partial = df.iloc[:i]
-		frame = render_frame(df_partial, x_column, y_columns, title, use_log_scale)
+		frame = render_frame(df_partial, x_column, y_columns, title, y_label, use_log_scale)
 		frames.append(frame)
 
 	return frames
@@ -203,12 +203,12 @@ def save_final_frame(frames: list, output_path: str) -> None:
 	imageio.imwrite(output_path, frames[-1])
 
 # generacion de outputs
-def generate_visual_outputs( df: pd.DataFrame, x_column: str, selected_columns: list[str], title: str, gif_path: str, png_path: str, use_log_scale: bool) -> None:
+def generate_visual_outputs( df: pd.DataFrame, x_column: str, selected_columns: list[str], title: str, y_label: str, gif_path: str, png_path: str, use_log_scale: bool) -> None:
 	"""Genera GIF y PNG final para un grupo de columnas."""
 	if not selected_columns:
 		return
 
-	frames = build_frames(df, x_column, selected_columns, title, use_log_scale)
+	frames = build_frames(df, x_column, selected_columns, title, y_label, use_log_scale)
 	create_gif(frames, gif_path, FRAME_DURATION)
 	save_final_frame(frames, png_path)
 
@@ -231,9 +231,9 @@ def main() -> None:
 
 		use_log_scale = ask_log_scale()
 
-		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento",SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
+		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento", "Tiempo (s)", SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
 
-		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
+		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", "Tiempo (s) acumulado",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
 
 		print("Proccess completed successfully.")
 

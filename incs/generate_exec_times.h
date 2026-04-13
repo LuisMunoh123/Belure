@@ -5,7 +5,7 @@
  */
 #ifndef EXEC_H
 #define EXEC_H
-#define NUM_TRIALS 10
+#define NUM_TRIALS 500
 #define NUM_STEPS 20
 // piernafloo *crack*
 #include <stdio.h>
