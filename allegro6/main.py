@@ -23,13 +23,14 @@ FIG_HEIGHT = 7
 DPI = 120
 
 TITLE = "Comparación de algoritmos"
-Y_LABEL = "Tiempo"
+Y_LABEL = "Tiempo (s)"
 LINE_STYLE = "-"
 LINE_WIDTH = 1.8
 MARKER_STYLE = "o"
 MARKER_SIZE = 35
 SHOW_GRID = True
 PADDING_RATIO = 0.08
+EPSILON = 1e-9 # para evitar que los valores de 0 se muestren como 0
 
 
 # Validaciones y utilidades
@@ -85,16 +86,44 @@ def compute_axis_limits(series: pd.Series, padding_ratio: float) -> tuple[float,
 	pad = range_val * padding_ratio
 	return min_val - pad, max_val + pad
 
+def compute_log_axis_limits(series: pd.Series, padding_ratio: float, epsilon: float = EPSILON) -> tuple[float, float]:
+	"""
+	Calcula límites con margen para escala logaritmica.
+	Descarta valores <= 0 y asegura que y_min siempre sea positivo.
+	"""
+
+	positive_series = series[series > 0]
+
+	if positive_series.empty:
+		return epsilon, 1.0
+	
+	min_val = positive_series.min()
+	max_val = positive_series.max()
+
+	if min_val == max_val:
+		return max(epsilon, min_val/2), max_val*2
+	
+	y_min = max(epsilon, min_val / (1 + padding_ratio))
+	y_max = max_val * (1 + padding_ratio)
+
+	return y_min, y_max
 
 # Generacion de frames
-def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], title: str):
+def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], title: str, use_log_scale: bool):
 	"""
 	Renderiza un frame acumulativo y lo devuelve como imagen en memoria.
 	Cada frame dibuja todas las series hasta la fila actual.
 	"""
 	fig, ax = plt.subplots(figsize=(FIG_WIDTH, FIG_HEIGHT), dpi=DPI)
 
+	visible_y_series = []
+
 	for y_col in y_columns:
+		series_y = df_partial[y_col].copy()
+
+		if use_log_scale:
+			series_y = series_y.clip(lower=EPSILON)
+
 		ax.plot(
 			df_partial[x_column],
 			df_partial[y_col],
@@ -106,14 +135,15 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 
 		ax.scatter(
 			df_partial[x_column],
-			df_partial[y_col],
+			series_y,
 			s=MARKER_SIZE,
 		)
+
+		visible_y_series.append(series_y)
 
 	ax.set_title(f"{title}")
 	ax.set_xlabel(x_column)
 	ax.set_ylabel(Y_LABEL)
-	ax.set_yscale("log")
 
 	if SHOW_GRID:
 		ax.grid(True)
@@ -121,10 +151,15 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 	ax.legend(loc="upper left")
 
 	visible_x = df_partial[x_column]
-	visible_y = pd.concat([df_partial[col] for col in y_columns], ignore_index=True)
+	visible_y = pd.concat(visible_y_series, ignore_index=True)
 
 	x_min, x_max = compute_axis_limits(visible_x, PADDING_RATIO)
-	y_min, y_max = compute_axis_limits(visible_y, PADDING_RATIO)
+
+	if use_log_scale:
+		ax.set_yscale("log")
+		y_min, y_max = compute_log_axis_limits(visible_y, PADDING_RATIO)
+	else:
+		y_min, y_max = compute_axis_limits(visible_y, PADDING_RATIO)
 
 	ax.set_xlim(x_min, x_max)
 	ax.set_ylim(y_min, y_max)
@@ -139,7 +174,7 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 	return imageio.imread(buffer)
 
 
-def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: str):
+def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: str, use_log_scale: bool):
 	"""
 	Genera todos los frames en memoria.
 	El frame final corresponde al punto en que todas las funciones culminan.
@@ -148,7 +183,7 @@ def build_frames(df: pd.DataFrame, x_column: str, y_columns: list[str], title: s
 
 	for i in range(1, len(df) + 1):
 		df_partial = df.iloc[:i]
-		frame = render_frame(df_partial, x_column, y_columns, title)
+		frame = render_frame(df_partial, x_column, y_columns, title, use_log_scale)
 		frames.append(frame)
 
 	return frames
@@ -171,45 +206,52 @@ def save_final_frame(frames: list, output_path: str) -> None:
 	imageio.imwrite(output_path, frames[-1])
 
 # generacion de outputs
-def generate_visual_outputs( df: pd.DataFrame, x_column: str, selected_columns: list[str], title: str, gif_path: str, png_path: str) -> None:
+def generate_visual_outputs( df: pd.DataFrame, x_column: str, selected_columns: list[str], title: str, gif_path: str, png_path: str, use_log_scale: bool) -> None:
 	"""Genera GIF y PNG final para un grupo de columnas."""
 	if not selected_columns:
 		return
 
-	frames = build_frames(df, x_column, selected_columns, title)
+	frames = build_frames(df, x_column, selected_columns, title, use_log_scale)
 	create_gif(frames, gif_path, FRAME_DURATION)
 	save_final_frame(frames, png_path)
 
+def ask_log_scale() -> bool:
+	"""Pregunta al usuario si quiere usar escala logaritmica."""
+	return input("Do you want to use logarithmic scale? (y/n): ").lower() == "y"
+
+
 def main() -> None:
-    try:
-        validate_csv_file(CSV_PATH)
+	try:
+		validate_csv_file(CSV_PATH)
 
-        Path("docs/results").mkdir(parents=True, exist_ok=True)
+		Path("docs/results").mkdir(parents=True, exist_ok=True)
 
-        df, x_column, y_columns = load_and_validate_data(CSV_PATH)
+		df, x_column, y_columns = load_and_validate_data(CSV_PATH)
 
-        sorting_columns = [col for col in y_columns if "sort" in col.lower()]
-        searching_columns = [col for col in y_columns if "search" in col.lower()]
+		# Separa columnas de ordenamiento y búsqueda para generar outputs separados
+		sorting_columns = [col for col in y_columns if "sort" in col.lower()]
+		searching_columns = [col for col in y_columns if "search" in col.lower()]
 
-        generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento",SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH)
+		use_log_scale = ask_log_scale()
 
-        generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH)
+		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento",SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
 
-        print("Proceso completado correctamente.")
-        print(f"Columna X compartida: {x_column}")
+		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
 
-        if sorting_columns:
-            print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
-            print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
-            print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
+		print("Proccess completed successfully.")
 
-        if searching_columns:
-            print(f"Series de búsqueda: {', '.join(searching_columns)}")
-            print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
-            print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+		if sorting_columns:
+ 			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
+ 			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
+ 			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
 
-    except Exception as e:
-        print(f"Error: {e}")
+		if searching_columns:
+			print(f"Series de búsqueda: {', '.join(searching_columns)}")
+			print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+
+	except Exception as e:
+		print(f"Error: {e}")
 
 
 if __name__ == "__main__":
