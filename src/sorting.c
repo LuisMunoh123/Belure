@@ -24,6 +24,7 @@ static void swap(Player *a, Player *b) {
  * 
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
+ * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
  */
 void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -47,6 +48,7 @@ void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
  * 
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
+ * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
  */
 void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -67,6 +69,7 @@ void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
  * 
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
+ * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
  */
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -90,6 +93,7 @@ void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
  * 
  * @param V arreglo de enteros
  * @param n tamanho del arreglo
+ * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
  */
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 	int beg = 0;

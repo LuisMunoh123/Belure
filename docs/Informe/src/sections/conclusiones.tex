@@ -1,0 +1,26 @@
+\section{Conclusiones}\label{sec:conclusiones}
+A partir del análisis teórico y experimental realizado, se extraen las siguientes conclusiones respecto al comportamiento de los algoritmos estudiados:
+
+\subsection*{Eficiencia comparativa de algoritmos de búsqueda}
+
+La Búsqueda Binaria demostró ser significativamente más eficiente que la Búsqueda Secuencial, con una complejidad temporal de $\mathcal{O}(\log n)$ frente a $\mathcal{O}(n)$. Teóricamente, sobre un arreglo de 7000 elementos, Binary Search requiere como máximo $\lceil \log_2(7000) \rceil = 13$ comparaciones, mientras que Linear Search puede alcanzar 7000 intentos en el peor caso. Si bien la velocidad de procesamiento de los computadores actuales hace que las diferencias en órdenes logarítmicos sean difíciles de capturar en tiempos absolutos (frecuentemente apareciendo como valores cercanos a cero), el análisis experimental permitió evidenciar la mejora relativa de la Búsqueda Binaria, reflejando las predicciones teóricas sobre su superioridad asintótica.
+
+\subsection*{Eficiencia comparativa de algoritmos de ordenamiento}
+
+Los resultados experimentales revelaron distintos niveles de eficiencia entre los algoritmos de ordenamiento evaluados:
+
+\begin{enumerate}
+    \item \textbf{Algoritmo más eficiente:} Insertion Sort demostró el mejor desempeño en todos los escenarios evaluados (mejor caso, peor caso y caso promedio), ejecutándose aproximadamente en la mitad del tiempo requerido por Selection Sort en el peor caso.
+
+    \item \textbf{Algoritmo menos eficiente:} Selection Sort presentó el comportamiento más desfavorable, especialmente en el mejor caso, donde su complejidad $\mathcal{O}(n^2)$ permanece constante incluso cuando el arreglo ya se encuentra ordenado, a diferencia de otros algoritmos que pueden terminar anticipadamente.
+
+    \item \textbf{Swap Sort y su variante:} Aunque ambos exhiben complejidad $\mathcal{O}(n^2)$, Cocktail-Shaker Sort (variante bidireccional de Swap Sort) demostró ser considerablemente más eficiente que el Swap Sort estándar en el caso promedio, aprovechando su capacidad de detectar patrones de orden en ambas direcciones. Sin embargo, en el mejor caso (arreglo ya ordenado) Swap Sort resulta superior, mientras que en el peor caso ambos exhiben comportamiento prácticamente idéntico.
+\end{enumerate}
+
+\subsection*{Validación de la teoría en la práctica}
+
+El análisis experimental corroboró las predicciones del análisis teórico de complejidad. Las curvas de tiempo de ejecución se ajustaron a los órdenes asintóticos predichos, confirmando que el análisis de complejidad constituye una herramienta confiable para la predicción del comportamiento de algoritmos.
+
+\subsection*{Implicaciones para la selección de algoritmos}
+
+Aunque los algoritmos analizados representan casos de estudio académicos con complejidades cuadráticas o lineales, los hallazgos refuerzan la importancia de considerar la complejidad temporal al seleccionar algoritmos. La diferencia relativa entre algoritmos de similar orden de complejidad (como Swap Sort e Insertion Sort) puede ser sustancial en aplicaciones prácticas con grandes volúmenes de datos. Asimismo, la factibilidad de optimizaciones (como Cocktail-Shaker Sort) demuestra que mejoras significativas pueden obtenerse mediante modificaciones algorítmicas sin cambiar el orden de complejidad.

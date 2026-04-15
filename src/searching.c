@@ -13,6 +13,7 @@
  * @param V Arreglo de enteros
  * @param n Tamanho del arreglo
  * @param x Busqueda
+ * @param comp_f funcion de comparacion (1 si a < b, -1 si a > b, 0 si a = b)
  * @return int r Indice de la busqueda, retorna n si no se encuentra
  */
 int linear_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Player *)) {

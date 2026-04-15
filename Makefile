@@ -1,5 +1,5 @@
 CC=gcc
-EXEC=main.out
+EXEC=player.out
 GRUPO=G1
 NTAR=2
 
