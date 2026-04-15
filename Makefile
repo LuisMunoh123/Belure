@@ -1,7 +1,7 @@
 CC=gcc
 EXEC=player.out
-GRUPO=G1
-NTAR=2
+GRUPO=AB-IG-MH
+NTAR=1
 
 SRC_DIR=src
 OBJ_DIR=obj
@@ -55,5 +55,4 @@ plot:
 	fi
 
 send:
-	tar czf $(GRUPO)-$(NTAR).tgz --transform 's,^,$(GRUPO)-$(NTAR)/,' Makefile src incs docs $(ALLEGRO6_DIR)
-
+	tar czf $(GRUPO)-$(NTAR).tgz --transform 's,^,$(GRUPO)-$(NTAR)/,' Makefile src incs docs $(ALLEGRO6_DIR) Readme.md
