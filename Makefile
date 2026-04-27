@@ -1,7 +1,7 @@
 CC=gcc
-EXEC=player.out
-GRUPO=AB-IG-MH
-NTAR=1
+EXEC=conquer.out
+GRUPO=FA-MH-LM
+NTAR=2
 
 SRC_DIR=src
 OBJ_DIR=obj
@@ -12,9 +12,6 @@ LIBS= -lm
 
 CFLAGS=-Wall -Wextra -Wpedantic -O3
 LDFLAGS= -Wall -lm
-
-# pero no creo que haya caido tan bajo como un !GUION BAJO!. 
-# player.h
 
 PYTHON=python3
 ALLEGRO6_DIR=allegro6

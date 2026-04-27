@@ -1,14 +1,20 @@
-# PALYER - Procesamiento Algorítmico, Lectura y Evaluación de Registros
+# Conquer
 
 **Universidad de Magallanes - Diseño de Algoritmos - 2026**
 
-**Estudiantes:** [Andres Barbosa](mailto:abarbosa@umag.cl), [Milton Hernández](mailto:mhern@umag.cl), [Iván Gallardo](mailto:ivangall@umag.cl).
+**Estudiantes:** [Franco Aguilar](mailto:fagucarc@umag.cl), [Milton Hernández](mailto:mhern@umag.cl), [Luis Muñoz](mailto:luimuoz@umag.cl).
 
 **Docente:** [Jacqueline Aldridge ](mailto:jacqueline.aldridge@umag.cl)
 
-El presente repositorio tiene como objetivo la comparación y comprobación de los órdenes de complejidad de distintos algoritmos de ordenamiento y búsqueda, mediante su implementación y evaluación sobre datos artificialmente generados de deportistas.
+El presente repositorio tiene como objetivo la comparación y comprobación de los órdenes de complejidad de distintos algoritmos recursivos de ordenamiento, búsqueda y selección, mediante su implementación y evaluación sobre datos artificialmente generados de deportistas.
 
-El sistema se desarrolla en lenguaje C y considera la generación de registros con atributos como ID, nombre, equipo, puntaje y cantidad de competencias, los cuales servirán como base para el análisis teórico y experimental del comportamiento de los algoritmos en distintos tamaños de entrada.
+El sistema se desarrolla en lenguaje C y considera la generación de registros, los cuales servirán como base para el análisis teórico y experimental del comportamiento de los algoritmos en distintos tamaños de entrada.
+
+Este proyecto toma como base el trabajo realizado en el proyecto [PALYER](https://github.com/AndrewhiteCode/PALYER) expandiendo su funcionalidad para incluir algoritmos recursivos.
+
+<!--
+TODO: Lo que sigue a partir de aquí hay que modificarlo en base al nuevo proyecto.
+
 
 ## Objetivo general
 
@@ -50,6 +56,8 @@ La funcionalidad asociada a `make plot` se encuentra encapsulada en la carpeta `
 ### Salida esperada
 
 Al ejecutar `make plot`, el programa procesa los datos experimentales y genera archivos gráficos que permiten visualizar la evolución y comparación de los algoritmos analizados en `docs/results/`.
+
+-->
 
 ## Manejo de errores
 

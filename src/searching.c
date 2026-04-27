@@ -26,8 +26,7 @@ int linear_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Player *
 	}
 	return r;
 }
-// !?!no lo vas a usar? A lo que yo respondi con esta cara !v=!.
-// generator.c
+
 /**
  * @brief Funcion de busqueda binaria
  * * @param V Arreglo de jugadores
@@ -54,5 +53,3 @@ int binary_search(Player V[], int beg, int end, Player *x) {
 	}
 	return -1;
 }
-
-// yo creo que

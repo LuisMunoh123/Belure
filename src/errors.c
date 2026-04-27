@@ -5,9 +5,6 @@
  */
 #include "errors.h"
 
-// que haga !W!iwiwiwi cuando tenga la edad suficiente para 
-// install-allegro6.sh
-
 /**
  * @brief Funcion para imprimir un error
  *
@@ -46,9 +43,6 @@ void print_error(int num, char *target, char *obs)
 	case 301:
 		printf("The number of players is too high, console will show the first %d players\n", MAX_CONSOLE_READABLE_PLAYERS);
 		break;
-	//case 302:
-	//	printf("Q.E.P.D. mi warning que no duró ni siquiera un commit (creo)\n");
-	// Default
 	default:
 		printf("unknown error %d\n", num);
 	}

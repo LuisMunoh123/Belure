@@ -17,9 +17,6 @@ else
 	echo -n "Do you want to try installing Python automatically in the current environment? [y/N]: "
 	read -r install_python
 
-# saber que dijo. Ahora es cuando me restan !0! anhos para eso,
-# player.c
-
 	if [[ "$install_python" =~ ^[Yy]$ ]]; then
 		if command -v apt-get >/dev/null 2>&1; then
 			sudo apt-get update
@@ -55,11 +52,6 @@ else
 	echo "Dependencies installed in allegro6/.venv"
 	echo "To activate it later, run: source allegro6/.venv/bin/activate"
 fi
-
-# ?que hara patatoe en los deportistas?
-
-
-
 
 # YO IVAN GALLARDO A.K.A. JAYS, RECLAMO ESTE ARCHIVO COMO DE *MI* PROPIEDAD.
 

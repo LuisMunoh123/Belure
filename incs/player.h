@@ -33,8 +33,6 @@ typedef struct {
     char team[MAX_TEAM_LENGTH+1]; // Nombre del equipo al que pertenece el jugador.
     float score;                  // Puntuacion general o calificacion del jugador.
     int competitions;             // Cantidad total de competiciones en las que ha participado.
-    bool potatoe;                 // Se usa para indicar si el jugador potatoe
-
 } Player;
 
 void swap_player(Player *p1, Player *p2);
@@ -43,8 +41,6 @@ int compare_name(Player *p1, Player *p2);
 int compare_team(Player *p1, Player *p2);
 int compare_score(Player *p1, Player *p2);
 int compare_competitions(Player *p1, Player *p2);
-// creo que !G!uardare esa pregunta en una cajita musical 
-// errors.c
 void print_player_array(Player *players, int n);
 void print_player_array_more(Player *players, int n);
 void print_player(Player *player);
@@ -52,4 +48,3 @@ bool are_players_equal(Player *p1, Player *p2);
 
 
 #endif // PLAYER_H
-// Dios es mudo pero a su vez es bastante sabio

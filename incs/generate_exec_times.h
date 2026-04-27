@@ -7,7 +7,6 @@
 #define EXEC_H
 #define NUM_TRIALS 1000
 #define NUM_STEPS 20
-// piernafloo *crack*
 #include <stdio.h>
 #include <time.h>
 
@@ -26,9 +25,6 @@ typedef struct ExecResults {
     double timeLinearSearch;
     double timeBinarySearch;
 } ExecResults;
-
-// Pero bueno, finalizo esta carta que te escribo desde mi hoja !A4!.
-// main.c
 
 void run_experiment(void);
 

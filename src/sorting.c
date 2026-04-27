@@ -85,9 +85,6 @@ void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 	}
 }
 
-// !PUNTO COMERCIAL!. De vez en cuando, este 
-// generate_exec_times.c
-
 /**
  * @brief Ordenamiento por shaker
  * 
@@ -119,5 +116,3 @@ void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) 
 		end--;
 	}
 }
-
-// Pues eso... Saludos =)

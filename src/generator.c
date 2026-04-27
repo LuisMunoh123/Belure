@@ -75,10 +75,6 @@ static void generate_player(int id, Player *player)
 	strcpy(player->team, teams[rand() % 9]);
 	player->score = (rand() % 100 + 1) / 10.0f;
 	player->competitions = rand() % 251;
-
-	// Aqui no hay nada que ver agente...
-	player->potatoe = rand() % 2 ? true : false;
-	// Usted no vio nada aqui agente...
 }
 
 /**
@@ -120,21 +116,19 @@ int generate_csv(int n, int generationType)
 	} else if (generationType == 3) {
 		shuffle_players(players, n);
 	}
-	// El best case son los amigos que hicimos en el camino
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
-	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS POTATOE\n");
+	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS\n");
 
 	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
-		fprintf(csv, "%d %s %s %.1f %d %s\n",
+		fprintf(csv, "%d %s %s %.1f %d\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions,
-			players[i].potatoe ? "true" : "false"
+			players[i].competitions
 		);
 	}
 
@@ -184,13 +178,11 @@ Player* load_players(char* file, int* out_n)
 		print_error(102,  size_string, NULL);
 		return NULL;
 	}
-	// Entonces mi punto comercial sonrio y 
-	// searching.h
 
 	printf("%s de memoria reservados\n", size_string);
 
 	// Leer cabecera
-	if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {
+	if (fscanf(csv, "%*s %*s %*s %*s %*s") == EOF) {
 		free(playerArray);
 		fclose(csv);
 		print_error(101, file, "No se pudo leer la cabecera");
@@ -199,28 +191,21 @@ Player* load_players(char* file, int* out_n)
 
 	// Leer jugadores
 	for (int i = 0; i < n; i++) {
-		// Este campo no parece ser muy relevante, no lo tome en cuenta agente.
-		char mysteriousStr[8];
-
-		// Leemos los datos de la linea (el ultimo campo lo leemos y guardamos en mysteriousStr)
-		int fields = fscanf(csv, "%d %10s %10s %f %d %7s",
+		// Leemos los datos de la linea
+		int fields = fscanf(csv, "%d %10s %10s %f %d",
 			&playerArray[i].id,
 			playerArray[i].name,
 			playerArray[i].team,
 			&playerArray[i].score,
-			&playerArray[i].competitions,
-			mysteriousStr
+			&playerArray[i].competitions
 		);
 	
-		if (fields != 6) {
+		if (fields != 5) {
 			free(playerArray);
 			fclose(csv);
 			print_error(101, file, "CSV malformada");
 			return NULL;
 		}
-
-		// Convertimos la cadena en mysteriousStr a booleano
-		playerArray[i].potatoe = (strcmp(mysteriousStr, "true") == 0);
 	}
 
 	// Enviamos la cantidad de jugadores si el puntero fue pasado
@@ -230,5 +215,3 @@ Player* load_players(char* file, int* out_n)
 	fclose(csv);
 	return playerArray;
 }
-
-// Se rie en latex: 𝑗𝑎𝑗𝑎𝑗𝑎𝑗𝑎

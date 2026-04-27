@@ -12,9 +12,6 @@
 #include <time.h>
 #include <stdbool.h>
 
-// Quiza sea una referencia a algo de hace !5! anhos atras, 
-// Makefile
-
 #include "utilities.h"
 #include "errors.h"
 #include "player.h"
@@ -23,5 +20,3 @@ int generate_csv(int n, int case_type);
 Player* load_players(char* file, int *out_n);
 
 #endif
-
-// 𝑚𝑚𝑚

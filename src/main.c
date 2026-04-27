@@ -214,7 +214,7 @@ int main() {
 				check = scanf("%d", &searchId);
 			}
 			
-			Player target = {searchId, "", "", 0.0, 0, false};
+			Player target = {searchId, "", "", 0.0, 0};
 
 			if (searchOption == 1) {
 				result = linear_search(players, n, &target, compare_id);
@@ -233,9 +233,6 @@ int main() {
 				print_player_array_more(players, n);
 
 				result = binary_search(players, 0, n - 1, &target);
-
-				// Adios. o/
-				// main.py
 
 				if (result == -1) {
 					printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -285,7 +282,4 @@ int main() {
 	}
 
 	return 0;
-}
-
-// MIAU !
-                                                                                
+}                                                                 

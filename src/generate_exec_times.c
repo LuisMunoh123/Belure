@@ -62,10 +62,7 @@ void run_experiment()
 		// La fórmula evita k = 0 y garantiza que el último punto sea n.
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		Player target = {n+1, "", "", 0.0, 0, false}; // Jugador buscado de ejemplo
-		
-		// !PARTIA! el aire de la nada y me preguntaba:
-		// utilites.h
+		Player target = {n+1, "", "", 0.0, 0}; // Jugador buscado de ejemplo
 
 		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
 		printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
@@ -174,8 +171,6 @@ void run_experiment()
 	fclose(csv);
 
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
-
-	// MILTON LE COPIO A ARIEL??? :O
 
 	free(players);
 	free(swapSortPlayers);

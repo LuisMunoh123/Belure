@@ -18,12 +18,6 @@ void swap_player(Player *p1, Player *p2) {
 	*p2 = temp;
 }
 
-
-// y c!u!ando la intente construir se rompa al ya haber transcurrido un laaargo tiempo tras eso... 
-// sorting.h
-
-
-
 /**
  * @brief Compara si dos jugadores son exactamente iguales en todos sus campos.
  * * @param p1 Puntero al primer jugador.
@@ -39,7 +33,6 @@ bool are_players_equal(Player *p1, Player *p2) {
 	if (p1->id != p2->id) return false;
 	if (p1->score != p2->score) return false;
 	if (p1->competitions != p2->competitions) return false;
-	if (p1->potatoe != p2->potatoe) return false;
 
 	// Comparar arreglos de caracteres estaticos (name y team)
 	if (strcasecmp(p1->name, p2->name) != 0) return false;
@@ -263,8 +256,6 @@ void print_player_array_more(Player *players, int n)
 		fflush(stdout);
 
 		int c = getchar();
-
-// Nota de jays: los \n son mis peores enemigos.
 		
 		if (c == 'q' || c == 'Q') {
 			while (c != '\n' && c != EOF) {

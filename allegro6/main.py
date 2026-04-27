@@ -1,4 +1,3 @@
-# Si llegaste aqui desde main.c tienes -5 puntos.
 import os
 from io import BytesIO
 from pathlib import Path
@@ -253,13 +252,3 @@ def main() -> None:
 
 if __name__ == "__main__":
 	main()
-
-# Si encontraste esto por tu cuenta tienes 10 puntos.
-# Bienvenidx a este minijuego que hice dentro del codigo! Si ve esto y logra descifrarme, se lo agradeceria.
-# lea con atencion los comentarios y redirijase a donde estos mismos le indiquen. El siguiente comentario sera el punto de inicio.
-
-# ?De que hablas? !YO! 
-# errors.h
-
-# Si lograste descifrarme, tienes 20 puntos.
-
