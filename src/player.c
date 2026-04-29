@@ -238,7 +238,7 @@ void print_player_array_more(Player *players, int n)
 {
 	int start = 0;
 
-	getchar(); // Parche para que el paginador print_player_array_more() funcione como corresponde
+	//getchar(); // Antes era en un parche, ahora se quito para el funcionamiento de getopt
 	while (start < n) {
 		int end = start + PAGE_SIZE;
 		if (end > n) {

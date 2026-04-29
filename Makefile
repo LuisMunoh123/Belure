@@ -39,7 +39,7 @@ folders:
 	mkdir -p src obj incs build/db docs/results $(ALLEGRO6_DIR)
 
 run:
-	@./build/$(EXEC)
+	@./build/$(EXEC) -h
 
 install-allegro6:
 	@bash $(ALLEGRO6_INSTALLER)
