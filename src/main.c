@@ -22,7 +22,6 @@ static struct option long_options[] = {
 	{"sort", no_argument, 0, 's'},
 	{"find", no_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
-	{"exit", no_argument, 0, 'x'},
 	{"type", required_argument, 0, 't'},
 	{"algorithm", required_argument, 0, 'a'},
 	{"criteria", required_argument, 0, 'c'},
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsfxeht:a:c:b:i:", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsfeht:a:c:b:i:", long_options, NULL)) != -1) {
 		switch (opt) {
 			case 'g':
 				action = 'g';
@@ -65,7 +64,6 @@ int main(int argc, char *argv[])
 			case 's':
 			case 'f':
 			case 'e':
-			case 'x':
 				action = (char)opt;
 				action_count++;
 				break;
@@ -224,10 +222,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	if (action == 'x') {
-		return 0;
-	}
-
 	print_usage(argv[0]);
 	return 1;
 }
@@ -243,7 +237,6 @@ static void print_usage(const char *progname){
 	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "-a <1|2|3|4> -c <1|2|3|4|5>" RESET " " LIGHT_BLUE "Ordenar CSV\n" RESET, progname);
 	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "-b <1|2> -i <id>" RESET "            " LIGHT_GREEN "Buscar por ID\n" RESET, progname);
 	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "Ejecutar experimento\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_RED "-x" RESET "                             " LIGHT_RED "Salir\n" RESET, progname);
 	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "Mostrar ayuda\n" RESET, progname);
 
 	printf("\n" DARK_GRAY "Opciones:\n" RESET);
@@ -257,6 +250,5 @@ static void print_usage(const char *progname){
 	printf("  " DARK_GREEN "-b, --binary <1|2>" RESET "                " LIGHT_GRAY "                 Busqueda: 1=linear, 2=binary\n" RESET);
 	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                 ID del jugador a buscar\n" RESET);
 	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                 Ejecuta el experimento\n" RESET);
-	printf("  " DARK_RED "-x, --exit" RESET "                        " LIGHT_GRAY "                 Sale del programa\n" RESET);
 	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                 Muestra esta ayuda\n\n" RESET);
 }
