@@ -20,12 +20,11 @@ static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
 	{"read", no_argument, 0, 'r'},
 	{"sort", no_argument, 0, 's'},
-	{"find", no_argument, 0, 'f'},
+	{"find", required_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
 	{"type", required_argument, 0, 't'},
 	{"algorithm", required_argument, 0, 'a'},
 	{"criteria", required_argument, 0, 'c'},
-	{"binary", required_argument, 0, 'b'},
 	{"id", required_argument, 0, 'i'},
 	{"help", no_argument, 0, 'h'},
 	{0, 0, 0, 0}
@@ -56,7 +55,7 @@ int main(int argc, char *argv[])
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsfeht:a:c:b:i:", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsf:eht:a:c:i:", long_options, NULL)) != -1) {
 		switch (opt) {
 			case 'g':
 				action = 'g';
@@ -66,10 +65,15 @@ int main(int argc, char *argv[])
 
 			case 'r':
 			case 's':
-			case 'f':
 			case 'e':
-				action = (char)opt;
+			action = (char)opt;
+			action_count++;
+			break;
+
+			case 'f':
+				action = 'f';
 				action_count++;
+				searchOption = parse_search_algorithm(optarg);
 				break;
 
 			case 't':
@@ -82,10 +86,6 @@ int main(int argc, char *argv[])
 
 			case 'c':
 				sortCriteria = parse_sort_criteria(optarg);
-				break;
-
-			case 'b':
-				searchOption = parse_search_algorithm(optarg);
 				break;
 
 			case 'i':
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
 	if (action == 'f') {
 		if (searchOption == SEARCH_INVALID) {
-			printf("Error: para buscar debes usar -b <search type> -i <id>\n\n");
+			printf("Error: para buscar debes usar -f <search type> -i <id>\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -241,7 +241,7 @@ static void print_usage(const char *progname){
 	printf("  " YELLOW "%s " DARK_YELLOW "-g " LIGHT_GRAY "<cantidad> " DARK_YELLOW "-t " LIGHT_GRAY "<generate type>" RESET "       " YELLOW "Generar CSV\n" RESET, progname);
 	printf("  " YELLOW "%s " ORANGE "-r" RESET "                             " ORANGE "        Leer CSV actual\n" RESET, progname);
 	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "-a <sort type> -c <criteria>" RESET " " LIGHT_BLUE "       Ordenar CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "-b <search type> -i <id>" RESET "            " LIGHT_GREEN "Buscar por ID\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "<search type> -i <id>" RESET "            " LIGHT_GREEN "   Buscar por ID\n" RESET, progname);
 	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "        Ejecutar experimento\n" RESET, progname);
 	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "        Mostrar ayuda\n" RESET, progname);
 
@@ -252,8 +252,7 @@ static void print_usage(const char *progname){
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Ordena el CSV actual\n" RESET);
 	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail, quick\n" RESET);
 	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criterio: id, name, team, score, competitions\n" RESET);
-	printf("  " DARK_GREEN "-f, --find" RESET "                        " LIGHT_GRAY "                         Busca un jugador por ID\n" RESET);
-	printf("  " DARK_GREEN "-b, --binary <search type>" RESET "                " LIGHT_GRAY "                 Busqueda: linear, binary\n" RESET);
+	printf("  " DARK_GREEN "-f, --find <search type>" RESET "                        " LIGHT_GRAY "           Busca un jugador por ID, busqueda: binary, linear.\n" RESET);
 	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID del jugador a buscar\n" RESET);
 	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                         Ejecuta el experimento\n" RESET);
 	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                         Muestra esta ayuda\n\n" RESET);
@@ -262,12 +261,12 @@ static void print_usage(const char *progname){
 static GenerationType parse_generation_type(const char *value){
 	if (strcmp(value, "sorted") == 0) return SORTED;
 	if (strcmp(value, "inverse") == 0) return INVERSE;
-	if (strcmp(value, "shuffle") == 0) return SHUFFLED;
+	if (strcmp(value, "shuffled") == 0) return SHUFFLED;
 	return GEN_INVALID;
 }
 
 static SortAlgorithm parse_sort_algorithm(const char *value){
-	if (strcmp(value, "bubble") == 0) return SWAP;
+	if (strcmp(value, "swap") == 0) return SWAP;
 	if (strcmp(value, "insertion") == 0) return INSERTION;
 	if (strcmp(value, "selection") == 0) return SELECTION;
 	if (strcmp(value, "cocktail") == 0) return COCKTAIL;
