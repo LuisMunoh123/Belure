@@ -1,6 +1,6 @@
 /**
  * @file player.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Definicion de la estructura Player y prototipos de las funciones de comparacion.
  */
 
@@ -45,6 +45,7 @@ void print_player_array(Player *players, int n);
 void print_player_array_more(Player *players, int n);
 void print_player(Player *player);
 bool are_players_equal(Player *p1, Player *p2);
+int median_of_three(Player V[], int left, int right, int (*comp_f)(Player *, Player *));
 
 
 #endif // PLAYER_H

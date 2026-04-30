@@ -225,26 +225,27 @@ def main() -> None:
 		df, x_column, y_columns = load_and_validate_data(CSV_PATH)
 
 		# Separa columnas de ordenamiento y búsqueda para generar outputs separados
-		sorting_columns = [col for col in y_columns if "sort" in col.lower()]
-		searching_columns = [col for col in y_columns if "search" in col.lower()]
+		# sorting_columns = [col for col in y_columns if "sort" in col.lower()]
+		sorting_columns = ["Left Pivot","Right Pivot","Median Pivot","Random Pivot"]
+		# searching_columns = [col for col in y_columns if "search" in col.lower()]
 
 		use_log_scale = ask_log_scale()
 
 		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento", "Tiempo (s)", SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
 
-		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", "Tiempo (s)",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
+		#generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", #"Tiempo (s)",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
 
 		print("Proccess completed successfully.")
 
 		if sorting_columns:
- 			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
- 			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
- 			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
+			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
+			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
 
-		if searching_columns:
-			print(f"Series de búsqueda: {', '.join(searching_columns)}")
-			print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
-			print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+		#if searching_columns:
+		#	print(f"Series de búsqueda: {', '.join(searching_columns)}")
+		#	print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
+		#	print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
 
 	except Exception as e:
 		print(f"Error: {e}")

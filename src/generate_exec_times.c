@@ -26,7 +26,12 @@ void run_experiment()
 	int struct_idx = 0;
 
 	// Inicializamos los arreglos de jugadores
-	Player* swapSortPlayers = malloc(n * sizeof(Player));
+	Player* leftPivotPlayers = malloc(n * sizeof(Player));
+	Player* rightPivotPlayers = malloc(n * sizeof(Player));
+	Player* medianPivotPlayers = malloc(n * sizeof(Player));
+	Player* randomPivotPlayers = malloc(n * sizeof(Player));
+
+	/* Player* swapSortPlayers = malloc(n * sizeof(Player));
 	Player* insertionSortPlayers = malloc(n * sizeof(Player));
 	Player* selectionSortPlayers = malloc(n * sizeof(Player));
 	Player* cocktailShakerSortPlayers = malloc(n * sizeof(Player));
@@ -42,6 +47,15 @@ void run_experiment()
 		free(binarySearchPlayers);
 		print_error(102, "players", NULL);
 		return;
+	} */
+
+	if (!leftPivotPlayers || !rightPivotPlayers || !medianPivotPlayers || !randomPivotPlayers) {
+		free(leftPivotPlayers);
+		free(rightPivotPlayers);
+		free(medianPivotPlayers);
+		free(randomPivotPlayers);
+		print_error(102, "Players", NULL);
+		return;
 	}
 
 	// Abrimos el archivo de resultados
@@ -52,7 +66,8 @@ void run_experiment()
 		return;
 	}
 
-	fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Linear Search,Binary Search\n");
+	/* fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Linear Search,Binary Search\n"); */
+	fprintf(csv, "N,Left Pivot,Right Pivot,Median Pivot,Random Pivot\n");
 
 	// header
 	printf(PURPLE "╔══════════════════════════════════════════╗\n");
@@ -62,14 +77,14 @@ void run_experiment()
 		// La fórmula evita k = 0 y garantiza que el último punto sea n.
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		Player target = {n+1, "", "", 0.0, 0}; // Jugador buscado de ejemplo
+		/* Player target = {n+1, "", "", 0.0, 0}; // Jugador buscado de ejemplo */
 
 		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
 		printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
 		//printf(PURPLE "║                                          ║\n");
 		clock_t start, end;
 
-		// Tiempos Bubble Sort
+		/* // Tiempos Bubble Sort
 		double timeSwapSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(swapSortPlayers, players, k * sizeof(Player));
@@ -149,10 +164,64 @@ void run_experiment()
 		resultados[struct_idx].timeSelectionSort = timeSelectionSort;
 		resultados[struct_idx].timeCocktailSort = timeCocktailSort;
 		resultados[struct_idx].timeLinearSearch = timeLinearSearch;
-		resultados[struct_idx].timeBinarySearch = timeBinarySearch;
+		resultados[struct_idx].timeBinarySearch = timeBinarySearch; */
+
+		// Tiempos Left Pivot
+		double timeLeftPivot = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(leftPivotPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(leftPivotPlayers, 0, k - 1, compare_id, 1);
+			end = clock();
+			timeLeftPivot += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeLeftPivot /= NUM_TRIALS;
+		printf(PURPLE "║" MAG3 "\tLeft Pivot Quick Sort:" WHITE " %f\t" PURPLE "   ║\n", timeLeftPivot);
+
+		// Tiempos Right Pivot
+		double timeRightPivot = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(rightPivotPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(rightPivotPlayers, 0, k - 1, compare_id, 2);
+			end = clock();
+			timeRightPivot += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeRightPivot /= NUM_TRIALS;
+		printf(PURPLE "║" MAG4 "\tRight Pivot Quick Sort:" WHITE " %f" PURPLE "     ║\n", timeRightPivot);
+
+		// Tiempos Median Pivot
+		double timeMedianPivot = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(medianPivotPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(medianPivotPlayers, 0, k - 1, compare_id, 3);
+			end = clock();
+			timeMedianPivot += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeMedianPivot /= NUM_TRIALS;
+		printf( PURPLE "║" MAG5 "\tMedian Pivot Quick Sort:" WHITE " %f" PURPLE "            ║\n", timeMedianPivot);
+
+		// Tiempos Random Pivot
+		double timeRandomPivot = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(randomPivotPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(randomPivotPlayers, 0, k - 1, compare_id, 4);
+			end = clock();
+			timeRandomPivot += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeRandomPivot /= NUM_TRIALS;
+		printf( PURPLE "║" MAG6 "\tRandom Pivot Quick Sort:" WHITE " %f" PURPLE "            ║\n", timeRandomPivot);
+
+		resultados[struct_idx].n = k;
+		resultados[struct_idx].timeLeftPivot = timeLeftPivot;
+		resultados[struct_idx].timeRightPivot = timeRightPivot;
+		resultados[struct_idx].timeMedianPivot = timeMedianPivot;
+		resultados[struct_idx].timeRandomPivot = timeRandomPivot;
 
 		// Guardar en CSV
-		fprintf(csv,
+		/* fprintf(csv,
 				"%d,%f,%f,%f,%f,%f,%f\n",
 				resultados[struct_idx].n,
 				resultados[struct_idx].timeSwapSort,
@@ -161,7 +230,15 @@ void run_experiment()
 				resultados[struct_idx].timeCocktailSort,
 				resultados[struct_idx].timeLinearSearch,
 				resultados[struct_idx].timeBinarySearch
-			);        
+			);       */
+		fprintf(csv,
+				"%d,%f,%f,%f,%f\n",
+				resultados[struct_idx].n,
+				resultados[struct_idx].timeLeftPivot,
+				resultados[struct_idx].timeRightPivot,
+				resultados[struct_idx].timeMedianPivot,
+				resultados[struct_idx].timeRandomPivot
+			);  
 		printf(PURPLE "╠══════════════════════════════════════════╣\n");
 		struct_idx++;
 	}
@@ -173,10 +250,14 @@ void run_experiment()
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
 	free(players);
-	free(swapSortPlayers);
+	free(leftPivotPlayers);
+	free(rightPivotPlayers);
+	free(medianPivotPlayers);
+	free(randomPivotPlayers);
+	/* free(swapSortPlayers);
 	free(insertionSortPlayers);
 	free(selectionSortPlayers);
 	free(cocktailShakerSortPlayers);
 	free(linearSearchPlayers);
-	free(binarySearchPlayers);
+	free(binarySearchPlayers); */
 }

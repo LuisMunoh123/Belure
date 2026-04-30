@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Funciones principales del programa
  */
 #include <stdio.h>
@@ -139,8 +139,8 @@ int main(int argc, char *argv[])
 	if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
-		if (sortOption < 1 || sortOption > 4 || sortCriteria < 1 || sortCriteria > 5) {
-			printf("Error: para ordenar debes usar -a <1..4> y -c <1..5>\n\n");
+		if (sortOption < 1 || sortOption > 5 || sortCriteria < 1 || sortCriteria > 5) {
+			printf("Error: para ordenar debes usar -a <1..5> y -c <1..5>\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -166,6 +166,8 @@ int main(int argc, char *argv[])
 			selection_sort(players, n, comp_ptr);
 		} else if (sortOption == 4) {
 			cocktail_shaker_sort(players, n, comp_ptr);
+		} else if (sortOption == 5) {
+			quick_sort(players, 0, n - 1, comp_ptr, 4);
 		}
 
 		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
@@ -251,7 +253,7 @@ static void print_usage(const char *progname){
 	printf("  " DARK_YELLOW "-t, --type <1|2|3>" RESET "                " LIGHT_GRAY "                 Tipo de generacion: 1=sorted, 2=inverse, 3=shuffled\n" RESET);
 	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                 Lee e imprime el CSV actual\n" RESET);
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                 Ordena el CSV actual\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <1|2|3|4>" RESET "         " LIGHT_GRAY "                 Algoritmo: 1=swap, 2=insertion, 3=selection, 4=cocktail\n" RESET);
+	printf("  " DARK_BLUE "-a, --algorithm <1|2|3|4|5>" RESET "         " LIGHT_GRAY "                 Algoritmo: 1=swap, 2=insertion, 3=selection, 4=cocktail, 5=quick\n" RESET);
 	printf("  " DARK_BLUE "-c, --criteria <1|2|3|4|5>" RESET "        " LIGHT_GRAY "                 Criterio: 1=ID, 2=Name, 3=Team, 4=Score, 5=Competitions\n" RESET);
 	printf("  " DARK_GREEN "-f, --find" RESET "                        " LIGHT_GRAY "                 Busca un jugador por ID\n" RESET);
 	printf("  " DARK_GREEN "-b, --binary <1|2>" RESET "                " LIGHT_GRAY "                 Busqueda: 1=linear, 2=binary\n" RESET);
