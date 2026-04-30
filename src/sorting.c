@@ -124,36 +124,21 @@ void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) 
  * @param left Inicio del ordenamiento
  * @param right Final del ordenamiento
  * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @param pivot_type Tipo de pivote (1 = menor, 2 = mayor, 3 = mediana de 3, 4 = aleatorio)
  */
-void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *), int pivot_type)
+void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *))
 {
 	// Arreglos de 1 elemento no se ordenan
 	if ((right - left)+1 < 2)
 		return;
 	
-	// Eleccion del pivote 1=menor, 2=mayor, 3=mediana de 3, 4=aleatorio
-	int pivot_pos = 0;
-	switch (pivot_type) {
-		case 1:
-			pivot_pos = left;
-			break;
-		case 2:
-			pivot_pos = right;
-			break;
-		case 3:
-			pivot_pos = median_of_three(V, left, right, comp_f);
-			break;
-		case 4:
-			pivot_pos = rand() % (right - left + 1) + left;
-			break;
-	}
+	// Eleccion del pivote por mediana de 3
+	int pivot_pos = median_of_three(V, left, right, comp_f);
 
 	pivot_pos = lomuto_partition(V, left, right, pivot_pos, comp_f);
 
 	// llamadas recursivas
-	quick_sort(V, left, pivot_pos - 1, comp_f, pivot_type);
-	quick_sort(V, pivot_pos + 1, right, comp_f, pivot_type);
+	quick_sort(V, left, pivot_pos - 1, comp_f);
+	quick_sort(V, pivot_pos + 1, right, comp_f);
 }
 
 /**

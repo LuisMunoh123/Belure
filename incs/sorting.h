@@ -16,8 +16,7 @@ void swap_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void insertion_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
-
-void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *), int pivot_type);
+void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *));
 int lomuto_partition(Player V[], int left, int right, int pivot, int (*comp_f)(Player *, Player *));
 
 #endif // SORTING_H

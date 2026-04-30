@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
 		} else if (sortOption == 4) {
 			cocktail_shaker_sort(players, n, comp_ptr);
 		} else if (sortOption == 5) {
-			quick_sort(players, 0, n - 1, comp_ptr, 4);
+			quick_sort(players, 0, n - 1, comp_ptr);
 		}
 
 		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
