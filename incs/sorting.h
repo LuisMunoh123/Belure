@@ -1,6 +1,6 @@
 /**
  * @file sorting.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Funciones de ordenamiento
  */
 
@@ -8,16 +8,15 @@
 #define SORTING_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "player.h"
+#include "utilities.h"
 
-/**
- * @file sorting.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
- * @brief Funciones de ordenamiento
- */
 void swap_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void insertion_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *));
+void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *));
+int lomuto_partition(Player V[], int left, int right, int pivot, int (*comp_f)(Player *, Player *));
 
 #endif // SORTING_H

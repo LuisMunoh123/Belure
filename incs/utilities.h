@@ -1,6 +1,6 @@
 /**
  * @file utilities.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Utilidades micelaneas
  */
 #ifndef UTILITIES_H
@@ -64,7 +64,8 @@ typedef enum {
     SWAP,
     INSERTION,
     SELECTION,
-    COCKTAIL
+    COCKTAIL,
+    QUICK
 } SortAlgorithm;
 
 typedef enum {

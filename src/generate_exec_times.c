@@ -30,14 +30,16 @@ void run_experiment()
 	Player* insertionSortPlayers = malloc(n * sizeof(Player));
 	Player* selectionSortPlayers = malloc(n * sizeof(Player));
 	Player* cocktailShakerSortPlayers = malloc(n * sizeof(Player));
+	Player* quickSortPlayers = malloc(n * sizeof(Player));
 	Player* linearSearchPlayers = malloc(n * sizeof(Player));
 	Player* binarySearchPlayers = malloc(n * sizeof(Player));
 
-	if (!swapSortPlayers || !insertionSortPlayers || !selectionSortPlayers || !cocktailShakerSortPlayers || !linearSearchPlayers || !binarySearchPlayers) {
+	if (!swapSortPlayers || !insertionSortPlayers || !selectionSortPlayers || !cocktailShakerSortPlayers || !quickSortPlayers || !linearSearchPlayers || !binarySearchPlayers) {
 		free(swapSortPlayers);
 		free(insertionSortPlayers);
 		free(selectionSortPlayers);
 		free(cocktailShakerSortPlayers);
+		free(quickSortPlayers);
 		free(linearSearchPlayers);
 		free(binarySearchPlayers);
 		print_error(102, "players", NULL);
@@ -52,7 +54,7 @@ void run_experiment()
 		return;
 	}
 
-	fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Linear Search,Binary Search\n");
+	fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Quick Sort,Linear Search,Binary Search\n");
 
 	// header
 	printf(PURPLE "╔══════════════════════════════════════════╗\n");
@@ -118,6 +120,18 @@ void run_experiment()
 		timeCocktailSort /= NUM_TRIALS;
 		printf(PURPLE "║" MAG4 "\tCocktail Shaker Sort:" WHITE " %f" PURPLE "     ║\n", timeCocktailSort);
 
+		// Tiempos Quick Sort
+		double timeQuickSort = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(quickSortPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(quickSortPlayers, 0, k - 1, compare_id);
+			end = clock();
+			timeQuickSort += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeQuickSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG5 "\tQuick Sort:" WHITE "    %f" PURPLE "            ║\n", timeQuickSort);
+
 		// Tiempos Linear Search
 		double timeLinearSearch = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
@@ -148,20 +162,22 @@ void run_experiment()
 		resultados[struct_idx].timeInsertionSort = timeInsertionSort;
 		resultados[struct_idx].timeSelectionSort = timeSelectionSort;
 		resultados[struct_idx].timeCocktailSort = timeCocktailSort;
+		resultados[struct_idx].timeQuickSort = timeQuickSort;
 		resultados[struct_idx].timeLinearSearch = timeLinearSearch;
 		resultados[struct_idx].timeBinarySearch = timeBinarySearch;
 
 		// Guardar en CSV
 		fprintf(csv,
-				"%d,%f,%f,%f,%f,%f,%f\n",
+				"%d,%f,%f,%f,%f,%f,%f,%f\n",
 				resultados[struct_idx].n,
 				resultados[struct_idx].timeSwapSort,
 				resultados[struct_idx].timeInsertionSort,
 				resultados[struct_idx].timeSelectionSort,
 				resultados[struct_idx].timeCocktailSort,
+				resultados[struct_idx].timeQuickSort,
 				resultados[struct_idx].timeLinearSearch,
 				resultados[struct_idx].timeBinarySearch
-			);        
+			);
 		printf(PURPLE "╠══════════════════════════════════════════╣\n");
 		struct_idx++;
 	}
@@ -173,10 +189,11 @@ void run_experiment()
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
 	free(players);
-	free(swapSortPlayers);
+	 free(swapSortPlayers);
 	free(insertionSortPlayers);
 	free(selectionSortPlayers);
 	free(cocktailShakerSortPlayers);
+	free(quickSortPlayers);
 	free(linearSearchPlayers);
 	free(binarySearchPlayers);
 }

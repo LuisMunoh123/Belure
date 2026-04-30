@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Funciones principales del programa
  */
 #include <stdio.h>
@@ -168,6 +168,8 @@ int main(int argc, char *argv[])
 			selection_sort(players, n, comp_ptr);
 		} else if (sortOption == COCKTAIL) {
 			cocktail_shaker_sort(players, n, comp_ptr);
+		} else if (sortOption == QUICK) {
+			quick_sort(players, 0, n - 1, comp_ptr);
 		}
 
 		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
@@ -248,7 +250,7 @@ static void print_usage(const char *progname){
 	printf("  " DARK_YELLOW "-t, --type <generate type>" RESET "                " LIGHT_GRAY "                 Tipo de generacion: sorted, inverse, shuffled\n" RESET);
 	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                         Lee e imprime el CSV actual\n" RESET);
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Ordena el CSV actual\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail\n" RESET);
+	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail, quick\n" RESET);
 	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criterio: id, name, team, score, competitions\n" RESET);
 	printf("  " DARK_GREEN "-f, --find" RESET "                        " LIGHT_GRAY "                         Busca un jugador por ID\n" RESET);
 	printf("  " DARK_GREEN "-b, --binary <search type>" RESET "                " LIGHT_GRAY "                 Busqueda: linear, binary\n" RESET);
@@ -269,6 +271,7 @@ static SortAlgorithm parse_sort_algorithm(const char *value){
 	if (strcmp(value, "insertion") == 0) return INSERTION;
 	if (strcmp(value, "selection") == 0) return SELECTION;
 	if (strcmp(value, "cocktail") == 0) return COCKTAIL;
+	if (strcmp(value, "quick") == 0) return QUICK;
 	return SORT_INVALID;
 }
 

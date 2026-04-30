@@ -1,6 +1,6 @@
 /**
  * @file player.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Implementacion de las funciones de comparacion para la estructura Player.
  */
 
@@ -273,5 +273,36 @@ void print_player_array_more(Player *players, int n)
 		clear_player_page();
 
 		start = end;
+	}
+}
+
+/**
+ * @brief Funcion para calcular la mediana de tres para un arreglo de Players
+ * 
+ * @param V Arreglo de Players
+ * @param left Indice inicial del arreglo
+ * @param right Indice final del arreglo
+ * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @return int Indice de la mediana de tres
+ */
+int median_of_three(Player V[], int left, int right, int (*comp_f)(Player *, Player *))
+{
+	int mid = (left + right) / 2;
+	if (comp_f(&V[left], &V[mid]) > 0) { // a > b
+		if (comp_f(&V[mid], &V[right]) > 0) { // a > b > c, mediana es b
+			return mid;
+		} else if (comp_f(&V[left], &V[right]) > 0) { // a > c >= b, mediana es c
+			return right;
+		} else { // c >= a > b, mediana es a
+			return left;
+		}
+	} else { // a <= b
+		if (comp_f(&V[left], &V[right]) > 0) { // b >= a > c, mediana es a
+			return left;
+		} else if (comp_f(&V[mid], &V[right]) > 0) { // b > c >= a, mediana es c
+			return right;
+		} else { // c >= b >= a, mediana es b
+			return mid;
+		}
 	}
 }

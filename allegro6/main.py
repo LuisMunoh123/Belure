@@ -237,9 +237,9 @@ def main() -> None:
 		print("Proccess completed successfully.")
 
 		if sorting_columns:
- 			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
- 			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
- 			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
+			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
+			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
 
 		if searching_columns:
 			print(f"Series de búsqueda: {', '.join(searching_columns)}")
