@@ -12,6 +12,7 @@
 #include "generator.h"
 #include "sorting.h"
 #include "searching.h"
+#include "selection.h"
 #include "utilities.h"
 #include "player.h" 
 #include "generate_exec_times.h"
@@ -203,8 +204,8 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Linear Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else {
-			cocktail_shaker_sort(players, n, compare_id);
+		} else if (searchOption == BINARY) {
+			quick_sort(players, 0, n - 1, compare_id);
 
 			printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:\n" RESET);
 			print_player_array_more(players, n);
@@ -217,6 +218,15 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Binary Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
+		} else {
+			if (searchId > n) {
+				print_error(103, "Players to select", NULL);
+				return 1;
+			}
+			// Buscamos el searched-id-ésimo mejor jugador segun el score
+			target = quick_select(players, 0, n - 1, n - searchId, compare_score);
+			printf(BG_GREEN "The %d best player is: " RESET "\n\n", searchId);
+			print_player(&target);
 		}
 
 		free(players);
@@ -252,7 +262,7 @@ static void print_usage(const char *progname){
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Ordena el CSV actual\n" RESET);
 	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail, quick\n" RESET);
 	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criterio: id, name, team, score, competitions\n" RESET);
-	printf("  " DARK_GREEN "-f, --find <search type>" RESET "                        " LIGHT_GRAY "           Busca un jugador por ID, busqueda: binary, linear.\n" RESET);
+	printf("  " DARK_GREEN "-f, --find <search type>" RESET "                        " LIGHT_GRAY "           Busca un jugador por ID, busqueda: linear, binary, quick\n" RESET);
 	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID del jugador a buscar\n" RESET);
 	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                         Ejecuta el experimento\n" RESET);
 	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                         Muestra esta ayuda\n\n" RESET);
@@ -286,5 +296,6 @@ static SortCriteria parse_sort_criteria(const char *value){
 static SearchAlgorithm parse_search_algorithm(const char *value){
 	if (strcmp(value, "linear") == 0) return LINEAR;
 	if (strcmp(value, "binary") == 0) return BINARY;
+	if (strcmp(value, "quick") == 0) return QUICKSELECT;
 	return SEARCH_INVALID;
 }
