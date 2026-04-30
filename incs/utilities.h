@@ -80,7 +80,8 @@ typedef enum {
 typedef enum {
     SEARCH_INVALID = 0,
     LINEAR,
-    BINARY
+    BINARY,
+    QUICKSELECT
 } SearchAlgorithm;
 
 #endif

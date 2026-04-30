@@ -68,4 +68,5 @@ Dentro del archivo [errors.c](src/errors.c) se encuentra la función `print_erro
 |100              | File <target> could not be read                    |
 |101              | File <target> could not be opened                  |
 |102              | It was not possible to allocate memory for <target>|
+|103              | The number you entered exceeds the maximum value allowed for <target>|
 |301              | The number of players is too high, console will show the first MAX_CONSOLE_READABLE_PLAYERS players|

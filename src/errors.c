@@ -38,6 +38,9 @@ void print_error(int num, char *target, char *obs)
 	case 102:
 		printf("It was not possible to allocate memory for %s\n", target);
 		break;
+	case 103:
+		printf("The number you entered exceeds the maximum value allowed for %s\n", target);
+		break;
 	// Errores Fatales
 	// Warnings
 	case 301:
