@@ -1,6 +1,6 @@
 /**
  * @file utilities.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
  * @brief Utilidades micelaneas
  */
 #ifndef UTILITIES_H
@@ -50,5 +50,36 @@
 #define MAG4 "\x1b[38;5;219m"
 #define MAG5 "\x1b[38;5;177m"
 #define MAG6 "\x1b[38;5;171m"
+
+// Enum para getopt
+typedef enum {
+    GEN_INVALID = 0,
+    SORTED,
+    INVERSE,
+    SHUFFLED
+} GenerationType;
+
+typedef enum {
+    SORT_INVALID = 0,
+    SWAP,
+    INSERTION,
+    SELECTION,
+    COCKTAIL
+} SortAlgorithm;
+
+typedef enum {
+    CRIT_INVALID = 0,
+    ID,
+    NAME,
+    TEAM,
+    SCORE,
+    COMPETITIONS
+} SortCriteria;
+
+typedef enum {
+    SEARCH_INVALID = 0,
+    LINEAR,
+    BINARY
+} SearchAlgorithm;
 
 #endif

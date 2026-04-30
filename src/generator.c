@@ -1,6 +1,6 @@
 /**
  * @file generator.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
  * @brief Funciones de generacion de datos y archivo csv
  */
 
@@ -84,7 +84,7 @@ static void generate_player(int id, Player *player)
  * 
  * @return int 0 si todo va bien, otro codigo de error en caso de error
  */
-int generate_csv(int n, int generationType) 
+int generate_csv(int n, GenerationType generationType) 
 {
 	FILE *csv = fopen("build/db/players.csv", "w");
 
@@ -111,9 +111,9 @@ int generate_csv(int n, int generationType)
 		generate_player(i + 1, &players[i]);
 	}
 
-	if (generationType == 2) {
+	if (generationType == INVERSE) {
 		reverse_players(players, n);
-	} else if (generationType == 3) {
+	} else if (generationType == SHUFFLED) {
 		shuffle_players(players, n);
 	}
 

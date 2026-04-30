@@ -32,6 +32,10 @@ static struct option long_options[] = {
 };
 
 static void print_usage(const char *progname);
+static GenerationType parse_generation_type(const char *value);
+static SortAlgorithm parse_sort_algorithm(const char *value);
+static SortCriteria parse_sort_criteria(const char *value);
+static SearchAlgorithm parse_search_algorithm(const char *value);
 
 int main(int argc, char *argv[])
 {
@@ -39,14 +43,14 @@ int main(int argc, char *argv[])
 	char action = '\0';
 	int action_count = 0;
 
-	int generationType = 0;
+	GenerationType generationType = GEN_INVALID;
 	Player *players = NULL;
 	int n = -1;
 
-	int sortOption = 0;
-	int sortCriteria = 0;
+	SortAlgorithm sortOption = SORT_INVALID;
+	SortCriteria sortCriteria = CRIT_INVALID;
 
-	int searchOption = 0;
+	SearchAlgorithm searchOption = SEARCH_INVALID;
 	int searchId = -1;
 	int result;
 
@@ -69,19 +73,19 @@ int main(int argc, char *argv[])
 				break;
 
 			case 't':
-				generationType = atoi(optarg);
+				generationType = parse_generation_type(optarg);
 				break;
 
 			case 'a':
-				sortOption = atoi(optarg);
+				sortOption = parse_sort_algorithm(optarg);
 				break;
 
 			case 'c':
-				sortCriteria = atoi(optarg);
+				sortCriteria = parse_sort_criteria(optarg);
 				break;
 
 			case 'b':
-				searchOption = atoi(optarg);
+				searchOption = parse_search_algorithm(optarg);
 				break;
 
 			case 'i':
@@ -105,15 +109,15 @@ int main(int argc, char *argv[])
 	}
 
 	if (action == 'g') {
-		if (n < 0 || generationType < 1 || generationType > 3) {
-			printf("Error: para generar debes usar -n <cantidad> y -t <1|2|3>\n\n");
+		if (generationType == GEN_INVALID) {
+			printf("Error: para generar debes usar -g <cantidad> y -t <generate type>\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
 
-		if (generationType == 1) {
+		if (generationType == SORTED) {
 			printf(YELLOW "\nGenerating SORTED array...\n");
-		} else if (generationType == 2) {
+		} else if (generationType == INVERSE) {
 			printf(YELLOW "\nGenerating INVERSE array...\n");
 		} else {
 			printf(YELLOW "\nGenerating SHUFFLED array...\n");
@@ -137,8 +141,8 @@ int main(int argc, char *argv[])
 	if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
-		if (sortOption < 1 || sortOption > 4 || sortCriteria < 1 || sortCriteria > 5) {
-			printf("Error: para ordenar debes usar -a <1..4> y -c <1..5>\n\n");
+		if (sortOption == SORT_INVALID || sortCriteria == CRIT_INVALID) {
+			printf("Error: para ordenar debes usar -a <sort type> y -c <criteria>\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -150,19 +154,19 @@ int main(int argc, char *argv[])
 		printf(LIGHT_BLUE "\nOriginal file:\n" RESET);
 		print_player_array_more(players, n);
 
-		if (sortCriteria == 1) comp_ptr = compare_id;
-		else if (sortCriteria == 2) comp_ptr = compare_name;
-		else if (sortCriteria == 3) comp_ptr = compare_team;
-		else if (sortCriteria == 4) comp_ptr = compare_score;
-		else if (sortCriteria == 5) comp_ptr = compare_competitions;
+		if (sortCriteria == ID) comp_ptr = compare_id;
+		else if (sortCriteria == NAME) comp_ptr = compare_name;
+		else if (sortCriteria == TEAM) comp_ptr = compare_team;
+		else if (sortCriteria == SCORE) comp_ptr = compare_score;
+		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competitions;
 
-		if (sortOption == 1) {
+		if (sortOption == SWAP) {
 			swap_sort(players, n, comp_ptr);
-		} else if (sortOption == 2) {
+		} else if (sortOption == INSERTION) {
 			insertion_sort(players, n, comp_ptr);
-		} else if (sortOption == 3) {
+		} else if (sortOption == SELECTION) {
 			selection_sort(players, n, comp_ptr);
-		} else if (sortOption == 4) {
+		} else if (sortOption == COCKTAIL) {
 			cocktail_shaker_sort(players, n, comp_ptr);
 		}
 
@@ -173,8 +177,8 @@ int main(int argc, char *argv[])
 	}
 
 	if (action == 'f') {
-		if (searchOption < 1 || searchOption > 2 || searchId < 0) {
-			printf("Error: para buscar debes usar -b <1|2> -i <id>\n\n");
+		if (searchOption == SEARCH_INVALID) {
+			printf("Error: para buscar debes usar -b <search type> -i <id>\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -188,7 +192,7 @@ int main(int argc, char *argv[])
 
 		Player target = {searchId, "", "", 0.0, 0};
 
-		if (searchOption == 1) {
+		if (searchOption == LINEAR) {
 			result = linear_search(players, n, &target, compare_id);
 
 			if (result == n) {
@@ -232,23 +236,53 @@ static void print_usage(const char *progname){
 	printf(LIGHT_BLUE "╚════════════════════════════════════════════════════════════╝\n" RESET);
 
 	printf("\n" DARK_GRAY "Uso rapido:\n" RESET);
-	printf("  " YELLOW "%s " DARK_YELLOW "-g " LIGHT_GRAY "<cantidad> " DARK_YELLOW "-t " LIGHT_GRAY "<1|2|3>" RESET "       " YELLOW "Generar CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " ORANGE "-r" RESET "                             " ORANGE "Leer CSV actual\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "-a <1|2|3|4> -c <1|2|3|4|5>" RESET " " LIGHT_BLUE "Ordenar CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "-b <1|2> -i <id>" RESET "            " LIGHT_GREEN "Buscar por ID\n" RESET, progname);
-	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "Ejecutar experimento\n" RESET, progname);
-	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "Mostrar ayuda\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_YELLOW "-g " LIGHT_GRAY "<cantidad> " DARK_YELLOW "-t " LIGHT_GRAY "<generate type>" RESET "       " YELLOW "Generar CSV\n" RESET, progname);
+	printf("  " YELLOW "%s " ORANGE "-r" RESET "                             " ORANGE "        Leer CSV actual\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "-a <sort type> -c <criteria>" RESET " " LIGHT_BLUE "       Ordenar CSV\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "-b <search type> -i <id>" RESET "            " LIGHT_GREEN "Buscar por ID\n" RESET, progname);
+	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "        Ejecutar experimento\n" RESET, progname);
+	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "        Mostrar ayuda\n" RESET, progname);
 
 	printf("\n" DARK_GRAY "Opciones:\n" RESET);
-	printf("  " DARK_YELLOW "-g, --generate <cantidad>" RESET "         " LIGHT_GRAY "                 Genera un CSV con la cantidad indicada\n" RESET);
-	printf("  " DARK_YELLOW "-t, --type <1|2|3>" RESET "                " LIGHT_GRAY "                 Tipo de generacion: 1=sorted, 2=inverse, 3=shuffled\n" RESET);
-	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                 Lee e imprime el CSV actual\n" RESET);
-	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                 Ordena el CSV actual\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <1|2|3|4>" RESET "         " LIGHT_GRAY "                 Algoritmo: 1=swap, 2=insertion, 3=selection, 4=cocktail\n" RESET);
-	printf("  " DARK_BLUE "-c, --criteria <1|2|3|4|5>" RESET "        " LIGHT_GRAY "                 Criterio: 1=ID, 2=Name, 3=Team, 4=Score, 5=Competitions\n" RESET);
-	printf("  " DARK_GREEN "-f, --find" RESET "                        " LIGHT_GRAY "                 Busca un jugador por ID\n" RESET);
-	printf("  " DARK_GREEN "-b, --binary <1|2>" RESET "                " LIGHT_GRAY "                 Busqueda: 1=linear, 2=binary\n" RESET);
-	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                 ID del jugador a buscar\n" RESET);
-	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                 Ejecuta el experimento\n" RESET);
-	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                 Muestra esta ayuda\n\n" RESET);
+	printf("  " DARK_YELLOW "-g, --generate <cantidad>" RESET "         " LIGHT_GRAY "                         Genera un CSV con la cantidad indicada\n" RESET);
+	printf("  " DARK_YELLOW "-t, --type <generate type>" RESET "                " LIGHT_GRAY "                 Tipo de generacion: sorted, inverse, shuffled\n" RESET);
+	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                         Lee e imprime el CSV actual\n" RESET);
+	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Ordena el CSV actual\n" RESET);
+	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail\n" RESET);
+	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criterio: id, name, team, score, competitions\n" RESET);
+	printf("  " DARK_GREEN "-f, --find" RESET "                        " LIGHT_GRAY "                         Busca un jugador por ID\n" RESET);
+	printf("  " DARK_GREEN "-b, --binary <search type>" RESET "                " LIGHT_GRAY "                 Busqueda: linear, binary\n" RESET);
+	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID del jugador a buscar\n" RESET);
+	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                         Ejecuta el experimento\n" RESET);
+	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                         Muestra esta ayuda\n\n" RESET);
+}
+
+static GenerationType parse_generation_type(const char *value){
+	if (strcmp(value, "sorted") == 0) return SORTED;
+	if (strcmp(value, "inverse") == 0) return INVERSE;
+	if (strcmp(value, "shuffle") == 0) return SHUFFLED;
+	return GEN_INVALID;
+}
+
+static SortAlgorithm parse_sort_algorithm(const char *value){
+	if (strcmp(value, "bubble") == 0) return SWAP;
+	if (strcmp(value, "insertion") == 0) return INSERTION;
+	if (strcmp(value, "selection") == 0) return SELECTION;
+	if (strcmp(value, "cocktail") == 0) return COCKTAIL;
+	return SORT_INVALID;
+}
+
+static SortCriteria parse_sort_criteria(const char *value){
+	if (strcmp(value, "id") == 0) return ID;
+	if (strcmp(value, "name") == 0) return NAME;
+	if (strcmp(value, "team") == 0) return TEAM;
+	if (strcmp(value, "score") == 0) return SCORE;
+	if (strcmp(value, "competitions") == 0) return COMPETITIONS;
+	return CRIT_INVALID;
+}
+
+static SearchAlgorithm parse_search_algorithm(const char *value){
+	if (strcmp(value, "linear") == 0) return LINEAR;
+	if (strcmp(value, "binary") == 0) return BINARY;
+	return SEARCH_INVALID;
 }
