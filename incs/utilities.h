@@ -81,7 +81,9 @@ typedef enum {
     SEARCH_INVALID = 0,
     LINEAR,
     BINARY,
-    QUICKSELECT
+    BINARY_RECURSIVE,
+    EXPONENTIAL,
+    INTERPOLATION
 } SearchAlgorithm;
 
 #endif

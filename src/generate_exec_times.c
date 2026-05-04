@@ -150,7 +150,7 @@ void run_experiment()
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(binarySearchPlayers, cocktailShakerSortPlayers, k * sizeof(Player));
 			start = clock();
-			binary_search(binarySearchPlayers, 0, k - 1, &target);
+			binary_search_iterative(binarySearchPlayers, 0, k - 1, &target, compare_id);
 			end = clock();
 			timeBinarySearch += (double)(end - start) / CLOCKS_PER_SEC;
 		}
