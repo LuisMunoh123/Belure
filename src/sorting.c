@@ -1,4 +1,3 @@
-
 /**
  * @file sorting.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
@@ -141,27 +140,6 @@ void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player 
 	quick_sort(V, left, pivot_pos - 1, comp_f);
 	quick_sort(V, pivot_pos + 1, right, comp_f);
 }
-/**
- * @brief ordena una parte del arreglo con insercion
- *
- * @param V arreglo de jugadores
- * @param left inicio del subarreglo
- * @param right final del subarreglo
- * @param comp_f funcion de comparacion
- */
-static void insertion_sort_range(Player V[], int left, int right, int (*comp_f)(Player *, Player *)) {
-	for (int i = left + 1; i <= right; i++) {
-		Player key = V[i];
-		int j = i - 1;
-
-		while (j >= left && comp_f(&V[j], &key) > 0) {
-			V[j + 1] = V[j];
-			j--;
-		}
-
-		V[j + 1] = key;
-	}
-}
 
 /**
  * @brief junta dos subarreglos ya ordenados
@@ -217,31 +195,6 @@ void merge_sort_classic(Player V[], int left, int right, int (*comp_f)(Player *,
 	}
 }
 
-/**
- * @brief merge sort optimizado con insercion para subarreglos pequenos
- *
- * @param V arreglo de jugadores
- * @param left inicio del arreglo
- * @param right final del arreglo
- * @param threshold umbral para usar insercion
- * @param comp_f funcion de comparacion
- */
-void merge_sort_optimized(Player V[], int left, int right, int threshold, int (*comp_f)(Player *, Player *)) {
-	if (left >= right) {
-		return;
-	}
-
-	if ((right - left + 1) <= threshold) {
-		insertion_sort_range(V, left, right, comp_f);
-		return;
-	}
-
-	int mid = left + (right - left) / 2;
-
-	merge_sort_optimized(V, left, mid, threshold, comp_f);
-	merge_sort_optimized(V, mid + 1, right, threshold, comp_f);
-	merge(V, left, mid, right, comp_f);
-}
 /**
  * @brief Particion de un arreglo por algoritmo lomuto
  * 

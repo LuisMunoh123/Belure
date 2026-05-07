@@ -5,8 +5,8 @@
  */
 #ifndef EXEC_H
 #define EXEC_H
-#define NUM_TRIALS 20
-#define NUM_STEPS 25
+#define NUM_TRIALS 100
+#define NUM_STEPS 100
 #include <stdio.h>
 #include <time.h>
 
@@ -18,18 +18,8 @@
 
 typedef struct ExecResults {
     int n;
-    double timeSwapSort;
     double timeInsertionSort;
-    double timeSelectionSort;
-    double timeCocktailSort;
-    double timeQuickSort;
-    double timeMergeClassic; 
-    double timeMergeOpt4;
-    double timeMergeOpt8;
-    double timeMergeOpt16;
-    double timeMergeOpt32;
-    double timeLinearSearch;
-    double timeBinarySearch;
+    double timeMergeClassic;
 } ExecResults;
 
 void run_experiment(void);
