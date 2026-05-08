@@ -32,6 +32,5 @@ typedef struct ExecResults {
 } ExecResults;
 
 void run_experiment(void);
-void run_merge_threshold_experiment(void);
 
 #endif

@@ -66,7 +66,8 @@ typedef enum {
     SELECTION,
     COCKTAIL,
     QUICK,
-    MERGE
+    MERGE,
+    MERGE_OPTIMIZED
 } SortAlgorithm;
 
 typedef enum {
