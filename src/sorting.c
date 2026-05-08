@@ -196,6 +196,29 @@ void merge_sort_classic(Player V[], int left, int right, int (*comp_f)(Player *,
 }
 
 /**
+ * @brief merge sort optimizado: usa insertion sort cuando el subarreglo
+ *        es menor o igual al threshold dado
+ *
+ * @param V arreglo de jugadores
+ * @param left inicio del arreglo
+ * @param right final del arreglo
+ * @param threshold tamano minimo para usar insertion sort
+ * @param comp_f funcion de comparacion
+ */
+void merge_sort_optimized(Player V[], int left, int right, int threshold, int (*comp_f)(Player *, Player *)) {
+	if (right - left + 1 <= threshold) {
+		insertion_sort(&V[left], right - left + 1, comp_f);
+		return;
+	}
+	if (left < right) {
+		int mid = left + (right - left) / 2;
+		merge_sort_optimized(V, left, mid, threshold, comp_f);
+		merge_sort_optimized(V, mid + 1, right, threshold, comp_f);
+		merge(V, left, mid, right, comp_f);
+	}
+}
+
+/**
  * @brief Particion de un arreglo por algoritmo lomuto
  * 
  * @param V Arreglo de Players

@@ -13,6 +13,9 @@ SORTING_FINAL_FRAME_PATH = "docs/results/sorting_graph.png"
 SEARCHING_GIF_PATH = "docs/results/searching_animation.gif"
 SEARCHING_FINAL_FRAME_PATH = "docs/results/searching_graph.png"
 
+THRESHOLD_CSV_PATH = "build/db/merge_threshold_experiment.csv"
+THRESHOLD_PNG_PATH = "docs/results/threshold_graph.png"
+
 FRAME_DURATION = 1.5
 FIG_WIDTH = 10
 FIG_HEIGHT = 7
@@ -216,6 +219,43 @@ def ask_log_scale() -> bool:
 	return input("Do you want to use logarithmic scale? (y/n): ").lower() == "y"
 
 
+def generate_threshold_graph(csv_path: str, png_path: str) -> None:
+	"""Genera gráfica de barras para el experimento de thresholds."""
+	if not os.path.isfile(csv_path):
+		return
+
+	df = pd.read_csv(csv_path)
+	if df.empty or "threshold" not in df.columns or "time" not in df.columns:
+		return
+
+	best_idx = df["time"].idxmin()
+
+	fig, ax = plt.subplots(figsize=(FIG_WIDTH, FIG_HEIGHT), dpi=DPI)
+
+	colors = ["#e07b39" if i == best_idx else "#5b8db8" for i in range(len(df))]
+	bars = ax.bar(df["threshold"].astype(str), df["time"], color=colors, width=0.6, edgecolor="black", linewidth=0.8)
+
+	for bar, val in zip(bars, df["time"]):
+		ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() * 1.01,
+			f"{val:.6f}", ha="center", va="bottom", fontsize=9)
+
+	ax.set_title("Experimento: Threshold óptimo de Merge Sort Optimizado", fontsize=13)
+	ax.set_xlabel("Threshold", fontsize=11)
+	ax.set_ylabel("Tiempo promedio (s)", fontsize=11)
+	ax.grid(axis="y", linestyle="--", alpha=0.6)
+
+	best_thr = df.loc[best_idx, "threshold"]
+	ax.legend(handles=[
+		plt.Rectangle((0,0),1,1, color="#e07b39", label=f"Mejor threshold: {best_thr}"),
+		plt.Rectangle((0,0),1,1, color="#5b8db8", label="Otros thresholds"),
+	], loc="upper right")
+
+	fig.tight_layout()
+	fig.savefig(png_path, format="png")
+	plt.close(fig)
+	print(f"PNG threshold: {Path(png_path).resolve()}")
+
+
 def main() -> None:
 	try:
 		validate_csv_file(CSV_PATH)
@@ -245,6 +285,8 @@ def main() -> None:
 			print(f"Series de búsqueda: {', '.join(searching_columns)}")
 			print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
 			print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+
+		generate_threshold_graph(THRESHOLD_CSV_PATH, THRESHOLD_PNG_PATH)
 
 	except Exception as e:
 		print(f"Error: {e}")

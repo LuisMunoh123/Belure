@@ -23,6 +23,7 @@ static struct option long_options[] = {
 	{"sort", no_argument, 0, 's'},
 	{"find", required_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
+	{"threshold-experiment", no_argument, 0, 'T'},
 	{"type", required_argument, 0, 't'},
 	{"algorithm", required_argument, 0, 'a'},
 	{"criteria", required_argument, 0, 'c'},
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsf:eht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsf:eTht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
 		switch (opt) {
 			case 'g':
 				action = 'g';
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
 			case 'r':
 			case 's':
 			case 'e':
+			case 'T':
 			action = (char)opt;
 			action_count++;
 			break;
@@ -473,6 +475,11 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	if (action == 'T') {
+		run_merge_threshold_experiment();
+		return 0;
+	}
+
 	print_usage(argv[0]);
 	return 1;
 }
@@ -492,6 +499,7 @@ static void print_usage(const char *progname){
 	printf("  " YELLOW "%s " MAGENTA "-q <score>" RESET "                     " MAGENTA "        Mostrar jugadores con puntaje exacto\n" RESET, progname);
 	printf("  " YELLOW "%s " MAGENTA "-R -m <min> -M <max>" RESET "            " MAGENTA "       Mostrar jugadores por rango de puntaje\n" RESET, progname);
 	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "        Ejecutar experimento\n" RESET, progname);
+	printf("  " YELLOW "%s " PURPLE "-T" RESET "                             " MAGENTA "        Experimento threshold optimo de merge sort\n" RESET, progname);
 	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "        Mostrar ayuda\n" RESET, progname);
 
 	printf("\n" DARK_GRAY "Opciones:\n" RESET);
