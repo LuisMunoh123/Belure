@@ -1,6 +1,6 @@
 /**
  * @file generate_exec_times.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Funciones para la ejecution de tests
  */
 
@@ -8,93 +8,227 @@
 #include "utilities.h"
 
 /**
- * @brief compara merge sort clasico vs merge sort optimizado (threshold=MERGE_THRESHOLD)
- *        para observar la ganancia de la optimizacion sobre distintos tamanos.
+ * @brief Ejecuta un experimento de ordenamiento y busqueda generando un CSV con los resultados
+ * 
  */
 void run_experiment()
 {
-	int n = 0;
+	int n = 0; // Cantidad de jugadores
 	Player* players;
 	if ((players = load_players("build/db/players.csv", &n)) == NULL) {
-		return;
+			return;
 	}
+	printf("Arreglo de jugadores cargado\n");
+	print_player_array(players, n);
 
-	// Rango de 2 hasta min(n, 50000) en NUM_STEPS pasos uniformes.
-	const int n_min = 2;
-	const int n_max = (n < 50000) ? n : 50000;
 	const int num_points = NUM_STEPS;
+	ExecResults resultados[num_points];
+	int struct_idx = 0;
 
-	Player* classicPlayers   = malloc(n_max * sizeof(Player));
-	Player* optimizedPlayers = malloc(n_max * sizeof(Player));
+	// Inicializamos los arreglos de jugadores
+	Player* swapSortPlayers = malloc(n * sizeof(Player));
+	Player* insertionSortPlayers = malloc(n * sizeof(Player));
+	Player* selectionSortPlayers = malloc(n * sizeof(Player));
+	Player* cocktailShakerSortPlayers = malloc(n * sizeof(Player));
+	Player* quickSortPlayers = malloc(n * sizeof(Player));
+	Player* mergeSortPlayers = malloc(n * sizeof(Player));
+	Player* mergeSortOptimizedPlayers = malloc(n * sizeof(Player));
+	Player* linearSearchPlayers = malloc(n * sizeof(Player));
+	Player* binarySearchPlayers = malloc(n * sizeof(Player));
 
-	if (!classicPlayers || !optimizedPlayers) {
-		free(classicPlayers);
-		free(optimizedPlayers);
-		free(players);
+	if (!swapSortPlayers || !insertionSortPlayers || !selectionSortPlayers || !cocktailShakerSortPlayers || !quickSortPlayers || !mergeSortPlayers || !mergeSortOptimizedPlayers || !linearSearchPlayers || !binarySearchPlayers) {
+		free(swapSortPlayers);
+		free(insertionSortPlayers);
+		free(selectionSortPlayers);
+		free(cocktailShakerSortPlayers);
+		free(quickSortPlayers);
+		free(mergeSortPlayers);
+		free(mergeSortOptimizedPlayers);
+		free(linearSearchPlayers);
+		free(binarySearchPlayers);
 		print_error(102, "players", NULL);
 		return;
 	}
 
+	// Abrimos el archivo de resultados
 	FILE *csv = fopen("build/db/experiment.csv", "w");
-	if (csv == NULL) {
-		free(classicPlayers);
-		free(optimizedPlayers);
-		free(players);
+	if (csv == NULL)
+	{
 		print_error(101, "build/db/experiment.csv", NULL);
 		return;
 	}
 
-	fprintf(csv, "N,Merge Sort Classic,Merge Sort Optimized\n");
+	fprintf(csv, "N,Bubble Sort,Insertion Sort,Selection Sort,Cocktail Shaker Sort,Quick Sort,Merge Sort,Merge Sort Optimized,Linear Search,Binary Search\n");
 
-	printf(PURPLE "╔══════════════════════════════════════════\n");
+	// header
+	printf(PURPLE "╔══════════════════════════════════════════╗\n");
 
 	for (int s = 0; s < num_points; s++) {
-		int k = n_min + (int)((double)s / (num_points - 1) * (n_max - n_min));
-		if (k < 1) k = 1;
-		if (k > n) k = n;
+		// k crece desde 1 hasta n, repartido en NUM_STEPS puntos.
+		// La fórmula evita k = 0 y garantiza que el último punto sea n.
+		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE " %8d" PURPLE "                   ║\n", k);
-		printf(PURPLE "║" MAGENTA "Paso:" WHITE " %4d/%4d" PURPLE "                           ║\n", s + 1, num_points);
+		Player target = {n+1, "", "", 0.0, 0}; // Jugador buscado de ejemplo
 
+		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
+		printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
+		//printf(PURPLE "║                                          ║\n");
 		clock_t start, end;
 
-		// merge sort clasico
-		double timeClassic = 0;
+		// Tiempos Bubble Sort
+		double timeSwapSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(classicPlayers, players, (size_t)k * sizeof(Player));
+			memcpy(swapSortPlayers, players, k * sizeof(Player));
 			start = clock();
-			merge_sort_classic(classicPlayers, 0, k - 1, compare_id);
+			swap_sort(swapSortPlayers, k, compare_id);
 			end = clock();
-			timeClassic += (double)(end - start) / CLOCKS_PER_SEC;
+			timeSwapSort += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeClassic /= NUM_TRIALS;
-		printf(PURPLE "║" MAG6 "\tMerge Classic:     " WHITE " %f" PURPLE "     ║\n", timeClassic);
+		timeSwapSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG1 "\tSwap Sort:" WHITE " %f\t" PURPLE "           ║\n", timeSwapSort);
+ 
 
-		// merge sort optimizado con threshold = MERGE_THRESHOLD
-		double timeOptimized = 0;
+		// Tiempos Insertion Sort
+		double timeInsertionSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			memcpy(optimizedPlayers, players, (size_t)k * sizeof(Player));
+			memcpy(insertionSortPlayers, players, k * sizeof(Player));
 			start = clock();
-			merge_sort_optimized(optimizedPlayers, 0, k - 1, MERGE_THRESHOLD, compare_id);
+			insertion_sort(insertionSortPlayers, k, compare_id);
 			end = clock();
-			timeOptimized += (double)(end - start) / CLOCKS_PER_SEC;
+			timeInsertionSort += (double)(end - start) / CLOCKS_PER_SEC;
 		}
-		timeOptimized /= NUM_TRIALS;
-		printf(PURPLE "║" MAG2 "\tMerge Optimizado:  " WHITE " %f" PURPLE "     ║\n", timeOptimized);
+		timeInsertionSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG2 "\tInsertion Sort:" WHITE " %f\t" PURPLE "   ║\n", timeInsertionSort);
+		
+		// Tiempos Selection Sort
+		double timeSelectionSort = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(selectionSortPlayers, players, k * sizeof(Player));
+			start = clock();
+			selection_sort(selectionSortPlayers, k, compare_id);
+			end = clock();
+			timeSelectionSort += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeSelectionSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG3 "\tSelection Sort:" WHITE " %f\t" PURPLE "   ║\n", timeSelectionSort);
 
-		fprintf(csv, "%d,%f,%f\n", k, timeClassic, timeOptimized);
+		// Tiempos Cocktail Shaker Sort
+		double timeCocktailSort = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(cocktailShakerSortPlayers, players, k * sizeof(Player));
+			start = clock();
+			cocktail_shaker_sort(cocktailShakerSortPlayers, k, compare_id);
+			end = clock();
+			timeCocktailSort += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeCocktailSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG4 "\tCocktail Shaker Sort:" WHITE " %f" PURPLE "     ║\n", timeCocktailSort);
 
-		printf(PURPLE "╠══════════════════════════════════════════\n");
+		// Tiempos Quick Sort
+		double timeQuickSort = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(quickSortPlayers, players, k * sizeof(Player));
+			start = clock();
+			quick_sort(quickSortPlayers, 0, k - 1, compare_id);
+			end = clock();
+			timeQuickSort += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeQuickSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG5 "\tQuick Sort:" WHITE "    %f" PURPLE "            ║\n", timeQuickSort);
+
+
+		// Tiempos Merge Sort
+		double timeMergeSort = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(mergeSortPlayers, players, k * sizeof(Player));
+			start = clock();
+			merge_sort_classic(mergeSortPlayers, 0, k - 1, compare_id);
+			end = clock();
+			timeMergeSort += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeMergeSort /= NUM_TRIALS;
+		printf(PURPLE "║" MAG5 "\tMerge Sort:" WHITE "    %f" PURPLE "            ║\n", timeMergeSort);
+
+		// Tiempos Merge Sort Optimizado
+		double timeMergeOptimized = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(mergeSortOptimizedPlayers, players, k * sizeof(Player));
+			start = clock();
+			merge_sort_optimized(mergeSortOptimizedPlayers, 0, k - 1, MERGE_THRESHOLD, compare_id);
+			end = clock();
+			timeMergeOptimized += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeMergeOptimized /= NUM_TRIALS;
+		printf(PURPLE "║" MAG5 "\tMerge Optimized:" WHITE " %f" PURPLE "          ║\n", timeMergeOptimized);
+
+		// Tiempos Linear Search
+		double timeLinearSearch = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(linearSearchPlayers, players, k * sizeof(Player));
+			start = clock();
+			linear_search(linearSearchPlayers, k, &target, compare_id);
+			end = clock();
+			timeLinearSearch += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeLinearSearch /= NUM_TRIALS;
+		printf( PURPLE "║" MAG5 "\tLinear Search:" WHITE " %f" PURPLE "            ║\n", timeLinearSearch);
+
+		// Tiempos Binary Search
+		// USAMOS UN ARREGLO DE LOS YA ORDENADOS COMO INPUT
+		double timeBinarySearch = 0;
+		for (int i = 0; i < NUM_TRIALS; i++) {
+			memcpy(binarySearchPlayers, cocktailShakerSortPlayers, k * sizeof(Player));
+			start = clock();
+			binary_search_iterative(binarySearchPlayers, 0, k - 1, &target, compare_id);
+			end = clock();
+			timeBinarySearch += (double)(end - start) / CLOCKS_PER_SEC;
+		}
+		timeBinarySearch /= NUM_TRIALS;
+		printf( PURPLE "║" MAG6 "\tBinary Search:" WHITE " %f" PURPLE "            ║\n", timeBinarySearch);
+
+		resultados[struct_idx].n = k;
+		resultados[struct_idx].timeSwapSort = timeSwapSort;
+		resultados[struct_idx].timeInsertionSort = timeInsertionSort;
+		resultados[struct_idx].timeSelectionSort = timeSelectionSort;
+		resultados[struct_idx].timeCocktailSort = timeCocktailSort;
+		resultados[struct_idx].timeQuickSort = timeQuickSort;
+		resultados[struct_idx].timeMergeSort = timeMergeSort;
+		resultados[struct_idx].timeMergeSortOptimized = timeMergeOptimized;
+		resultados[struct_idx].timeLinearSearch = timeLinearSearch;
+		resultados[struct_idx].timeBinarySearch = timeBinarySearch;
+
+		// Guardar en CSV
+		fprintf(csv,
+				"%d,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
+				resultados[struct_idx].n,
+				resultados[struct_idx].timeSwapSort,
+				resultados[struct_idx].timeInsertionSort,
+				resultados[struct_idx].timeSelectionSort,
+				resultados[struct_idx].timeCocktailSort,
+				resultados[struct_idx].timeQuickSort,
+				resultados[struct_idx].timeMergeSort,
+				resultados[struct_idx].timeMergeSortOptimized,
+				resultados[struct_idx].timeLinearSearch,
+				resultados[struct_idx].timeBinarySearch
+			);
+		printf(PURPLE "╠══════════════════════════════════════════╣\n");
+		struct_idx++;
 	}
-
+	// end of table
 	printf(PURPLE "║" LIGHT_GREEN "              CSV Data written" PURPLE "            ║\n");
-	printf(PURPLE "╚══════════════════════════════════════════\n" RESET);
+	printf(PURPLE "╚══════════════════════════════════════════╝\n" RESET);
 	fclose(csv);
 
 	printf("\n" BG_GREEN "Data saved in build/db/experiment.csv" RESET "\n");
 
 	free(players);
-	free(classicPlayers);
-	free(optimizedPlayers);
+	 free(swapSortPlayers);
+	free(insertionSortPlayers);
+	free(selectionSortPlayers);
+	free(cocktailShakerSortPlayers);
+	free(quickSortPlayers);
+	free(mergeSortPlayers);
+	free(mergeSortOptimizedPlayers);
+	free(linearSearchPlayers);
+	free(binarySearchPlayers);
 }
-

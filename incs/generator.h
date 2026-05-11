@@ -1,6 +1,6 @@
 /**
  * @file generator.h
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz, Franco Aguilar
  * @brief Funcion y utilidades de generacion
  */
 

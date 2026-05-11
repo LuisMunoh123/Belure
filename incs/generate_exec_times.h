@@ -6,7 +6,7 @@
 #ifndef EXEC_H
 #define EXEC_H
 #define NUM_TRIALS 100
-#define NUM_STEPS 40
+#define NUM_STEPS 20
 #define MERGE_THRESHOLD 48
 
 #include <stdio.h>
@@ -26,7 +26,8 @@ typedef struct ExecResults {
     double timeSelectionSort;
     double timeCocktailSort;
     double timeQuickSort;
-    double timeMergeClassic;
+    double timeMergeSort;
+    double timeMergeSortOptimized;
     double timeLinearSearch;
     double timeBinarySearch;
 } ExecResults;

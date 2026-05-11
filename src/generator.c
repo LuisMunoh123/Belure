@@ -1,6 +1,6 @@
 /**
  * @file generator.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo, Franco Aguilar
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz, Franco Aguilar
  * @brief Funciones de generacion de datos y archivo csv
  */
 

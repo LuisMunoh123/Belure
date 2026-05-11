@@ -1,6 +1,6 @@
 /**
  * @file searching.c
- * @author Andres Barbosa, Milton Hernandez, Ivan Gallardo
+ * @author Franco Aguilar, Milton Hernández, Luis Muñoz
  * @brief Funciones de busqueda
  */
 
