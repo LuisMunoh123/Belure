@@ -379,9 +379,7 @@ int main(int argc, char *argv[])
 
 		printf(BG_GREEN "Top %d players by score:" RESET "\n\n", topCount);
 
-		for (int i = n - 1; i >= n - topCount; i--) {
-			print_player(&players[i]);
-		}
+		print_player_array_more(&players[n-1-topCount], topCount);
 
 		free(players);
 		return 0;
