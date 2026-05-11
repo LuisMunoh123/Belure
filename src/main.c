@@ -23,6 +23,7 @@ static struct option long_options[] = {
 	{"sort", no_argument, 0, 's'},
 	{"find", required_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
+	{"threshold-experiment", no_argument, 0, 'T'},
 	{"type", required_argument, 0, 't'},
 	{"algorithm", required_argument, 0, 'a'},
 	{"criteria", required_argument, 0, 'c'},
@@ -223,6 +224,10 @@ int main(int argc, char *argv[])
 			cocktail_shaker_sort(players, n, comp_ptr);
 		} else if (sortOption == QUICK) {
 			quick_sort(players, 0, n - 1, comp_ptr);
+		} else if (sortOption == MERGE) {
+			merge_sort_classic(players, 0, n - 1, comp_ptr);
+		} else if (sortOption == MERGE_OPTIMIZED) {
+			merge_sort_optimized(players, 0, n - 1, MERGE_THRESHOLD, comp_ptr);
 		}
 
 		printf(LIGHT_BLUE "\nSorted file (Ascending):\n" RESET);
@@ -497,7 +502,7 @@ static void print_usage(const char *progname){
 	printf("  " DARK_YELLOW "-t, --type <generate type>" RESET "                " LIGHT_GRAY "                 Tipo de generacion: sorted, inverse, shuffled\n" RESET);
 	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                         Lee e imprime el CSV actual\n" RESET);
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Ordena el CSV actual\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail, quick\n" RESET);
+	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algoritmo: swap, insertion, selection, cocktail, quick, merge, merge-optimized\n" RESET);
 	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criterio: id, name, team, score, competitions\n" RESET);
 	printf("  " DARK_GREEN "-f, --find <search type>" RESET "                        " LIGHT_GRAY "           Busca un jugador por ID, busqueda: linear, binary,\n binary-recursive, exponential, interpolation\n" RESET);
 	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID del jugador a buscar\n" RESET);
@@ -524,6 +529,8 @@ static SortAlgorithm parse_sort_algorithm(const char *value){
 	if (strcmp(value, "selection") == 0) return SELECTION;
 	if (strcmp(value, "cocktail") == 0) return COCKTAIL;
 	if (strcmp(value, "quick") == 0) return QUICK;
+	if (strcmp(value, "merge") == 0) return MERGE;
+	if (strcmp(value, "merge-optimized") == 0) return MERGE_OPTIMIZED;
 	return SORT_INVALID;
 }
 
