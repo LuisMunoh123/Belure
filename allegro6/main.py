@@ -153,6 +153,7 @@ def render_frame(df_partial: pd.DataFrame, x_column: str, y_columns: list[str], 
 
 	if use_log_scale:
 		ax.set_yscale("log")
+		ax.set_ylabel(f"{y_label} (escala logarítmica)")
 		y_min, y_max = compute_log_axis_limits(visible_y, PADDING_RATIO)
 	else:
 		y_min, y_max = compute_axis_limits(visible_y, PADDING_RATIO)
