@@ -1,7 +1,7 @@
 /**
  * @file generate_exec_times.h
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones para la ejecusion de tests (generate_exec_times.c)
+ * @brief Functions for running tests (generate_exec_times.c).
  */
 #ifndef EXEC_H
 #define EXEC_H

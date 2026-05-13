@@ -1,7 +1,7 @@
 /**
  * @file player.h
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Definicion de la estructura Player y prototipos de las funciones de comparacion.
+ * @brief Definition of the Player structure and comparison function prototypes.
  */
 
 #ifndef PLAYER_H
@@ -18,12 +18,12 @@
 #define MAX_TEAM_LENGTH 10
 #define MAX_CONSOLE_READABLE_PLAYERS 100
 
-// Paginacion
+// Pagination
 #define PAGE_SIZE 20
 #define PAGE_LINES 23
 
 /**
- * @brief Estructura que representa a un jugador.
+ * @brief Structure that represents a player.
  * 
  */
 typedef struct {

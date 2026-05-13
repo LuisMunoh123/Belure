@@ -1,7 +1,7 @@
 /**
  * @file generator.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz, Franco Aguilar
- * @brief Funciones de generacion de datos y archivo csv
+ * @brief Data generation and CSV file utilities.
  */
 
 #include "generator.h"
@@ -9,11 +9,11 @@
 static char *teams[] = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Theta", "Lambda", "Pi", "Tau"};
 
 /**
-* @brief Funcion para desordenar los jugadores (Fisher-Yates)
-* 
-* @param players Arreglo de jugadores
-* @param n Tamanho del arreglo
-*/
+ * @brief Shuffles the players (Fisher-Yates).
+ * 
+ * @param players Player array.
+ * @param n Array size.
+ */
 static void shuffle_players(Player players[], int n)
 {
 	for (int i = n - 1; i > 0; i--) {
@@ -23,10 +23,10 @@ static void shuffle_players(Player players[], int n)
 }
 
 /**
- * @brief Funcion para invertir el orden de los jugadores
+ * @brief Reverses the order of the players.
  * 
- * @param players Arreglo de jugadores a invertir
- * @param n Tamanho del arreglo
+ * @param players Player array to reverse.
+ * @param n Array size.
  */
 static void reverse_players(Player players[], int n)
 {
@@ -41,7 +41,7 @@ static void reverse_players(Player players[], int n)
 }
 
 /**
- * @brief Genera una letra aleatoria (Minus y mayus).
+ * @brief Generates a random letter (uppercase or lowercase).
  * @return char 
  */
 static char random_letter()
@@ -56,10 +56,10 @@ static char random_letter()
 
 
 /**
- * @brief Genera un jugador con campos ID, nombre, equipo, puntaje y cantidad de competencias.
+ * @brief Generates a player with ID, name, team, score, and number of competitions.
  * 
- * @param id valor unico de identificacion
- * @param player puntero a la estructura Player donde se almacenaran los datos generados
+ * @param id Unique identifier value.
+ * @param player Pointer to the Player structure where generated data will be stored.
  */
 static void generate_player(int id, Player *player) 
 {
@@ -78,11 +78,11 @@ static void generate_player(int id, Player *player)
 }
 
 /**
- * @brief Funcion general de generacion de csv con datos aleatorios 
+ * @brief General CSV generation function with random data.
  * 
- * @param n cantidad de jugadores a generar
+ * @param n Number of players to generate.
  * 
- * @return int 0 si todo va bien, otro codigo de error en caso de error
+ * @return int 0 if everything goes well, another error code otherwise.
  */
 int generate_csv(int n, GenerationType generationType) 
 {
@@ -105,7 +105,7 @@ int generate_csv(int n, GenerationType generationType)
 		print_error(102, size_string, NULL);
 		return 102;
 	}
-	printf(BG_GREEN "%s De memoria reservados" RESET"\n", size_string);
+	printf(BG_GREEN "%s of memory allocated" RESET"\n", size_string);
 
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &players[i]);
@@ -142,12 +142,12 @@ int generate_csv(int n, GenerationType generationType)
 }
 
 /**
- * @brief Funcion para cargar datos de jugadores de un archivo csv
+ * @brief Loads player data from a CSV file.
  * 
- * @param file Direccion relativa al archivo csv
- * @param out_n Puntero a la variable que almacenara el numero de jugadores
- * @return Player* Puntero al arreglo de jugadores
- * @important El arreglo debe ser liberado con free()
+ * @param file Relative path to the CSV file.
+ * @param out_n Pointer to the variable that stores the number of players.
+ * @return Player* Pointer to the player array.
+ * @important The array must be released with free().
  */
 Player* load_players(char* file, int* out_n)
 {
@@ -163,7 +163,7 @@ Player* load_players(char* file, int* out_n)
 	// Leer cantidad de jugadores
 	if (fscanf(csv, "%d", &n) != 1 || n <= 0) {
 		fclose(csv);
-		print_error(103, "No se pudo leer la cantidad de jugadores", NULL);
+		print_error(103, "Could not read the number of players", NULL);
 		return NULL;
 	}
 
@@ -179,13 +179,13 @@ Player* load_players(char* file, int* out_n)
 		return NULL;
 	}
 
-	printf("%s de memoria reservados\n", size_string);
+	printf("%s of memory allocated\n", size_string);
 
 	// Leer cabecera
 	if (fscanf(csv, "%*s %*s %*s %*s %*s") == EOF) {
 		free(playerArray);
 		fclose(csv);
-		print_error(101, file, "No se pudo leer la cabecera");
+		print_error(101, file, "Could not read the header");
 		return NULL;
 	}
 
@@ -203,7 +203,7 @@ Player* load_players(char* file, int* out_n)
 		if (fields != 5) {
 			free(playerArray);
 			fclose(csv);
-			print_error(101, file, "CSV malformada");
+			print_error(101, file, "Malformed CSV");
 			return NULL;
 		}
 	}

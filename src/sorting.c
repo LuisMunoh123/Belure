@@ -1,17 +1,17 @@
 /**
  * @file sorting.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones de ordenamiento
+ * @brief Sorting functions.
  */
 
 #include"sorting.h"
 #include"player.h"
 
 /**
- * @brief Funcion interna de intercambio
+ * @brief Internal swap function.
  * 
- * @param a puntero a elemento a intercambiar por b
- * @param b puntero a elemento a intercambiar por a
+ * @param a Pointer to the element to swap with b.
+ * @param b Pointer to the element to swap with a.
  */
 static void swap(Player *a, Player *b) {
 	Player temp = *a;
@@ -20,11 +20,11 @@ static void swap(Player *a, Player *b) {
 }
 
 /**
- * @brief Ordenamiento por intercambio
+ * @brief Swap sort.
  * 
- * @param V arreglo de enteros
- * @param n tamanho del arreglo
- * @param comp_f funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @param V Array of players.
+ * @param n Array size.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
  */
 void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -44,11 +44,11 @@ void swap_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 }
 
 /**
- * @brief Ordenamiento por insercion
+ * @brief Insertion sort.
  * 
- * @param V arreglo de enteros
- * @param n tamanho del arreglo
- * @param comp_f funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @param V Array of players.
+ * @param n Array size.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 si a = b).
  */
 void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -65,11 +65,11 @@ void insertion_sort(Player V[], int n,int(*comp_f)( Player *, Player *)) {
 }
 
 /**
- * @brief Ordenamiento por seleccion
+ * @brief Selection sort.
  * 
- * @param V arreglo de enteros
- * @param n tamanho del arreglo
- * @param comp_f funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @param V Array of players.
+ * @param n Array size.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
  */
 void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 	for (int i = 1; i <= n - 1; i++) {
@@ -86,11 +86,11 @@ void selection_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 }
 
 /**
- * @brief Ordenamiento por shaker
+ * @brief Cocktail shaker sort.
  * 
- * @param V Arreglo de jugadores
- * @param n Tamanho del arreglo
- * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @param V Array of players.
+ * @param n Array size.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
  */
 void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) {
 	int beg = 0;
@@ -118,12 +118,12 @@ void cocktail_shaker_sort(Player V[], int n, int (*comp_f)(Player *, Player *)) 
 }
 
 /**
- * @brief Ordenamiento por quicksort
+ * @brief Quicksort.
  * 
- * @param V Arreglo de Players
- * @param left Inicio del ordenamiento
- * @param right Final del ordenamiento
- * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
+ * @param V Array of players.
+ * @param left Sort start index.
+ * @param right Sort end index.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
  */
 void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player *))
 {
@@ -142,13 +142,13 @@ void quick_sort(Player V[], int left, int right, int (*comp_f)(Player *, Player 
 }
 
 /**
- * @brief junta dos subarreglos ya ordenados
+ * @brief Merges two already sorted subarrays.
  *
- * @param V arreglo de jugadores
- * @param left inicio del arreglo
- * @param mid mitad del arreglo
- * @param right final del arreglo
- * @param comp_f funcion de comparacion
+ * @param V Array of players.
+ * @param left Start of the array.
+ * @param mid Middle of the array.
+ * @param right End of the array.
+ * @param comp_f Comparison function.
  */
 static void merge(Player V[], int left, int mid, int right, int (*comp_f)(Player *, Player *)) {
 	int i = left;
@@ -178,12 +178,12 @@ static void merge(Player V[], int left, int mid, int right, int (*comp_f)(Player
 }
 
 /**
- * @brief merge sort clasico
+ * @brief Classic merge sort.
  *
- * @param V arreglo de jugadores
- * @param left inicio del arreglo
- * @param right final del arreglo
- * @param comp_f funcion de comparacion
+ * @param V Array of players.
+ * @param left Start of the array.
+ * @param right End of the array.
+ * @param comp_f Comparison function.
  */
 void merge_sort_classic(Player V[], int left, int right, int (*comp_f)(Player *, Player *)) {
 	if (left < right) {
@@ -196,14 +196,14 @@ void merge_sort_classic(Player V[], int left, int right, int (*comp_f)(Player *,
 }
 
 /**
- * @brief merge sort optimizado: usa insertion sort cuando el subarreglo
- *        es menor o igual al threshold dado
+ * @brief Optimized merge sort: uses insertion sort when the subarray
+ *        is smaller than or equal to the given threshold.
  *
- * @param V arreglo de jugadores
- * @param left inicio del arreglo
- * @param right final del arreglo
- * @param threshold tamano minimo para usar insertion sort
- * @param comp_f funcion de comparacion
+ * @param V Array of players.
+ * @param left Start of the array.
+ * @param right End of the array.
+ * @param threshold Minimum size to use insertion sort.
+ * @param comp_f Comparison function.
  */
 void merge_sort_optimized(Player V[], int left, int right, int threshold, int (*comp_f)(Player *, Player *)) {
 	if (right - left + 1 <= threshold) {
@@ -219,14 +219,14 @@ void merge_sort_optimized(Player V[], int left, int right, int threshold, int (*
 }
 
 /**
- * @brief Particion de un arreglo por algoritmo lomuto
+ * @brief Partitions an array using the Lomuto algorithm.
  * 
- * @param V Arreglo de Players
- * @param left Inicio de la particion
- * @param right Fin de la particion
- * @param pivot Posicion del pivote
- * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @return int Posicion final del pivote
+ * @param V Array of players.
+ * @param left Partition start.
+ * @param right Partition end.
+ * @param pivot Pivot position.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
+ * @return int Final pivot position.
  */
 int lomuto_partition(Player V[], int left, int right, int pivot, int (*comp_f)(Player *, Player *))
 {

@@ -1,14 +1,14 @@
 /**
  * @file utilities.h
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Utilidades micelaneas
+ * @brief Miscellaneous utilities.
  */
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
 #include <stdio.h>
 
-// Colores para texto
+// Text colors
 #define CLEAR_SCREEN "\033[H\033[J"
 #define ANSI_COLOR_RED "\x1b[31m"
 #define ANSI_COLOR_GREEN "\x1b[32m"
@@ -39,11 +39,11 @@
 #define EVEN_DARKER_BLUE "\x1b[38;5;25m"
 #define EVEN_DARKER_RED "\x1b[38;5;124m"
 
-// Colores de fondo
+// Background colors
 #define BG_RED "\x1b[41m"
 #define BG_GREEN "\x1b[42m"
 
-// Magenta pallete
+// Magenta palette
 #define MAG1 "\x1b[38;5;170m"
 #define MAG2 "\x1b[38;5;207m"
 #define MAG3 "\x1b[38;5;213m"
@@ -51,7 +51,7 @@
 #define MAG5 "\x1b[38;5;177m"
 #define MAG6 "\x1b[38;5;171m"
 
-// Enum para getopt
+// Enum for getopt
 typedef enum {
     GEN_INVALID = 0,
     SORTED,

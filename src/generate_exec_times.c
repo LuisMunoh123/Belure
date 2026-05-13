@@ -1,14 +1,14 @@
 /**
  * @file generate_exec_times.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones para la ejecution de tests
+ * @brief Functions for running tests.
  */
 
 #include "generate_exec_times.h"
 #include "utilities.h"
 
 /**
- * @brief Ejecuta un experimento de ordenamiento y busqueda generando un CSV con los resultados
+ * @brief Runs a sorting and search experiment, generating a CSV with the results.
  * 
  */
 void run_experiment()
@@ -18,7 +18,7 @@ void run_experiment()
 	if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return;
 	}
-	printf("Arreglo de jugadores cargado\n");
+	printf("Player array loaded\n");
 	print_player_array(players, n);
 
 	const int num_points = NUM_STEPS;
@@ -64,18 +64,18 @@ void run_experiment()
 	printf(PURPLE "╔══════════════════════════════════════════╗\n");
 
 	for (int s = 0; s < num_points; s++) {
-		// k crece desde 1 hasta n, repartido en NUM_STEPS puntos.
-		// La fórmula evita k = 0 y garantiza que el último punto sea n.
+		// k grows from 1 to n, distributed across NUM_STEPS points.
+		// The formula avoids k = 0 and guarantees that the last point is n.
 		int k = (num_points == 1) ? n : 1 + (s * (n - 1)) / (num_points - 1);
 
-		Player target = {n+1, "", "", 0.0, 0}; // Jugador buscado de ejemplo
+		Player target = {n+1, "", "", 0.0, 0}; // Example target player
 
-		printf(PURPLE "║" MAGENTA "Procesando n =" WHITE" %8d" PURPLE "                   ║\n", k);
-		printf(PURPLE "║" MAGENTA "Paso:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
+		printf(PURPLE "║" MAGENTA "Processing n =" WHITE" %8d" PURPLE "                   ║\n", k);
+		printf(PURPLE "║" MAGENTA "Step:" WHITE" %4d/%4d" PURPLE "                           ║\n", s+1, num_points);
 		//printf(PURPLE "║                                          ║\n");
 		clock_t start, end;
 
-		// Tiempos Bubble Sort
+		// Bubble Sort timings
 		double timeSwapSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(swapSortPlayers, players, k * sizeof(Player));
@@ -88,7 +88,7 @@ void run_experiment()
 		printf(PURPLE "║" MAG1 "\tSwap Sort:" WHITE " %f\t" PURPLE "           ║\n", timeSwapSort);
  
 
-		// Tiempos Insertion Sort
+		// Insertion Sort timings
 		double timeInsertionSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(insertionSortPlayers, players, k * sizeof(Player));
@@ -100,7 +100,7 @@ void run_experiment()
 		timeInsertionSort /= NUM_TRIALS;
 		printf(PURPLE "║" MAG2 "\tInsertion Sort:" WHITE " %f\t" PURPLE "   ║\n", timeInsertionSort);
 		
-		// Tiempos Selection Sort
+		// Selection Sort timings
 		double timeSelectionSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(selectionSortPlayers, players, k * sizeof(Player));
@@ -112,7 +112,7 @@ void run_experiment()
 		timeSelectionSort /= NUM_TRIALS;
 		printf(PURPLE "║" MAG3 "\tSelection Sort:" WHITE " %f\t" PURPLE "   ║\n", timeSelectionSort);
 
-		// Tiempos Cocktail Shaker Sort
+		// Cocktail Shaker Sort timings
 		double timeCocktailSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(cocktailShakerSortPlayers, players, k * sizeof(Player));
@@ -124,7 +124,7 @@ void run_experiment()
 		timeCocktailSort /= NUM_TRIALS;
 		printf(PURPLE "║" MAG4 "\tCocktail Shaker Sort:" WHITE " %f" PURPLE "     ║\n", timeCocktailSort);
 
-		// Tiempos Quick Sort
+		// Quick Sort timings
 		double timeQuickSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(quickSortPlayers, players, k * sizeof(Player));
@@ -137,7 +137,7 @@ void run_experiment()
 		printf(PURPLE "║" MAG5 "\tQuick Sort:" WHITE "    %f" PURPLE "            ║\n", timeQuickSort);
 
 
-		// Tiempos Merge Sort
+		// Merge Sort timings
 		double timeMergeSort = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(mergeSortPlayers, players, k * sizeof(Player));
@@ -149,7 +149,7 @@ void run_experiment()
 		timeMergeSort /= NUM_TRIALS;
 		printf(PURPLE "║" MAG5 "\tMerge Sort:" WHITE "    %f" PURPLE "            ║\n", timeMergeSort);
 
-		// Tiempos Merge Sort Optimizado
+		// Optimized Merge Sort timings
 		double timeMergeOptimized = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(mergeSortOptimizedPlayers, players, k * sizeof(Player));
@@ -161,7 +161,7 @@ void run_experiment()
 		timeMergeOptimized /= NUM_TRIALS;
 		printf(PURPLE "║" MAG5 "\tMerge Optimized:" WHITE " %f" PURPLE "          ║\n", timeMergeOptimized);
 
-		// Tiempos Linear Search
+		// Linear Search timings
 		double timeLinearSearch = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(linearSearchPlayers, players, k * sizeof(Player));
@@ -173,8 +173,8 @@ void run_experiment()
 		timeLinearSearch /= NUM_TRIALS;
 		printf( PURPLE "║" MAG5 "\tLinear Search:" WHITE " %f" PURPLE "            ║\n", timeLinearSearch);
 
-		// Tiempos Binary Search
-		// USAMOS UN ARREGLO DE LOS YA ORDENADOS COMO INPUT
+		// Binary Search timings
+		// We use an already sorted array as input
 		double timeBinarySearch = 0;
 		for (int i = 0; i < NUM_TRIALS; i++) {
 			memcpy(binarySearchPlayers, cocktailShakerSortPlayers, k * sizeof(Player));
@@ -197,7 +197,7 @@ void run_experiment()
 		resultados[struct_idx].timeLinearSearch = timeLinearSearch;
 		resultados[struct_idx].timeBinarySearch = timeBinarySearch;
 
-		// Guardar en CSV
+		// Save to CSV
 		fprintf(csv,
 				"%d,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",
 				resultados[struct_idx].n,
@@ -214,7 +214,7 @@ void run_experiment()
 		printf(PURPLE "╠══════════════════════════════════════════╣\n");
 		struct_idx++;
 	}
-	// end of table
+	// End of table
 	printf(PURPLE "║" LIGHT_GREEN "              CSV Data written" PURPLE "            ║\n");
 	printf(PURPLE "╚══════════════════════════════════════════╝\n" RESET);
 	fclose(csv);

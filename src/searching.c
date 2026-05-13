@@ -1,20 +1,20 @@
 /**
  * @file searching.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones de busqueda
+ * @brief Search functions.
  */
 
 #include"searching.h"
 #include"player.h"
 
 /**
- * @brief Funcion de busqueda lineal
+ * @brief Linear search function.
  * 
- * @param V Arreglo de enteros
- * @param n Tamanho del arreglo
- * @param x Busqueda
- * @param comp_f funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @return int r Indice de la busqueda, retorna n si no se encuentra
+ * @param V Array of players.
+ * @param n Array size.
+ * @param x Target player.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
+ * @return int r Search index, returns n if not found.
  */
 int linear_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Player *)) {
 	int r = n;
@@ -28,13 +28,13 @@ int linear_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Player *
 }
 
 /**
- * @brief Funcion de busqueda binaria iterativa
- * * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Puntero al jugador a buscar (con el criterio clave lleno)
- * @param comp_f Puntero a la función de comparación (ej: compare_id)
- * @return int m Indice de la busqueda, retorna -1 si no se encuentra
+ * @brief Iterative binary search function.
+ * * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Pointer to the player to search for (with the key criterion filled in).
+ * @param comp_f Pointer to the comparison function (e.g. compare_id).
+ * @return int m Search index, returns -1 if not found.
  */
 int binary_search_iterative(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *)) {
 	while (beg <= end) {
@@ -52,13 +52,13 @@ int binary_search_iterative(Player V[], int beg, int end, Player *x, int (*comp_
 	return -1;
 }
 /**
- * @brief Funcion de busqueda binaria recursiva
- * * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Puntero al jugador a buscar (con el criterio clave lleno)
- * @param comp_f Puntero a la función de comparación (ej: compare_id)
- * @return int Indice donde se encuentra el elemento, retorna -1 si no se encuentra
+ * @brief Recursive binary search function.
+ * * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Pointer to the player to search for (with the key criterion filled in).
+ * @param comp_f Pointer to the comparison function (e.g. compare_id).
+ * @return int Index where the element is found, returns -1 if not found.
  */
 int binary_search_recursive(Player V[], int beg, int end, Player *x,int (*comp_f)(Player *, Player *)) {
 	if (beg > end) {
@@ -79,13 +79,13 @@ int binary_search_recursive(Player V[], int beg, int end, Player *x,int (*comp_f
 }
 
 /**
- * @brief Funcion de busqueda binaria que busca la primera aparicion de un elemento en un arreglo ordenado
- * * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Elemento a buscar
- * @param comp_f Puntero a la función de comparación (ej: compare_id)
- * @return int Indice donde se encuentra la primera aparicion, retorna -1 si no se encuentra
+ * @brief Binary search function that finds the first occurrence of an element in a sorted array.
+ * * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Element to search for.
+ * @param comp_f Pointer to the comparison function (e.g. compare_id).
+ * @return int Index where the first occurrence is found, returns -1 if not found.
  */
 int binary_search_first(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *)) {
 	int result = -1;
@@ -107,13 +107,13 @@ int binary_search_first(Player V[], int beg, int end, Player *x, int (*comp_f)(P
 }
 
 /**
- * @brief Funcion de busqueda binaria que busca la ultima aparicion de un elemento en un arreglo ordenado
- * * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Elemento a buscar
- * @param comp_f Puntero a la función de comparación (ej: compare_id)
- * @return int Indice donde se encuentra la ultima aparicion, retorna -1 si no se encuentra
+ * @brief Binary search function that finds the last occurrence of an element in a sorted array.
+ * * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Element to search for.
+ * @param comp_f Pointer to the comparison function (e.g. compare_id).
+ * @return int Index where the last occurrence is found, returns -1 if not found.
  */
 int binary_search_last(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *)) {
 	int result = -1;
@@ -135,14 +135,14 @@ int binary_search_last(Player V[], int beg, int end, Player *x, int (*comp_f)(Pl
 }
 
 /**
- * @brief Funcion de busqueda binaria que busca el rango completo de un elemento en un arreglo ordenado
- * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Elemento a buscar
- * @param comp_f Puntero a la función de comparación (ej: compare_id)
- * @param first puntero donde guardar la primera posicion
- * @param last puntero donde guardar la ultima aparicion
+ * @brief Binary search function that finds the full range of an element in a sorted array.
+ * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Element to search for.
+ * @param comp_f Pointer to the comparison function (e.g. compare_id).
+ * @param first Pointer where the first position is stored.
+ * @param last Pointer where the last occurrence is stored.
  */
 void binary_search_range(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *), int *first, int *last) {
 	*first = binary_search_first(V, beg, end, x, comp_f);
@@ -156,14 +156,14 @@ void binary_search_range(Player V[], int beg, int end, Player *x, int (*comp_f)(
 }
 
 /**
- * @brief Busca la primera posicion cuyo valor sea mayor o igual al buscado
+ * @brief Finds the first position whose value is greater than or equal to the target.
  * 
- * @param V Arreglo de jugadores ordenado
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Elemento limite inferior
- * @param comp_f Funcion de comparacion
- * @return int Primera posicion valida, o -1 si no existe
+ * @param V Sorted player array.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Lower-bound element.
+ * @param comp_f Comparison function.
+ * @return int First valid position, or -1 if none exists.
  */
 int binary_search_lower_bound(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *)) {
 	int result = -1;
@@ -184,14 +184,14 @@ int binary_search_lower_bound(Player V[], int beg, int end, Player *x, int (*com
 }
 
 /**
- * @brief Busca la ultima posicion cuyo valor sea menor o igual al buscado
+ * @brief Finds the last position whose value is less than or equal to the target.
  * 
- * @param V Arreglo de jugadores ordenado
- * @param beg Indice inicial
- * @param end Indice final
- * @param x Elemento limite superior
- * @param comp_f Funcion de comparacion
- * @return int Ultima posicion valida, o -1 si no existe
+ * @param V Sorted player array.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param x Upper-bound element.
+ * @param comp_f Comparison function.
+ * @return int Last valid position, or -1 if none exists.
  */
 int binary_search_upper_bound(Player V[], int beg, int end, Player *x, int (*comp_f)(Player *, Player *)) {
 	int result = -1;
@@ -212,13 +212,13 @@ int binary_search_upper_bound(Player V[], int beg, int end, Player *x, int (*com
 }
 
 /**
- * @brief Funcion de busqueda exponencial
+ * @brief Exponential search function.
  * 
- * @param V Arreglo de jugadores
- * @param n cantidad o tamanho del arreglo
- * @param x elemento a buscar
- * @param comp_f funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @return int Indice donde se encuentra el elemento, o -1 si no se encuentra
+ * @param V Array of players.
+ * @param n Number or size of the array.
+ * @param x Element to search for.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
+ * @return int Index where the element is found, or -1 if not found.
  */
 int exponential_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Player *)) {
 	if (n <= 0) {
@@ -248,13 +248,13 @@ int exponential_search(Player V[], int n, Player *x, int (*comp_f)(Player *, Pla
 }
 
 /**
- * @brief Funcion de busqueda por interpolacion
+ * @brief Interpolation search function.
  * 
- * @param V Arreglo de jugadores
- * @param beg Indice inicial
- * @param end Indice final
- * @param target_id Id a buscar
- * @return int Indice donde se encuentra el jugador, o -1 si no se encuentra
+ * @param V Array of players.
+ * @param beg Starting index.
+ * @param end Ending index.
+ * @param target_id ID to search for.
+ * @return int Index where the player is found, or -1 if not found.
  */
 int interpolation_search(Player V[], int beg, int end, int target_id) {
 	while (beg <= end && target_id >= V[beg].id && target_id <= V[end].id) {

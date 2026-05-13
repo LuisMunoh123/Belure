@@ -1,16 +1,16 @@
 /**
  * @file errors.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones para manejo de errores
+ * @brief Error handling functions.
  */
 #include "errors.h"
 
 /**
- * @brief Funcion para imprimir un error
+ * @brief Prints an error.
  *
- * @param num Codigo de error
- * @param target Algun parametro que puede ser necesario para el error
- * @param obs Algun texto que puede acompannar el error
+ * @param num Error code.
+ * @param target Some parameter that may be needed for the error.
+ * @param obs Some text that can accompany the error.
  */
 void print_error(int num, char *target, char *obs)
 {
