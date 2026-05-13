@@ -73,49 +73,59 @@ int main(int argc, char *argv[])
 
 	while ((opt = getopt_long(argc, argv, "g:rsf:eht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
 		switch (opt) {
+			// generacion de datos
 			case 'g':
 				action = 'g';
 				action_count++;
 				n = atoi(optarg);
 				break;
-
+			// leer el archivo csv actual
 			case 'r':
+			// ordenamiento segun algoritmo y criterio
 			case 's':
+			// ejecutar experimento
 			case 'e':
 			action = (char)opt;
 			action_count++;
 			break;
 
+			// busqueda por ID
 			case 'f':
 				action = 'f';
 				action_count++;
 				searchOption = parse_search_algorithm(optarg);
 				break;
 
+			// tipo de generacion (ordenado, invertido, desordenado)
 			case 't':
 				generationType = parse_generation_type(optarg);
 				break;
 
+			// tipo de algoritmo (swap, insertion, quick, etc.)
 			case 'a':
 				sortOption = parse_sort_algorithm(optarg);
 				break;
 
+			// tipo de criterio (id, nombre, puntaje, etc.)
 			case 'c':
 				sortCriteria = parse_sort_criteria(optarg);
 				break;
-
+			
+			// id del jugador buscado
 			case 'i':
 				searchId = atoi(optarg);
 				break;
 
+			// el k-esimo mejor deportista
 			case 'j':
-				if (action != 'k') {
-					action = 'k';
+				if (action != 'j') {
+					action = 'j';
 					action_count++;
 				}
 				kthValue = atoi(optarg);
 				break;
 
+			// ranking de los mejores N deportistas
 			case 'p':
 				if (action != 'n') {
 					action = 'n';
@@ -124,6 +134,7 @@ int main(int argc, char *argv[])
 				topCount = atoi(optarg);
 				break;
 
+			// busca todos los jugadores con el mismo puntaje indicado
 			case 'q':
 				action = 'Q';
 				action_count++;
@@ -131,21 +142,25 @@ int main(int argc, char *argv[])
 				exactScoreSet = 1;
 				break;
 
+			// Busqueda de jugadores en un rango establecido de puntajes
 			case 'R':
 				action = 'R';
 				action_count++;
 				break;
 
+			// Puntaje minimo del rango
 			case 'm':
 				minScore = (float)atof(optarg);
 				minScoreSet = 1;
 				break;
 
+			// Puntaje maximo del rango
 			case 'M':
 				maxScore = (float)atof(optarg);
 				maxScoreSet = 1;
 				break;
 
+			// muestra el menú de ayuda o ejemplo
 			case 'h':
 				print_usage(argv[0]);
 				return 0;
@@ -162,6 +177,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	// generacion de datos
 	if (action == 'g') {
 		if (generationType == GEN_INVALID) {
 			printf("Error: para generar debes usar -g <cantidad> y -t <generate type>\n\n");
@@ -180,6 +196,7 @@ int main(int argc, char *argv[])
 		return generate_csv(n, generationType);
 	}
 
+	// leer el archivo csv actual
 	if (action == 'r') {
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			print_error(101, "build/db/players.csv", NULL);
@@ -192,6 +209,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// ordenamiento segun algoritmo y criterio
 	if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
@@ -236,6 +254,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// busqueda por ID
 	if (action == 'f') {
 		if (searchOption == SEARCH_INVALID || searchId < 0) {
 			printf("Error: para buscar debes usar -f <search type> -i <id>\n\n");
@@ -326,7 +345,8 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	if (action == 'k') {
+	// el k-esimo mejor deportista
+	if (action == 'j') {
 		if (kthValue <= 0) {
 			printf("Error: para seleccion debes usar -j <k>\n\n");
 			print_usage(argv[0]);
@@ -355,6 +375,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// ranking de los mejores N deportistas
 	if (action == 'n') {
 		if (topCount <= 0) {
 			printf("Error: para ranking debes usar -p <N>\n\n");
@@ -385,6 +406,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// busqueda de jugadores en un rango establecido de puntajes
 	if (action == 'R') {
 		if (!minScoreSet || !maxScoreSet) {
 			printf("Error: para rango de puntajes debes usar -R -m <min> -M <max>\n\n");
@@ -430,6 +452,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// busca todos los jugadores con el mismo puntaje indicado
 	if (action == 'Q') {
 		if (!exactScoreSet) {
 			printf("Error: para buscar un puntaje exacto debes usar -q <score>\n\n");
@@ -469,6 +492,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	// ejecutar experimento
 	if (action == 'e') {
 		run_experiment();
 		return 0;
