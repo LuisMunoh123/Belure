@@ -8,6 +8,8 @@
 #define NUM_TRIALS 100
 #define NUM_STEPS 20
 #define MERGE_THRESHOLD 48
+#define LINEAR_REPEAT 1
+#define SEARCH_REPEAT 10
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +21,7 @@
 #include "searching.h"
 #include "generator.h"
 
-typedef struct ExecResults {
+typedef struct SortExecResults {
     int n;
     double timeSwapSort;
     double timeInsertionSort;
@@ -28,10 +30,26 @@ typedef struct ExecResults {
     double timeQuickSort;
     double timeMergeSort;
     double timeMergeSortOptimized;
-    double timeLinearSearch;
-    double timeBinarySearch;
-} ExecResults;
+} SortExecResults;
+
+typedef struct SearchExecResults {
+    int n;
+    double timeLinearSearchWorst;
+    double timeLinearSearchAverage;
+    double timeBinarySearchWorst;
+    double timeBinarySearchAverage;
+    double timeBinarySearchRecursiveWorst;
+    double timeBinarySearchRecursiveAverage;
+    double timeExponentialSearchWorst;
+    double timeExponentialSearchAverage;
+    double timeInterpolationSearchWorst;
+    double timeInterpolationSearchAverage;
+    double timeBinarySearchRangeWorst;
+    double timeBinarySearchRangeAverage;
+} SearchExecResults;
 
 void run_experiment(void);
+void run_sort_experiment(void);
+void run_search_experiment(void);
 
 #endif

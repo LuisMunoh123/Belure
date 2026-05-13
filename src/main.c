@@ -177,7 +177,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// generacion de datos
 	if (action == 'g') {
 		if (generationType == GEN_INVALID) {
 			printf("Error: para generar debes usar -g <cantidad> y -t <generate type>\n\n");
@@ -196,7 +195,6 @@ int main(int argc, char *argv[])
 		return generate_csv(n, generationType);
 	}
 
-	// leer el archivo csv actual
 	if (action == 'r') {
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			print_error(101, "build/db/players.csv", NULL);
@@ -209,7 +207,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// ordenamiento segun algoritmo y criterio
 	if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
@@ -254,7 +251,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// busqueda por ID
 	if (action == 'f') {
 		if (searchOption == SEARCH_INVALID || searchId < 0) {
 			printf("Error: para buscar debes usar -f <search type> -i <id>\n\n");
@@ -345,7 +341,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// el k-esimo mejor deportista
 	if (action == 'j') {
 		if (kthValue <= 0) {
 			printf("Error: para seleccion debes usar -j <k>\n\n");
@@ -375,7 +370,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// ranking de los mejores N deportistas
 	if (action == 'n') {
 		if (topCount <= 0) {
 			printf("Error: para ranking debes usar -p <N>\n\n");
@@ -406,7 +400,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// busqueda de jugadores en un rango establecido de puntajes
 	if (action == 'R') {
 		if (!minScoreSet || !maxScoreSet) {
 			printf("Error: para rango de puntajes debes usar -R -m <min> -M <max>\n\n");
@@ -452,7 +445,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// busca todos los jugadores con el mismo puntaje indicado
 	if (action == 'Q') {
 		if (!exactScoreSet) {
 			printf("Error: para buscar un puntaje exacto debes usar -q <score>\n\n");
@@ -492,7 +484,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// ejecutar experimento
 	if (action == 'e') {
 		run_experiment();
 		return 0;

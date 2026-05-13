@@ -12,6 +12,10 @@ SORTING_GIF_PATH = "docs/results/sorting_animation.gif"
 SORTING_FINAL_FRAME_PATH = "docs/results/sorting_graph.png"
 SEARCHING_GIF_PATH = "docs/results/searching_animation.gif"
 SEARCHING_FINAL_FRAME_PATH = "docs/results/searching_graph.png"
+SEARCHING_WORST_GIF_PATH = "docs/results/searching_worst_animation.gif"
+SEARCHING_WORST_FINAL_FRAME_PATH = "docs/results/searching_worst_graph.png"
+SEARCHING_AVERAGE_GIF_PATH = "docs/results/searching_average_animation.gif"
+SEARCHING_AVERAGE_FINAL_FRAME_PATH = "docs/results/searching_average_graph.png"
 
 FRAME_DURATION = 1.5
 FIG_WIDTH = 10
@@ -216,6 +220,98 @@ def ask_log_scale() -> bool:
 	"""Pregunta al usuario si quiere usar escala logaritmica."""
 	return input("Do you want to use logarithmic scale? (y/n): ").lower() == "y"
 
+def ask_plot_mode() -> str:
+	"""Pregunta al usuario que tipo de graficos quiere generar."""
+	print("What do you want to plot?")
+	print("1. Sorting")
+	print("2. Searching")
+	option = input("Choose an option (1/2): ").strip()
+
+	if option == "1":
+		return "sorting"
+	if option == "2":
+		return "searching"
+
+	raise ValueError("Invalid plot option.")
+
+def generate_sorting_outputs(df: pd.DataFrame, x_column: str, y_columns: list[str], use_log_scale: bool) -> None:
+	"""Mantiene la logica original de generacion para ordenamiento."""
+	sorting_columns = [col for col in y_columns if "sort" in col.lower()]
+
+	generate_visual_outputs(
+		df,
+		x_column,
+		sorting_columns,
+		"Comparación de algoritmos de ordenamiento",
+		"Tiempo (s)",
+		SORTING_GIF_PATH,
+		SORTING_FINAL_FRAME_PATH,
+		use_log_scale,
+	)
+
+	if sorting_columns:
+		print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
+		print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
+		print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
+
+def generate_searching_outputs(df: pd.DataFrame, x_column: str, y_columns: list[str], use_log_scale: bool) -> None:
+	"""Logica nueva de generacion para peor caso y caso promedio en busqueda."""
+	searching_worst_columns = [col for col in y_columns if "worst" in col.lower()]
+	searching_average_columns = [col for col in y_columns if "average" in col.lower()]
+	searching_columns = [
+		col for col in y_columns
+		if col not in searching_worst_columns and col not in searching_average_columns
+	]
+
+	if searching_worst_columns or searching_average_columns:
+		generate_visual_outputs(
+			df,
+			x_column,
+			searching_worst_columns,
+			"Comparación de algoritmos de búsqueda - peor caso",
+			"Tiempo (s)",
+			SEARCHING_WORST_GIF_PATH,
+			SEARCHING_WORST_FINAL_FRAME_PATH,
+			use_log_scale,
+		)
+
+		generate_visual_outputs(
+			df,
+			x_column,
+			searching_average_columns,
+			"Comparación de algoritmos de búsqueda - caso promedio",
+			"Tiempo (s)",
+			SEARCHING_AVERAGE_GIF_PATH,
+			SEARCHING_AVERAGE_FINAL_FRAME_PATH,
+			use_log_scale,
+		)
+
+		if searching_worst_columns:
+			print(f"Series de búsqueda peor caso: {', '.join(searching_worst_columns)}")
+			print(f"PNG final searching worst: {Path(SEARCHING_WORST_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF searching worst: {Path(SEARCHING_WORST_GIF_PATH).resolve()}")
+
+		if searching_average_columns:
+			print(f"Series de búsqueda caso promedio: {', '.join(searching_average_columns)}")
+			print(f"PNG final searching average: {Path(SEARCHING_AVERAGE_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF searching average: {Path(SEARCHING_AVERAGE_GIF_PATH).resolve()}")
+	else:
+		generate_visual_outputs(
+			df,
+			x_column,
+			searching_columns,
+			"Comparación de algoritmos de búsqueda",
+			"Tiempo (s)",
+			SEARCHING_GIF_PATH,
+			SEARCHING_FINAL_FRAME_PATH,
+			use_log_scale,
+		)
+
+		if searching_columns:
+			print(f"Series de búsqueda: {', '.join(searching_columns)}")
+			print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
+			print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
+
 
 def main() -> None:
 	try:
@@ -224,28 +320,15 @@ def main() -> None:
 		Path("docs/results").mkdir(parents=True, exist_ok=True)
 
 		df, x_column, y_columns = load_and_validate_data(CSV_PATH)
-
-		# Separa columnas de ordenamiento y búsqueda para generar outputs separados
-		sorting_columns = [col for col in y_columns if "sort" in col.lower()]
-		searching_columns = [col for col in y_columns if "search" in col.lower()]
-
+		plot_mode = ask_plot_mode()
 		use_log_scale = ask_log_scale()
 
-		generate_visual_outputs(df,x_column,sorting_columns,"Comparación de algoritmos de ordenamiento", "Tiempo (s)", SORTING_GIF_PATH,SORTING_FINAL_FRAME_PATH,use_log_scale)
-
-		generate_visual_outputs(df,x_column,searching_columns,"Comparación de algoritmos de búsqueda", "Tiempo (s)",SEARCHING_GIF_PATH,SEARCHING_FINAL_FRAME_PATH,use_log_scale)
+		if plot_mode == "sorting":
+			generate_sorting_outputs(df, x_column, y_columns, use_log_scale)
+		else:
+			generate_searching_outputs(df, x_column, y_columns, use_log_scale)
 
 		print("Proccess completed successfully.")
-
-		if sorting_columns:
-			print(f"Series de ordenamiento: {', '.join(sorting_columns)}")
-			print(f"PNG final sorting: {Path(SORTING_FINAL_FRAME_PATH).resolve()}")
-			print(f"GIF sorting: {Path(SORTING_GIF_PATH).resolve()}")
-
-		if searching_columns:
-			print(f"Series de búsqueda: {', '.join(searching_columns)}")
-			print(f"PNG final searching: {Path(SEARCHING_FINAL_FRAME_PATH).resolve()}")
-			print(f"GIF searching: {Path(SEARCHING_GIF_PATH).resolve()}")
 
 	except Exception as e:
 		print(f"Error: {e}")

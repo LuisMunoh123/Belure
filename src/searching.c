@@ -265,7 +265,15 @@ int interpolation_search(Player V[], int beg, int end, int target_id) {
 			return -1;
 		}
 
-		int pos = beg + ((target_id - V[beg].id) * (end - beg)) / (V[end].id - V[beg].id);
+		long long numerator = (long long)(target_id - V[beg].id) * (end - beg);
+		long long denominator = (long long)(V[end].id - V[beg].id);
+		int pos = beg + (int)(numerator / denominator);
+
+		if (pos < beg) {
+			pos = beg;
+		} else if (pos > end) {
+			pos = end;
+		}
 
 		if (V[pos].id == target_id) {
 			return pos;
