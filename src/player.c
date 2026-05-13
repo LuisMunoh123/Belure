@@ -1,16 +1,16 @@
 /**
  * @file player.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Implementacion de las funciones de comparacion para la estructura Player.
+ * @brief Implementation of the comparison functions for the Player structure.
  */
 
 #include "player.h"
 #include "utilities.h"
 
 /**
- * @brief Intercambia dos jugadores
- * @param p1 puntero a jugador 1
- * @param p2 puntero a jugador 2
+ * @brief Swaps two players.
+ * @param p1 Pointer to player 1.
+ * @param p2 Pointer to player 2.
  */
 void swap_player(Player *p1, Player *p2) {
 	Player temp = *p1;
@@ -19,11 +19,11 @@ void swap_player(Player *p1, Player *p2) {
 }
 
 /**
- * @brief Compara si dos jugadores son exactamente iguales en todos sus campos.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return true Si todos los campos son equivalentes.
- * @return false Si al menos un campo es distinto.
+ * @brief Compares whether two players are exactly equal in all their fields.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return true If all fields are equivalent.
+ * @return false If at least one field differs.
  */
 bool are_players_equal(Player *p1, Player *p2) {
 	// Validar que los punteros no sean nulos
@@ -42,44 +42,44 @@ bool are_players_equal(Player *p1, Player *p2) {
 }
 
 /**
- * @brief Compara dos jugadores basandose en su ID.
- * * Realiza una comparacion numerica directa del campo `id`.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return -1 si el ID de p1 es menor, 1 si es mayor, 0 si son iguales.
+ * @brief Compares two players based on their ID.
+ * * Performs a direct numeric comparison of the `id` field.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return -1 if p1's ID is smaller, 1 if it is larger, 0 if they are equal.
  */
 int compare_id(Player *p1, Player *p2) {
 	return p1->id - p2->id;
 }
 
 /**
- * @brief Compara dos jugadores alfabeticamente por su nombre.
- * * Utiliza la funcion estandar strcmp para determinar el orden lexicografico.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return -1 si el nombre de p1 va antes, 1 si va despues, 0 si son iguales.
+ * @brief Compares two players alphabetically by name.
+ * * Uses the standard strcmp function to determine lexicographic order.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return -1 if p1's name comes first, 1 if it comes after, 0 if they are equal.
  */
 int compare_name(Player *p1, Player *p2) {
 	return strcasecmp(p1->name, p2->name);
 }
 
 /**
- * @brief Compara dos jugadores alfabeticamente por el nombre de su equipo.
- * * Utiliza la funcion estandar strcmp para evaluar la cadena de caracteres del equipo.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return -1 si el equipo de p1 va antes, 1 si va despues, 0 si son iguales.
+ * @brief Compares two players alphabetically by their team name.
+ * * Uses the standard strcmp function to evaluate the team string.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return -1 if p1's team comes first, 1 if it comes after, 0 if they are equal.
  */
 int compare_team(Player *p1, Player *p2) {
 	return strcasecmp(p1->team, p2->team);
 }
 
 /**
- * @brief Compara dos jugadores basandose en su puntuacion.
- * * Evalua los valores de punto flotante (double) del campo `score`.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return -1 si la puntuacion de p1 es menor, 1 si es mayor, 0 si son iguales.
+ * @brief Compares two players based on their score.
+ * * Evaluates the floating-point values of the `score` field.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return -1 if p1's score is lower, 1 if it is higher, 0 if they are equal.
  */
 int compare_score(Player *p1, Player *p2) {
 	if (p1->score > p2->score) return 1;
@@ -87,11 +87,11 @@ int compare_score(Player *p1, Player *p2) {
 	return 0;
 }
 /**
- * @brief Compara dos jugadores basandose en la cantidad de competiciones.
- * * Compara los valores enteros del campo `competitions` jugadas por cada uno.
- * * @param p1 Puntero al primer jugador.
- * @param p2 Puntero al segundo jugador.
- * @return -1 si las competiciones de p1 son menores, 1 si son mayores, 0 si son iguales.
+ * @brief Compares two players based on the number of competitions.
+ * * Compares the integer values of the `competitions` field for each player.
+ * * @param p1 Pointer to the first player.
+ * @param p2 Pointer to the second player.
+ * @return -1 if p1's competitions are fewer, 1 if they are greater, 0 if they are equal.
  */
 int compare_competitions(Player *p1, Player *p2) {
 	return p1->competitions - p2->competitions;
@@ -99,9 +99,9 @@ int compare_competitions(Player *p1, Player *p2) {
 
 
 /**
- * @brief Imprime un jugador por consola.
+ * @brief Prints a player to the console.
  * 
- * @param player Puntero al jugador a imprimir.
+ * @param player Pointer to the player to print.
  */
 void print_player(Player *player) {
 	printf(EVEN_DARKER_GREEN "╔════════════════════╗\n");
@@ -115,9 +115,9 @@ void print_player(Player *player) {
 }
 
 /**
- * @brief Imprime el arreglo de jugadores en formato de tabla
- * * @param players Arreglo de jugadores
- * @param n Tamanho del arreglo
+ * @brief Prints the player array in table format.
+ * * @param players Player array.
+ * @param n Array size.
  */
 void print_player_array(Player *players, int n)
 {
@@ -166,11 +166,11 @@ void print_player_array(Player *players, int n)
 }
 
 /**
- * @brief Funcion para imprimir un arreglo de jugadores en formato de pagina, se usara junto a print_player_array_more
+ * @brief Prints a player array in page format; used together with print_player_array_more.
  * 
- * @param players Jugadores a imprimir
- * @param start indice inicial de la pagina a mostrar (inclusivo)
- * @param end indice final de la pagina a mostrar (exclusivo)
+ * @param players Players to print.
+ * @param start Starting index of the page to show (inclusive).
+ * @param end Ending index of the page to show (exclusive).
  */
 static void print_player_array_page(Player *players, int start, int end)
 {
@@ -212,7 +212,7 @@ static void print_player_array_page(Player *players, int start, int end)
 }
 
 /**
- * @brief Funcion para limpiar la pagina actual de print_player_array_page()
+ * @brief Clears the current page from print_player_array_page().
  * 
  */
 static void clear_player_page()
@@ -229,10 +229,10 @@ static void clear_player_page()
 }
 
 /**
- * @brief Funcion para ver a los jugadores al estilo 'more' de UNIX
+ * @brief Shows players in a UNIX 'more' style view.
  * 
- * @param players Jugadores a imprimir
- * @param n cantidad de jugadores
+ * @param players Players to print.
+ * @param n Number of players.
  */
 void print_player_array_more(Player *players, int n)
 {
@@ -277,13 +277,13 @@ void print_player_array_more(Player *players, int n)
 }
 
 /**
- * @brief Funcion para calcular la mediana de tres para un arreglo de Players
+ * @brief Computes the median of three for an array of players.
  * 
- * @param V Arreglo de Players
- * @param left Indice inicial del arreglo
- * @param right Indice final del arreglo
- * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @return int Indice de la mediana de tres
+ * @param V Array of players.
+ * @param left Starting index of the array.
+ * @param right Ending index of the array.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
+ * @return int Index of the median of three.
  */
 int median_of_three(Player V[], int left, int right, int (*comp_f)(Player *, Player *))
 {

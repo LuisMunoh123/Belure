@@ -1,7 +1,7 @@
 /**
  * @file searching.h
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones de busqueda
+ * @brief Search functions.
  */
 #ifndef SEARCHING_H
 #define SEARCHING_H

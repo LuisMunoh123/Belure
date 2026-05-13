@@ -1,7 +1,7 @@
 /**
  * @file generator.h
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz, Franco Aguilar
- * @brief Funcion y utilidades de generacion
+ * @brief Generation function and utilities.
  */
 
 #ifndef GENERATOR_H

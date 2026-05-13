@@ -1,20 +1,20 @@
 /**
- * @file searching.c
+ * @file selection.c
  * @author Franco Aguilar, Milton Hernández, Luis Muñoz
- * @brief Funciones de busqueda
+ * @brief Selection-related functions.
  */
 
 #include"selection.h"
 
 /**
- * @brief Funcion para buscar el k-ésimo elemento de un arreglo de Players
+ * @brief Finds the k-th element in an array of players.
  * 
- * @param V Arreglo de Players
- * @param left Primer indice del arreglo
- * @param right Ultimo indice del arreglo
- * @param k Indice del elemento buscado
- * @param comp_f Funcion de comparacion (-1 si a < b, 1 si a > b, 0 si a = b)
- * @return Player* Puntero al k-ésimo elemento de V
+ * @param V Array of players.
+ * @param left First index in the array.
+ * @param right Last index in the array.
+ * @param k Index of the target element.
+ * @param comp_f Comparison function (-1 if a < b, 1 if a > b, 0 if a = b).
+ * @return Player* Pointer to the k-th element of V.
  */
 Player quick_select(Player V[], int left, int right, int k, int (*comp_f)(Player *, Player *))
 {
