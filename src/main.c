@@ -538,6 +538,11 @@ int main(int argc, char *argv[])
 	return 1;
 }
 
+/**
+ * @brief Prints the command-line help menu.
+ *
+ * @param progname Program name used in the usage examples.
+ */
 static void print_usage(const char *progname){
 	printf(LIGHT_BLUE "╔════════════════════════════════════════════════════════════╗\n");
 	printf(LIGHT_BLUE "-" WHITE "                      CONQUER CLI USAGE                   " LIGHT_BLUE "  -\n");
@@ -622,6 +627,12 @@ static void print_usage(const char *progname){
 	printf("  " LIGHT_GRAY "If no alternative algorithm is specified, the program uses the one chosen by the authors.\n" RESET);
 }
 
+/**
+ * @brief Parses the requested data generation mode.
+ *
+ * @param value Generation mode as text.
+ * @return GenerationType Parsed generation mode, or `GEN_INVALID`.
+ */
 static GenerationType parse_generation_type(const char *value){
 	if (strcmp(value, "sorted") == 0) return SORTED;
 	if (strcmp(value, "inverse") == 0) return INVERSE;
@@ -629,6 +640,12 @@ static GenerationType parse_generation_type(const char *value){
 	return GEN_INVALID;
 }
 
+/**
+ * @brief Parses the requested sorting algorithm.
+ *
+ * @param value Sorting algorithm as text.
+ * @return SortAlgorithm Parsed algorithm, or `SORT_INVALID`.
+ */
 static SortAlgorithm parse_sort_algorithm(const char *value){
 	if (strcmp(value, "swap") == 0) return SWAP;
 	if (strcmp(value, "insertion") == 0) return INSERTION;
@@ -640,6 +657,12 @@ static SortAlgorithm parse_sort_algorithm(const char *value){
 	return SORT_INVALID;
 }
 
+/**
+ * @brief Parses the requested sorting criterion.
+ *
+ * @param value Sorting criterion as text.
+ * @return SortCriteria Parsed criterion, or `CRIT_INVALID`.
+ */
 static SortCriteria parse_sort_criteria(const char *value){
 	if (strcmp(value, "id") == 0) return ID;
 	if (strcmp(value, "name") == 0) return NAME;
@@ -649,6 +672,12 @@ static SortCriteria parse_sort_criteria(const char *value){
 	return CRIT_INVALID;
 }
 
+/**
+ * @brief Parses the requested search algorithm.
+ *
+ * @param value Search algorithm as text.
+ * @return SearchAlgorithm Parsed algorithm, or `SEARCH_INVALID`.
+ */
 static SearchAlgorithm parse_search_algorithm(const char *value){
 	if (strcmp(value, "linear") == 0) return LINEAR;
 	if (strcmp(value, "binary") == 0) return BINARY;
@@ -658,6 +687,11 @@ static SearchAlgorithm parse_search_algorithm(const char *value){
 	return SEARCH_INVALID;
 }
 
+/**
+ * @brief Displays the experiment submenu and dispatches the chosen benchmark.
+ *
+ * @return int Exit status code.
+ */
 static int run_experiment_menu(void)
 {
 	int option = 0;

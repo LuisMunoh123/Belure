@@ -7,6 +7,13 @@
 #include "search_experiment.h"
 #include "utilities.h"
 
+/**
+ * @brief Finds an ID that does not exist within the current sorted prefix.
+ *
+ * @param players Array sorted by ID.
+ * @param n Number of valid elements to inspect.
+ * @return int Missing ID inside or just after the inspected range.
+ */
 static int pick_missing_id(Player players[], int n)
 {
 	if (n <= 0) return -1;
@@ -20,6 +27,13 @@ static int pick_missing_id(Player players[], int n)
 	return players[n - 1].id + 1;
 }
 
+/**
+ * @brief Finds a score that does not exist within the current sorted prefix.
+ *
+ * @param players Array sorted by score.
+ * @param n Number of valid elements to inspect.
+ * @return float Missing score inside or just after the inspected range.
+ */
 static float pick_missing_score(Player players[], int n)
 {
 	if (n <= 0) return 0.0f;
