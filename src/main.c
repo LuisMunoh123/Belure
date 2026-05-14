@@ -15,7 +15,9 @@
 #include "selection.h"
 #include "utilities.h"
 #include "player.h" 
-#include "generate_exec_times.h"
+#include "experiment_config.h"
+#include "search_experiment.h"
+#include "sort_experiment.h"
 
 static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
@@ -43,6 +45,7 @@ static GenerationType parse_generation_type(const char *value);
 static SortAlgorithm parse_sort_algorithm(const char *value);
 static SortCriteria parse_sort_criteria(const char *value);
 static SearchAlgorithm parse_search_algorithm(const char *value);
+static int run_experiment_menu(void);
 
 int main(int argc, char *argv[])
 {
@@ -485,8 +488,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (action == 'e') {
-		run_experiment();
-		return 0;
+		return run_experiment_menu();
 	}
 
 	print_usage(argv[0]);
@@ -563,4 +565,35 @@ static SearchAlgorithm parse_search_algorithm(const char *value){
 	if (strcmp(value, "exponential") == 0) return EXPONENTIAL;
 	if (strcmp(value, "interpolation") == 0) return INTERPOLATION;
 	return SEARCH_INVALID;
+}
+
+static int run_experiment_menu(void)
+{
+	int option = 0;
+
+	printf(PURPLE "\n╔════════════════════════════════════╗\n");
+	printf(PURPLE "║" WHITE "        MENU DE EXPERIMENTOS       " PURPLE " ║\n");
+	printf(PURPLE "╠════════════════════════════════════╣\n");
+	printf(PURPLE "║" LIGHT_BLUE " 1. Ordenamiento                    " PURPLE "║\n");
+	printf(PURPLE "║" LIGHT_GREEN " 2. Busqueda                        " PURPLE "║\n");
+	printf(PURPLE "╚════════════════════════════════════╝\n" RESET);
+	printf("Selecciona una opcion: ");
+
+	if (scanf("%d", &option) != 1) {
+		printf("Error: opcion invalida.\n");
+		return 1;
+	}
+
+	if (option == 1) {
+		run_sort_experiment();
+		return 0;
+	}
+
+	if (option == 2) {
+		run_search_experiment();
+		return 0;
+	}
+
+	printf("Error: opcion invalida.\n");
+	return 1;
 }
