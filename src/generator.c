@@ -132,7 +132,7 @@ int generate_csv(int n, GenerationType generationType)
 
 	free(players);
 	fclose(csv);
-	printf("\n" BG_GREEN "Data generated and saved to build/db/players.csv" RESET "\n");
+	printf("\nData generated and saved to build/db/players.csv" RESET "\n");
 
 	return 0;
 }

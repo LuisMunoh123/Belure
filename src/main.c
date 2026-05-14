@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
 	Player *players = NULL;
 	int n = -1;
 
-	SortAlgorithm sortOption = SORT_INVALID;
+	SortAlgorithm sortOption = QUICK;
 	SortCriteria sortCriteria = CRIT_INVALID;
-	int sortOptionSpecified = 0;
+	int sortOptionSpecified = 1;
 	int sortCriteriaSpecified = 0;
 
-	SearchAlgorithm searchOption = SEARCH_INVALID;
-	int searchOptionSpecified = 0;
+	SearchAlgorithm searchOption = INTERPOLATION;
+	int searchOptionSpecified = 1;
 	int searchId = -1;
 	int result;
 	int kthValue = -1;
@@ -256,18 +256,25 @@ int main(int argc, char *argv[])
 		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competitions;
 
 		if (sortOption == SWAP) {
+			printf(BG_GREEN "Sorting Players via Swap Sort:" RESET "\n");
 			swap_sort(players, n, comp_ptr);
 		} else if (sortOption == INSERTION) {
+			printf(BG_GREEN "Sorting Players via Insertion Sort:" RESET "\n");
 			insertion_sort(players, n, comp_ptr);
 		} else if (sortOption == SELECTION) {
+			printf(BG_GREEN "Sorting Players via Selection Sort:" RESET "\n");
 			selection_sort(players, n, comp_ptr);
 		} else if (sortOption == COCKTAIL) {
+			printf(BG_GREEN "Sorting Players via Cocktail Shaker Sort:" RESET "\n");
 			cocktail_shaker_sort(players, n, comp_ptr);
 		} else if (sortOption == QUICK) {
+			printf(BG_GREEN "Sorting Players via Quick Sort:" RESET "\n");
 			quick_sort(players, 0, n - 1, comp_ptr);
 		} else if (sortOption == MERGE) {
+			printf(BG_GREEN "Sorting Players via Merge Sort:" RESET "\n");
 			merge_sort_classic(players, 0, n - 1, comp_ptr);
 		} else if (sortOption == MERGE_OPTIMIZED) {
+			printf(BG_GREEN "Sorting Players via Merge Sort (Optimized):" RESET "\n");
 			merge_sort_optimized(players, 0, n - 1, MERGE_THRESHOLD, comp_ptr);
 		}
 
