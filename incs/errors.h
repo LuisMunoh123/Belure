@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "player.h"
 #include "utilities.h"
 
 void print_error(int num, char *target, char *obs);

@@ -25,7 +25,6 @@ static struct option long_options[] = {
 	{"sort", no_argument, 0, 's'},
 	{"find", optional_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
-	{"threshold-experiment", no_argument, 0, 'T'},
 	{"type", required_argument, 0, 't'},
 	{"algorithm", required_argument, 0, 'a'},
 	{"criteria", required_argument, 0, 'c'},
