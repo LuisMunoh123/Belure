@@ -533,34 +533,82 @@ static void print_usage(const char *progname){
 	printf(LIGHT_BLUE "╚════════════════════════════════════════════════════════════╝\n" RESET);
 
 	printf("\n" DARK_GRAY "Quick use:\n" RESET);
-	printf("  " YELLOW "%s " DARK_YELLOW "-g " LIGHT_GRAY "<amount> " DARK_YELLOW "-t " LIGHT_GRAY "<generate type>" RESET "       " YELLOW "Generate CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " ORANGE "-r" RESET "                             " ORANGE "        Read current CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "[-a <sort type>] [-c <criteria>]" RESET " " LIGHT_BLUE " Sort CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "[search type] -i <id>" RESET "              " LIGHT_GREEN " Search by ID\n" RESET, progname);
-	printf("  " YELLOW "%s " MAGENTA "-j <k>" RESET "                         " MAGENTA "        Show the kth best player\n" RESET, progname);
-	printf("  " YELLOW "%s " MAGENTA "-p <N>" RESET "                         " MAGENTA "        Show top N ranking\n" RESET, progname);
-	printf("  " YELLOW "%s " MAGENTA "-q <score>" RESET "                     " MAGENTA "        Show players with an exact score\n" RESET, progname);
-	printf("  " YELLOW "%s " MAGENTA "-R -m <min> -M <max>" RESET "            " MAGENTA "       Show players by score range\n" RESET, progname);
-	printf("  " YELLOW "%s " PURPLE "-e" RESET "                             " MAGENTA "        Run experiment\n" RESET, progname);
-	printf("  " YELLOW "%s " WHITE "-h" RESET "                             " WHITE "        Show help\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_YELLOW "%-38s" RESET YELLOW "%s\n" RESET,
+		progname, "-g <amount> -t <generate type>", "Generate CSV");
+	printf("  " YELLOW "%s " ORANGE "%-38s" RESET ORANGE "%s\n" RESET,
+		progname, "-r", "Read current CSV");
+	printf("  " YELLOW "%s " DARK_BLUE "%-38s" RESET LIGHT_BLUE "%s\n" RESET,
+		progname, "-s [-a <sort type>] [-c <criteria>]", "Sort CSV");
+	printf("  " YELLOW "%s " DARK_GREEN "%-38s" RESET LIGHT_GREEN "%s\n" RESET,
+		progname, "-f [search type] -i <id>", "Search by ID");
+	printf("  " YELLOW "%s " MAGENTA "%-38s" RESET MAGENTA "%s\n" RESET,
+		progname, "-j <k>", "Show the kth best player");
+	printf("  " YELLOW "%s " MAGENTA "%-38s" RESET MAGENTA "%s\n" RESET,
+		progname, "-p <N>", "Show top N ranking");
+	printf("  " YELLOW "%s " MAGENTA "%-38s" RESET MAGENTA "%s\n" RESET,
+		progname, "-q <score>", "Show players with an exact score");
+	printf("  " YELLOW "%s " MAGENTA "%-38s" RESET MAGENTA "%s\n" RESET,
+		progname, "-R -m <min> -M <max>", "Show players by score range");
+	printf("  " YELLOW "%s " PURPLE "%-38s" RESET MAGENTA "%s\n" RESET,
+		progname, "-e", "Run experiment");
+	printf("  " YELLOW "%s " WHITE "%-38s" RESET WHITE "%s\n" RESET,
+		progname, "-h", "Show help");
+	printf("\n  " LIGHT_GRAY "Arguments inside [] are optional.\n" RESET);
+	printf("  " LIGHT_GRAY "If omitted, the program uses the default algorithm or criterion selected by the authors.\n" RESET);
 
 	printf("\n" DARK_GRAY "Options:\n" RESET);
-	printf("  " DARK_YELLOW "-g, --generate <amount>" RESET "         " LIGHT_GRAY "                         Generates a CSV with the given amount\n" RESET);
-	printf("  " DARK_YELLOW "-t, --type <generate type>" RESET "                " LIGHT_GRAY "                 Generation type: sorted, inverse, shuffled\n" RESET);
-	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                         Reads and prints the current CSV\n" RESET);
-	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Sorts the current CSV\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Default: quick. Options: swap, insertion, selection, cocktail, quick, merge, merge-optimized\n" RESET);
-	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Default: id. Criteria: id, name, team, score, competitions\n" RESET);
-	printf("  " DARK_GREEN "-f, --find [search type]" RESET "                        " LIGHT_GRAY "           Default: interpolation. Options: linear, binary,\n binary-recursive, exponential, interpolation\n" RESET);
-	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID of the player to search for\n" RESET);
-	printf("  " MAGENTA "-j, --kth <k>" RESET "                     " LIGHT_GRAY "                         Shows the kth best player\n" RESET);
-	printf("  " MAGENTA "-p, --topcount <N>" RESET "               " LIGHT_GRAY "                          Shows the ranking of the top N players\n" RESET);
-	printf("  " MAGENTA "-q, --score <score>" RESET "              " LIGHT_GRAY "                          Searches players with repeated exact score\n" RESET);
-	printf("  " MAGENTA "-R, --score-range" RESET "                " LIGHT_GRAY "                          Enables binary search by score range\n" RESET);
-	printf("  " MAGENTA "-m, --min-score <min>" RESET "            " LIGHT_GRAY "                          Minimum score in the range\n" RESET);
-	printf("  " MAGENTA "-M, --max-score <max>" RESET "            " LIGHT_GRAY "                          Maximum score in the range\n" RESET);
-	printf("  " PURPLE "-e, --experiment" RESET "                  " LIGHT_GRAY "                         Runs the experiment\n" RESET);
-	printf("  " WHITE "-h, --help" RESET "                        " LIGHT_GRAY "                         Shows this help\n\n" RESET);
+	printf("  " DARK_YELLOW "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-g, --generate <amount>",
+		"Generates a CSV with the given amount");
+	printf("  " DARK_YELLOW "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-t, --type <generate type>",
+		"Generation type: sorted, inverse, shuffled");
+	printf("  " ORANGE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-r, --read",
+		"Reads and prints the current CSV");
+	printf("  " DARK_BLUE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-s, --sort",
+		"Sorts the current CSV");
+	printf("  " DARK_BLUE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-a, --algorithm <sort type>",
+		"Default: quick. Options: swap, insertion, selection, cocktail, quick, merge, merge-optimized");
+	printf("  " DARK_BLUE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-c, --criteria <criteria>",
+		"Default: id. Criteria: id, name, team, score, competitions");
+	printf("  " DARK_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-f, --find [search type]",
+		"Default: interpolation. Options: linear, binary, binary-recursive, exponential, interpolation");
+	printf("  " DARK_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-i, --id <id>",
+		"ID of the player to search for");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-j, --kth <k>",
+		"Shows the kth best player");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-p, --topcount <N>",
+		"Shows the ranking of the top N players");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-q, --score <score>",
+		"Searches players with repeated exact score");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-R, --score-range",
+		"Enables binary search by score range");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-m, --min-score <min>",
+		"Minimum score in the range");
+	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-M, --max-score <max>",
+		"Maximum score in the range");
+	printf("  " PURPLE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-e, --experiment",
+		"Runs the experiment");
+	printf("  " WHITE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-h, --help",
+		"Shows this help");
+
+	printf("\n" DARK_GRAY "Default algorithms:\n" RESET);
+	printf("  " LIGHT_GRAY "Some options have a default algorithm assigned.\n" RESET);
+	printf("  " LIGHT_GRAY "If no alternative algorithm is specified, the program uses the one chosen by the authors.\n" RESET);
 }
 
 static GenerationType parse_generation_type(const char *value){
