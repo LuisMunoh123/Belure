@@ -250,12 +250,9 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_BLUE "\nOriginal file:\n" RESET);
-		print_player_array_more(players, n);
-
-		if (sortCriteria == ID) comp_ptr = compare_id;
-		else if (sortCriteria == NAME) comp_ptr = compare_name;
-		else if (sortCriteria == TEAM) comp_ptr = compare_team;
+			if (sortCriteria == ID) comp_ptr = compare_id;
+			else if (sortCriteria == NAME) comp_ptr = compare_name;
+			else if (sortCriteria == TEAM) comp_ptr = compare_team;
 		else if (sortCriteria == SCORE) comp_ptr = compare_score;
 		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competitions;
 
@@ -302,12 +299,9 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
-		print_player_array_more(players, n);
-
-		Player target = {searchId, "", "", 0.0, 0};
-		if (searchOption == LINEAR) {
-			result = linear_search(players, n, &target, compare_id);
+			Player target = {searchId, "", "", 0.0, 0};
+			if (searchOption == LINEAR) {
+				result = linear_search(players, n, &target, compare_id);
 
 			if (result == n) {
 				printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -315,13 +309,10 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Linear Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else if (searchOption == BINARY) {
-			quick_sort(players, 0, n - 1, compare_id);
+			} else if (searchOption == BINARY) {
+				quick_sort(players, 0, n - 1, compare_id);
 
-			printf(LIGHT_GREEN "\nOrdered array (by ID) used for binary search:\n" RESET);
-			print_player_array_more(players, n);
-
-			result = binary_search_iterative(players, 0, n - 1, &target, compare_id);
+				result = binary_search_iterative(players, 0, n - 1, &target, compare_id);
 
 			if (result == -1) {
 				printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -329,13 +320,10 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Binary Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else if (searchOption == BINARY_RECURSIVE) {
-			quick_sort(players, 0, n - 1, compare_id);
+			} else if (searchOption == BINARY_RECURSIVE) {
+				quick_sort(players, 0, n - 1, compare_id);
 
-			printf(LIGHT_GREEN "\nOrdered array (by ID) used for recursive binary search:\n" RESET);
-			print_player_array_more(players, n);
-
-			result = binary_search_recursive(players, 0, n - 1, &target, compare_id);
+				result = binary_search_recursive(players, 0, n - 1, &target, compare_id);
 
 			if (result == -1) {
 				printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -343,13 +331,10 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Recursive Binary Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else if (searchOption == EXPONENTIAL) {
-			quick_sort(players, 0, n - 1, compare_id);
+			} else if (searchOption == EXPONENTIAL) {
+				quick_sort(players, 0, n - 1, compare_id);
 
-			printf(LIGHT_GREEN "\nOrdered array (by ID) used for exponential search:\n" RESET);
-			print_player_array_more(players, n);
-
-			result = exponential_search(players, n, &target, compare_id);
+				result = exponential_search(players, n, &target, compare_id);
 
 			if (result == -1) {
 				printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -357,13 +342,10 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Exponential Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else if (searchOption == INTERPOLATION) {
-			quick_sort(players, 0, n - 1, compare_id);
+			} else if (searchOption == INTERPOLATION) {
+				quick_sort(players, 0, n - 1, compare_id);
 
-			printf(LIGHT_GREEN "\nOrdered array (by ID) used for interpolation search:\n" RESET);
-			print_player_array_more(players, n);
-
-			result = interpolation_search(players, 0, n - 1, searchId);
+				result = interpolation_search(players, 0, n - 1, searchId);
 
 			if (result == -1) {
 				printf(BG_RED "Player with ID %d was not found." RESET "\n\n", searchId);
@@ -399,10 +381,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
-		print_player_array_more(players, n);
-
-		Player target = quick_select(players, 0, n - 1, n - kthValue, compare_score);
+			Player target = quick_select(players, 0, n - 1, n - kthValue, compare_score);
 
 		printf(BG_GREEN "The %d best player is: " RESET "\n\n", kthValue);
 		print_player(&target);
@@ -429,11 +408,8 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
-		print_player_array_more(players, n);
-
-		quick_select(players, 0, n - 1, n - topCount, compare_score);
-		quick_sort(&players[n - topCount], 0, topCount - 1, compare_score);
+			quick_select(players, 0, n - 1, n - topCount, compare_score);
+			quick_sort(&players[n - topCount], 0, topCount - 1, compare_score);
 
 		printf(BG_GREEN "Top %d players by score:" RESET "\n\n", topCount);
 
@@ -461,15 +437,9 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
-		print_player_array_more(players, n);
+			quick_sort(players, 0, n - 1, compare_score);
 
-		quick_sort(players, 0, n - 1, compare_score);
-
-		printf(LIGHT_GREEN "\nOrdered array (by score) used for range binary search:\n" RESET);
-		print_player_array_more(players, n);
-
-		Player minTarget = {0, "", "", minScore, 0};
+			Player minTarget = {0, "", "", minScore, 0};
 		Player maxTarget = {0, "", "", maxScore, 0};
 		int first = binary_search_lower_bound(players, 0, n - 1, &minTarget, compare_score);
 		int last = binary_search_upper_bound(players, 0, n - 1, &maxTarget, compare_score);
@@ -502,15 +472,9 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
-		print_player_array_more(players, n);
+			quick_sort(players, 0, n - 1, compare_score);
 
-		quick_sort(players, 0, n - 1, compare_score);
-
-		printf(LIGHT_GREEN "\nOrdered array (by score) used for exact score range search:\n" RESET);
-		print_player_array_more(players, n);
-
-		Player exactTarget = {0, "", "", exactScore, 0};
+			Player exactTarget = {0, "", "", exactScore, 0};
 		int first = binary_search_first(players, 0, n - 1, &exactTarget, compare_score);
 
 		if (first == -1) {

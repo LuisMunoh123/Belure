@@ -105,8 +105,6 @@ int generate_csv(int n, GenerationType generationType)
 		print_error(102, size_string, NULL);
 		return 102;
 	}
-	printf(BG_GREEN "%s of memory allocated" RESET"\n", size_string);
-
 	for (int i = 0; i < n; i++) {
 		generate_player(i + 1, &players[i]);
 	}
@@ -131,8 +129,6 @@ int generate_csv(int n, GenerationType generationType)
 			players[i].competitions
 		);
 	}
-
-	print_player_array_more(players, n);
 
 	free(players);
 	fclose(csv);
@@ -178,8 +174,6 @@ Player* load_players(char* file, int* out_n)
 		print_error(102,  size_string, NULL);
 		return NULL;
 	}
-
-	printf("%s of memory allocated\n", size_string);
 
 	// Leer cabecera
 	if (fscanf(csv, "%*s %*s %*s %*s %*s") == EOF) {
