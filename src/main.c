@@ -23,7 +23,7 @@ static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
 	{"read", no_argument, 0, 'r'},
 	{"sort", no_argument, 0, 's'},
-	{"find", required_argument, 0, 'f'},
+	{"find", optional_argument, 0, 'f'},
 	{"experiment", no_argument, 0, 'e'},
 	{"threshold-experiment", no_argument, 0, 'T'},
 	{"type", required_argument, 0, 't'},
@@ -59,8 +59,11 @@ int main(int argc, char *argv[])
 
 	SortAlgorithm sortOption = SORT_INVALID;
 	SortCriteria sortCriteria = CRIT_INVALID;
+	int sortOptionSpecified = 0;
+	int sortCriteriaSpecified = 0;
 
 	SearchAlgorithm searchOption = SEARCH_INVALID;
+	int searchOptionSpecified = 0;
 	int searchId = -1;
 	int result;
 	int kthValue = -1;
@@ -74,7 +77,7 @@ int main(int argc, char *argv[])
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsf:eht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsf::eht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
 		switch (opt) {
 			// generacion de datos
 			case 'g':
@@ -96,7 +99,10 @@ int main(int argc, char *argv[])
 			case 'f':
 				action = 'f';
 				action_count++;
-				searchOption = parse_search_algorithm(optarg);
+				if (optarg != NULL) {
+					searchOption = parse_search_algorithm(optarg);
+					searchOptionSpecified = 1;
+				}
 				break;
 
 			// tipo de generacion (ordenado, invertido, desordenado)
@@ -106,11 +112,13 @@ int main(int argc, char *argv[])
 
 			// tipo de algoritmo (swap, insertion, quick, etc.)
 			case 'a':
+				sortOptionSpecified = 1;
 				sortOption = parse_sort_algorithm(optarg);
 				break;
 
 			// tipo de criterio (id, nombre, puntaje, etc.)
 			case 'c':
+				sortCriteriaSpecified = 1;
 				sortCriteria = parse_sort_criteria(optarg);
 				break;
 			
@@ -130,8 +138,8 @@ int main(int argc, char *argv[])
 
 			// ranking de los mejores N deportistas
 			case 'p':
-				if (action != 'n') {
-					action = 'n';
+				if (action != 'p') {
+					action = 'p';
 					action_count++;
 				}
 				topCount = atoi(optarg);
@@ -174,6 +182,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	if (action == 'f' && !searchOptionSpecified && optind < argc && argv[optind][0] != '-') {
+		searchOption = parse_search_algorithm(argv[optind]);
+		searchOptionSpecified = 1;
+		optind++;
+	}
+
 	if (action_count != 1) {
 		printf("Error: you must specify exactly one action.\n\n");
 		print_usage(argv[0]);
@@ -213,11 +227,20 @@ int main(int argc, char *argv[])
 	if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
-		if (sortOption == SORT_INVALID || sortCriteria == CRIT_INVALID) {
-			printf("Error: to sort, use -a <sort type> and -c <criteria>\n\n");
+		if (sortOptionSpecified && sortOption == SORT_INVALID) {
+			printf("Error: invalid sort algorithm.\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
+
+		if (sortCriteriaSpecified && sortCriteria == CRIT_INVALID) {
+			printf("Error: invalid sort criteria.\n\n");
+			print_usage(argv[0]);
+			return 1;
+		}
+
+		if (!sortOptionSpecified) sortOption = QUICK;
+		if (!sortCriteriaSpecified) sortCriteria = ID;
 
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return 1;
@@ -255,11 +278,19 @@ int main(int argc, char *argv[])
 	}
 
 	if (action == 'f') {
-		if (searchOption == SEARCH_INVALID || searchId < 0) {
-			printf("Error: to search, use -f <search type> -i <id>\n\n");
+		if (searchOptionSpecified && searchOption == SEARCH_INVALID) {
+			printf("Error: invalid search algorithm.\n\n");
 			print_usage(argv[0]);
 			return 1;
 		}
+
+		if (searchId < 0) {
+			printf("Error: to search, use -f [-algorithm] -i <id>\n\n");
+			print_usage(argv[0]);
+			return 1;
+		}
+
+		if (!searchOptionSpecified) searchOption = INTERPOLATION;
 
 		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
 			return 1;
@@ -373,7 +404,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	if (action == 'n') {
+	if (action == 'p') {
 		if (topCount <= 0) {
 			printf("Error: to rank, use -p <N>\n\n");
 			print_usage(argv[0]);
@@ -393,7 +424,8 @@ int main(int argc, char *argv[])
 		printf(LIGHT_GREEN "\nCurrent file:\n" RESET);
 		print_player_array_more(players, n);
 
-		quick_sort(players, 0, n - 1, compare_score);
+		quick_select(players, 0, n - 1, n - topCount, compare_score);
+		quick_sort(&players[n - topCount], 0, topCount - 1, compare_score);
 
 		printf(BG_GREEN "Top %d players by score:" RESET "\n\n", topCount);
 
@@ -503,8 +535,8 @@ static void print_usage(const char *progname){
 	printf("\n" DARK_GRAY "Quick use:\n" RESET);
 	printf("  " YELLOW "%s " DARK_YELLOW "-g " LIGHT_GRAY "<amount> " DARK_YELLOW "-t " LIGHT_GRAY "<generate type>" RESET "       " YELLOW "Generate CSV\n" RESET, progname);
 	printf("  " YELLOW "%s " ORANGE "-r" RESET "                             " ORANGE "        Read current CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "-a <sort type> -c <criteria>" RESET " " LIGHT_BLUE "       Sort CSV\n" RESET, progname);
-	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "<search type> -i <id>" RESET "            " LIGHT_GREEN "   Search by ID\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_BLUE "-s " LIGHT_GRAY "[-a <sort type>] [-c <criteria>]" RESET " " LIGHT_BLUE " Sort CSV\n" RESET, progname);
+	printf("  " YELLOW "%s " DARK_GREEN "-f " LIGHT_GRAY "[search type] -i <id>" RESET "              " LIGHT_GREEN " Search by ID\n" RESET, progname);
 	printf("  " YELLOW "%s " MAGENTA "-j <k>" RESET "                         " MAGENTA "        Show the kth best player\n" RESET, progname);
 	printf("  " YELLOW "%s " MAGENTA "-p <N>" RESET "                         " MAGENTA "        Show top N ranking\n" RESET, progname);
 	printf("  " YELLOW "%s " MAGENTA "-q <score>" RESET "                     " MAGENTA "        Show players with an exact score\n" RESET, progname);
@@ -517,9 +549,9 @@ static void print_usage(const char *progname){
 	printf("  " DARK_YELLOW "-t, --type <generate type>" RESET "                " LIGHT_GRAY "                 Generation type: sorted, inverse, shuffled\n" RESET);
 	printf("  " ORANGE "-r, --read" RESET "                        " LIGHT_GRAY "                         Reads and prints the current CSV\n" RESET);
 	printf("  " DARK_BLUE "-s, --sort" RESET "                        " LIGHT_GRAY "                         Sorts the current CSV\n" RESET);
-	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Algorithm: swap, insertion, selection, cocktail, quick, merge, merge-optimized\n" RESET);
-	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Criteria: id, name, team, score, competitions\n" RESET);
-	printf("  " DARK_GREEN "-f, --find <search type>" RESET "                        " LIGHT_GRAY "           Searches for a player by ID, search: linear, binary,\n binary-recursive, exponential, interpolation\n" RESET);
+	printf("  " DARK_BLUE "-a, --algorithm <sort type>" RESET "         " LIGHT_GRAY "                       Default: quick. Options: swap, insertion, selection, cocktail, quick, merge, merge-optimized\n" RESET);
+	printf("  " DARK_BLUE "-c, --criteria <criteria>" RESET "        " LIGHT_GRAY "                          Default: id. Criteria: id, name, team, score, competitions\n" RESET);
+	printf("  " DARK_GREEN "-f, --find [search type]" RESET "                        " LIGHT_GRAY "           Default: interpolation. Options: linear, binary,\n binary-recursive, exponential, interpolation\n" RESET);
 	printf("  " DARK_GREEN "-i, --id <id>" RESET "                     " LIGHT_GRAY "                         ID of the player to search for\n" RESET);
 	printf("  " MAGENTA "-j, --kth <k>" RESET "                     " LIGHT_GRAY "                         Shows the kth best player\n" RESET);
 	printf("  " MAGENTA "-p, --topcount <N>" RESET "               " LIGHT_GRAY "                          Shows the ranking of the top N players\n" RESET);
