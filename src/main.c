@@ -189,14 +189,16 @@ int main(int argc, char *argv[])
 	}
 
 	if (action_count != 1) {
-		printf("Error: you must specify exactly one action.\n\n");
+		print_error(104, NULL, NULL);
+		printf("\n");
 		print_usage(argv[0]);
 		return 1;
 	}
 
 	if (action == 'g') {
 		if (generationType == GEN_INVALID) {
-			printf("Error: to generate, use -g <amount> and -t <generate type>\n\n");
+			print_error(105, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -224,17 +226,19 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	if (action == 's') {
+		if (action == 's') {
 		int (*comp_ptr)(Player*, Player*) = NULL;
 
 		if (sortOptionSpecified && sortOption == SORT_INVALID) {
-			printf("Error: invalid sort algorithm.\n\n");
+			print_error(106, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
 
 		if (sortCriteriaSpecified && sortCriteria == CRIT_INVALID) {
-			printf("Error: invalid sort criteria.\n\n");
+			print_error(107, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -279,13 +283,15 @@ int main(int argc, char *argv[])
 
 	if (action == 'f') {
 		if (searchOptionSpecified && searchOption == SEARCH_INVALID) {
-			printf("Error: invalid search algorithm.\n\n");
+			print_error(108, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
 
 		if (searchId < 0) {
-			printf("Error: to search, use -f [-algorithm] -i <id>\n\n");
+			print_error(109, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -365,11 +371,11 @@ int main(int argc, char *argv[])
 				printf(BG_GREEN "Player found at index %d via Interpolation Search:" RESET "\n\n", result + 1);
 				print_player(&players[result]);
 			}
-		} else {
-			printf("Error: unsupported search algorithm.\n");
-			free(players);
-			return 1;
-		}
+			} else {
+				print_error(110, NULL, NULL);
+				free(players);
+				return 1;
+			}
 
 		free(players);
 		return 0;
@@ -377,7 +383,8 @@ int main(int argc, char *argv[])
 
 	if (action == 'j') {
 		if (kthValue <= 0) {
-			printf("Error: to select, use -j <k>\n\n");
+			print_error(111, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -406,7 +413,8 @@ int main(int argc, char *argv[])
 
 	if (action == 'p') {
 		if (topCount <= 0) {
-			printf("Error: to rank, use -p <N>\n\n");
+			print_error(112, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -437,13 +445,15 @@ int main(int argc, char *argv[])
 
 	if (action == 'R') {
 		if (!minScoreSet || !maxScoreSet) {
-			printf("Error: for score ranges, use -R -m <min> -M <max>\n\n");
+			print_error(113, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
 
 		if (minScore > maxScore) {
-			printf("Error: the minimum score cannot be greater than the maximum score.\n\n");
+			print_error(114, NULL, NULL);
+			printf("\n");
 			return 1;
 		}
 
@@ -482,7 +492,8 @@ int main(int argc, char *argv[])
 
 	if (action == 'Q') {
 		if (!exactScoreSet) {
-			printf("Error: to search for an exact score, use -q <score>\n\n");
+			print_error(115, NULL, NULL);
+			printf("\n");
 			print_usage(argv[0]);
 			return 1;
 		}
@@ -660,7 +671,7 @@ static int run_experiment_menu(void)
 	printf("Selecciona una opcion: ");
 
 	if (scanf("%d", &option) != 1) {
-		printf("Error: opcion invalida.\n");
+		print_error(116, NULL, NULL);
 		return 1;
 	}
 
@@ -674,6 +685,6 @@ static int run_experiment_menu(void)
 		return 0;
 	}
 
-	printf("Error: opcion invalida.\n");
+	print_error(116, NULL, NULL);
 	return 1;
 }
