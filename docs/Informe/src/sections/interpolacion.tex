@@ -1,0 +1,78 @@
+\subsection{Búsqueda por Interpolación}\label{sec:interpolacion}
+La búsqueda por interpolación es una variante de la búsqueda binaria diseñada para trabajar sobre arreglos ordenados cuyos valores presentan una distribución aproximadamente uniforme. A diferencia de la búsqueda binaria, que siempre inspecciona el elemento central del intervalo actual, la búsqueda por interpolación intenta estimar directamente una posición más cercana al valor buscado a partir de la relación numérica entre los extremos del intervalo y el objetivo.
+
+La intuición detrás del algoritmo es similar a la búsqueda de una palabra en un diccionario o de un nombre en una guía telefónica: en vez de abrir siempre en la mitad exacta, se estima una posición probable según el valor que se desea encontrar. Si la distribución de los datos es uniforme o cercana a uniforme, esta estimación puede acercarse bastante a la posición real del elemento, reduciendo aún más el número de comparaciones necesarias.
+
+En este proyecto, la búsqueda por interpolación se aplica sobre arreglos ordenados por \texttt{id}, ya que esta clave posee una naturaleza numérica y ordenada que permite calcular una posición estimada dentro del subarreglo actual.
+
+\subsubsection{Funcionamiento general}
+El algoritmo trabaja sobre un intervalo delimitado por dos posiciones, \texttt{beg}(izquierda) y \texttt{end}(derecha). En cada paso calcula una posición estimada \texttt{pos} mediante una fórmula de interpolación lineal, basada en:
+\begin{itemize}
+    \item El valor buscado
+    \item El valor en el extremo izquierdo
+    \item El valor en el extremo derecho
+\end{itemize}
+Luego compara el valor ubicado en \texttt{pos} con el objetivo de si coincide, la búsqueda termina; si el objetivo es menor, continúa en la parte izquierda; si es mayor, continúa en la parte derecha.
+
+De este modo, el algoritmo también reduce progresivamente el espacio de búsqueda, pero lo hace intentando aproximarse mejor a la posición esperada del valor buscado.
+
+\begin{algorithm}
+    \caption{Búsqueda por interpolación $\triangleright$ $V[beg..end]$}
+    \begin{algorithmic}[1]
+        \Procedure{InterpolationSearch}{$V, beg, end, target\_id$}
+
+        \While{$beg \leq end$ \textbf{and} $target\_id \geq V[beg].id$ \textbf{and} $target\_id \leq V[end].id$}
+
+            \If{$V[beg].id = V[end].id$}
+                \If{$V[beg].id = target\_id$}
+                    \State \Return $beg$
+                \EndIf
+                \State \Return $-1$
+            \EndIf
+
+            \State $numerator \gets (target\_id - V[beg].id) \cdot (end - beg)$
+            \State $denominator \gets V[end].id - V[beg].id$
+            \State $pos \gets beg + \left\lfloor \dfrac{numerator}{denominator} \right\rfloor$
+
+            \If{$pos < beg$}
+                \State $pos \gets beg$
+            \ElsIf{$pos > end$}
+                \State $pos \gets end$
+            \EndIf
+
+            \If{$V[pos].id = target\_id$}
+                \State \Return $pos$
+            \EndIf
+
+            \If{$V[pos].id < target\_id$}
+                \State $beg \gets pos + 1$
+            \Else
+                \State $end \gets pos - 1$
+            \EndIf
+
+        \EndWhile
+
+        \State \Return $-1$
+
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+La caracteristica que distingue a este algoritmo es el cálculo de la posición estimada. Mientras la búsqueda binaria divide el intervalo en mitades exactas, la búsqueda por interpolación intenta aprovechar la magnitud relativa del valor buscado para ubicar una posición más prometedora.
+
+Si los valores del arreglo están distribuidos de manera uniforme, la posición calculada puede quedar muy cerca de la real, haciendo que el número de pasos necesarios sea muy bajo. Sin embargo, cuando la distribución de los datos es irregular o presenta acumulaciones, la estimación pierde precisión y el comportamiento del algoritmo puede verse afectado.
+
+Por esta razón, el rendimiento de la búsqueda por interpolación depende no solo del tamaño del arreglo, sino también de la forma en que se distribuyen sus claves.
+
+\subsubsection{Análisis de complejidad}
+El comportamiento teórico de la búsqueda por interpolación depende de la distribución de los datos:
+\begin{itemize}
+    \item Mejor caso: $O(1)$, si la primera estimación resulta ser la posición del valor buscado.
+    \item Caso promedio: $O($$log$ $log$ $n)$, bajo una distribución uniforme o aproximadamente uniforme.
+    \item Peor caso: $O(n)$
+\end{itemize}
+
+Esta diferencia respecto de la búsqueda binaria es importante. Aunque la búsqueda por interpolación puede superar en rendimiento a la búsqueda binaria en situaciones favorables, no ofrece la misma estabilidad teórica, dado que su peor caso puede degradar esta estabilidad considerablemente.
+
+\subsubsection{Comentario general}
+La búsqueda por interpolación constituye una variante más especializada de las búsquedas sobre arreglos ordenados. Su fortaleza corresponde a como explota la distribución númerica de los datos para estimar de manera más precisa la posición del elemento buscado. En arreglos uniformemente distribuidas, esta estrategia puede ofrecer un rendimiento muy superior al de búsqueda binaria, aunque dependa de la distribución númerica.

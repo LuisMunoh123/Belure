@@ -1,0 +1,181 @@
+\section{Desarrollo}\label{sec:desarrollo}
+\input{src/sections/quicksort.tex}
+\newpage
+\input{src/sections/quickSelect.tex}
+\newpage
+\input{src/sections/mergesort.tex}
+\input{src/sections/binario-recursivo.tex}
+\input{src/sections/binario-rango.tex}
+\input{src/sections/exponencial.tex}
+\newpage
+\input{src/sections/interpolacion.tex}
+
+
+\newpage
+\section{Comparación de algoritmos de ordenamiento}\label{sec:comparasion}
+ 
+Con el fin de obtener una visión global del rendimiento de todos los algoritmos implementados, se comparan a continuación los resultados experimentales de los algoritmos de Divide y Vencerás introducidos en este proyecto (Quick Sort, Merge Sort y Merge Sort Optimizado) frente a los cuatro algoritmos iterativos estudiados en el proyecto anterior: Bubble Sort, Insertion Sort, Selection Sort y Cocktail Shaker Sort. La comparación se realiza bajo los mismos tres escenarios de distribución de datos utilizados a lo largo del informe.
+ 
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[width=\textwidth]{src/figures/order_sorted.png}
+    \caption{Arreglo ordenado}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[width=\textwidth]{src/figures/order_inverse.png}
+    \caption{Arreglo en orden inverso}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[width=\textwidth]{src/figures/order_shuffled.png}
+    \caption{Arreglo desordenado}
+  \end{subfigure}
+  \caption{Comparación de algoritmos de ordenamiento iterativos y Divide y Vencerás bajo los tres escenarios de distribución de datos.}
+  \label{fig:comparacion-ordenamiento}
+\end{figure}
+ 
+\subsubsection*{Arreglo invertido y desordenado}
+
+En el escenario de orden inverso (Figura~\ref{fig:comparacion-ordenamiento}b) y en el caso promedio con datos aleatorios (Figura~\ref{fig:comparacion-ordenamiento}c), la brecha entre los algoritmos iterativos y los de Divide y Vencerás es notoria. Quick Sort, Merge Sort y Merge Sort Optimizado se agrupan en el extremo inferior del gráfico, separados por aproximadamente dos órdenes de magnitud respecto a Selection Sort y un orden respecto a Bubble Sort y Cocktail Shaker Sort. Este comportamiento es consistente con la superioridad asintótica de $O(n \log n)$ frente a $O(n^2)$ para tamaños de entrada crecientes. Dentro del grupo de Divide y Vencerás, los tres algoritmos exhiben tiempos de ejecución muy similares entre sí en ambos escenarios. 
+
+\subsubsection*{Arreglo ordenado: una ventaja de los algoritmos iterativos}
+ 
+El escenario de datos ya ordenados (Figura~\ref{fig:comparacion-ordenamiento}a) revela un resultado llamativo: los algoritmos iterativos con detección temprana de terminación (Bubble Sort, Insertion Sort y Cocktail Shaker Sort) superan en velocidad a los algoritmos de Divide y Vencerás. Esto se debe a que, cuando el arreglo ya está ordenado, dichos algoritmos alcanzan su mejor caso de $O(n)$, realizando únicamente un recorrido lineal sin efectuar intercambios o inserciones. Quick Sort y Merge Sort, en cambio, continúan ejecutando su esquema de división recursiva independientemente del estado del arreglo, manteniéndose en $O(n \log n)$.
+ 
+La única excepción entre los iterativos es Selection Sort, que no posee mecanismo de detección de ordenamiento previo y mantiene su complejidad $O(n^2)$ incluso en el mejor caso, tal como se analizó en el proyecto anterior.
+
+
+\newpage
+\section{Comparación de algoritmos de búsqueda}\label{sec:comparision-search}
+Con el fin de obtener una visión global del rendimiento de los algoritmos de búsqueda implementados, se comparan a continuación los resultados experimentales de búsqueda secuencial, búsqueda binaria iterativa, búsqueda binaria recursiva, búsqueda exponencial, búsqueda por interpolación y búsqueda binaria por rango. A diferencia del proyecto anterior, donde la referencia principal era la búsqueda secuencial y búsqueda binaria iterativa, en esta etapa se incorporan variantes basadas en la estrategia de Divide y Vencerás, permitiendo contrastar experimentalmente comportamientos lineales, logarítmicos y, en el caso de la interpolación, dependientes de la distribución de los datos.
+
+El análisis experimental se realizó sobre tamaños de entrada crecientes, evaluados en 20 puntos distribuidos a lo largo del rango considerado. Para cada tamaño se efectuaron 100 mediciones, promediando luego los tiempos obtenidos. En los algoritmos más rápidos se repitió internamente la operación de búsqueda varias veces por medición, con el fin de obtener tiempos observables incluso en escalas muy pequeñas. Para mantener una comparación estable entre los algoritmos de búsqueda exacta, se utilizó el campo \texttt{id} como clave en búsqueda secuencial, búsqueda binaria iterativa, búsqueda binaria recursiva, búsqueda exponencial e interpolación. En cambio, la búsqueda binaria por rango se evaluó sobre el campo \texttt{score}, ya que en ese caso se busca recuperar un conjunto de elementos y no una única coincidencia.
+
+Asimismo, dado que todos los algoritmos considerados, salvo la búsqueda secuencial, requieren arreglos previamente ordenados para funcionar correctamente, el costo de ordenamiento se separó del costo de búsqueda. De este modo, los tiempos reportados en las gráficas representan únicamente el comportamiento de los algoritmos de búsqueda y no el tiempo de preparación de la entrada.
+
+\subsection*{Peor caso}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.64\textwidth]{src/figures/searching_worst_graph.png}
+    \caption{Comparación de los peores casos de algoritmos de búsqueda (escala logarítmica)}
+    \label{fig:searching-worst}
+\end{figure}
+
+En el peor caso, la búsqueda secuencial se separa claramente del resto de los algoritmos. Su curva crece con mucha mayor rapidez y domina ampliamente la escala temporal a medida que aumenta el tamaño de entrada. Este comportamiento es consistente con su complejidad lineal $O(n)$, ya que en este escenario el algoritmo debe recorrer el arreglo completo antes de concluir que el identificador buscado no se encuentra presente.
+
+En contraste, la búsqueda binaria iterativa, la búsqueda binaria recursiva, la búsqueda exponencial y la búsqueda binaria por rango se agrupan en la parte inferior del gráfico, con tiempos muy próximos entre sí y claramente inferiores a los de la búsqueda secuencial. Esto coincide con sus complejidades logarítmicas y confirma experimentalmente la ventaja de descartar grandes porciones del arreglo en cada paso, en lugar de recorrerlo de manera lineal.
+
+Dentro de este grupo, la búsqueda binaria iterativa y la búsqueda binaria recursiva presentan comportamientos prácticamente equivalentes, lo que resulta esperable dado que ambas aplican la misma estrategia de reducción por mitades y solo difieren en el uso de iteración o recursión. La búsqueda exponencial, por su parte, también se mantiene en esta misma escala, confirmando que la fase inicial de expansión del intervalo no altera sustancialmente su comportamiento asintótico.
+
+La búsqueda binaria por rango sobre \texttt{score} también exhibe tiempos bajos y estables. Aunque requiere determinar ambos extremos del rango buscado, su comportamiento continúa siendo logarítmico, por lo que permanece muy por debajo de la búsqueda secuencial incluso en entradas grandes.
+
+\subsection*{Caso promedio}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.64\textwidth]{src/figures/searching_average_graph.png}
+    \caption{Comparación de los casos promedio de algoritmos de búsqueda (escala logarítmica)}
+    \label{fig:searching-average}
+\end{figure}
+
+En el caso promedio se observa nuevamente una separación entre la búsqueda secuencial y el resto de los algoritmos. Aunque en promedio la búsqueda lineal no necesita necesariamente recorrer todo el arreglo, su crecimiento sigue siendo mucho mayor que el de las variantes basadas en divide y vencerás.
+
+Las búsquedas binaria iterativa y binaria recursiva vuelven a mostrar un comportamiento muy cercano, ratificando que ambas comparten la misma eficiencia asintótica. La búsqueda exponencial también se mantiene dentro de esta misma zona del gráfico, con tiempos comparables a los de la búsqueda binaria. Esto permite observar que, en la práctica, las diferencias entre estas variantes son menores que la distancia que las separa de la búsqueda secuencial.
+
+La búsqueda binaria por rango presenta tiempos algo superiores a los de la búsqueda binaria simple, lo cual es razonable, pues en vez de localizar una sola posición debe determinar los límites del segmento relevante dentro del arreglo. Aun así, su comportamiento sigue siendo considerablemente más eficiente que el de la búsqueda lineal y conserva la misma tendencia logarítmica general.
+
+En conjunto, los resultados del caso promedio confirman que, para arreglos ordenados y de gran tamaño, las estrategias de búsqueda basadas en reducción del espacio de búsqueda superan ampliamente a la exploración secuencial, tanto en teoría como en práctica.
+
+\subsection*{El caso particular de la búsqueda por interpolación}
+La búsqueda por interpolación merece una observación separada, ya que en ambas gráficas aparece con tiempos excepcionalmente bajos en comparación con las demás variantes de búsqueda exacta. Este resultado se explica porque el análisis se realizó utilizando \texttt{id} como clave, y dicha clave presenta una estructura numérica favorable para la estimación de posiciones que realiza este algoritmo.
+
+En términos teóricos, esta observación es coherente con su comportamiento esperado sobre distribuciones aproximadamente uniformes, donde el caso promedio puede acercarse a $O(\log \log n)$. Sin embargo, esto no debe confundirse con su peor caso teórico, que sigue siendo $O(n)$. En otras palabras, la interpolación puede resultar extraordinariamente eficiente cuando la distribución de los datos la favorece, pero su comportamiento es más sensible a la estructura de la entrada que el de la búsqueda binaria o la exponencial.
+
+Por esta razón, sus resultados deben interpretarse como una evidencia de muy buen rendimiento práctico bajo las condiciones particulares del experimento.
+
+\newpage
+\section{Aplicación práctica}
+
+\subsection{Interfaz de línea de comandos}
+
+Con el fin de integrar los algoritmos implementados al sistema desarrollado en el Proyecto~1, se rediseñó la interfaz de línea de comandos para permitir invocar cada funcionalidad de forma directa, sin depender de interacción paso a paso. Para ello se utilizó la función estándar \texttt{getopt\_long()}, disponible en \texttt{<getopt.h>}, la cual permite definir tanto banderas cortas (por ejemplo, \texttt{-s}) como sus equivalentes en formato largo (por ejemplo, \texttt{--sort}). Esto simplifica el procesamiento de argumentos y hace posible exponer cada operación del sistema como una acción independiente parametrizable desde la terminal.
+
+De esta forma, el programa admite operaciones de generación, lectura, ordenamiento, búsqueda, selección, ranking, búsqueda por puntaje exacto, búsqueda por rango y ejecución de experimentos. Algunos ejemplos de uso se muestran a continuación:
+
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -g 1000 -t shuffled
+./build/conquer.out -r
+./build/conquer.out -s -a quick -c score
+./build/conquer.out -f interpolation -i 25
+./build/conquer.out -j 3
+./build/conquer.out -p 10
+./build/conquer.out -q 80.0
+./build/conquer.out -R -m 80.0 -M 95.0
+./build/conquer.out -e
+\end{lstlisting}
+
+Para la generación de datos se utiliza la bandera \texttt{-g} acompañada de un número de elementos, junto con \texttt{-t} para indicar el tipo de generación. Los modos soportados son \texttt{sorted}, \texttt{inverse} y \texttt{shuffled}, permitiendo construir arreglos ordenados, invertidos o aleatorios según las necesidades del análisis experimental.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -g <cantidad> -t <sorted|inverse|shuffled>
+\end{lstlisting}
+
+Para visualizar el archivo CSV actualmente almacenado se emplea la bandera \texttt{-r} ({\small\texttt{--read}}), la cual carga y muestra el contenido actual del sistema.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -r
+\end{lstlisting}
+
+Para ordenar el conjunto de deportistas se expone la bandera \texttt{-s} ({\small\texttt{--sort}}), que puede acompañarse de \texttt{-a} para indicar el algoritmo y de \texttt{-c} para el criterio de comparación. Los algoritmos admitidos incluyen las variantes implementadas en el proyecto, mientras que los criterios corresponden a los distintos campos del registro del deportista. Si la opción \texttt{-a} se omite, el sistema utiliza \textbf{Quick Sort} como algoritmo predeterminado; si \texttt{-c} se omite, se utiliza el campo \texttt{id} como criterio por defecto.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -s [-a <algoritmo>] [-c <criterio>]
+\end{lstlisting}
+
+Para la búsqueda exacta de un deportista por identificador se utiliza la bandera \texttt{-f}, junto con \texttt{-i} para indicar el \texttt{id} buscado. Esta funcionalidad admite distintas variantes de búsqueda exacta, incluyendo búsqueda secuencial, búsqueda binaria iterativa, búsqueda binaria recursiva, búsqueda exponencial e interpolación. Si no se especifica un algoritmo explícitamente, el sistema utiliza \textbf{búsqueda por interpolación} como algoritmo predeterminado.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -f [algoritmo-busqueda] -i <id>
+\end{lstlisting}
+
+Para obtener el $k$-ésimo mejor deportista se emplea la bandera \texttt{-j} seguida del valor entero $k$. Esta funcionalidad se implementa mediante \textbf{Quick Select}, utilizando el puntaje como criterio de selección.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -j <k>
+\end{lstlisting}
+
+El ranking de los $N$ mejores deportistas se obtiene con la bandera \texttt{-p}. Internamente, el sistema utiliza \textbf{Quick Select} para aislar el segmento correspondiente a los mejores puntajes y luego ordena dicho segmento para presentarlo como ranking final.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -p <N>
+\end{lstlisting}
+
+Para recuperar todos los deportistas que tengan un puntaje exacto se utiliza la bandera \texttt{-q} seguida del valor buscado. En este caso, el sistema ordena previamente los datos por puntaje y luego aplica una variante de \textbf{búsqueda binaria por rango}, identificando la primera y la última ocurrencia del valor solicitado.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -q <score>
+\end{lstlisting}
+
+Para consultar los deportistas cuyo puntaje se encuentre entre un mínimo y un máximo se utiliza la bandera \texttt{-R} acompañada de \texttt{-m} y \texttt{-M}. El sistema ordena primero el arreglo por puntaje y posteriormente aplica \textbf{búsqueda binaria por rango}, determinando el subarreglo comprendido entre el primer valor válido y el último valor válido dentro del intervalo $[\textit{min},\,\textit{max}]$.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -R -m <min> -M <max>
+\end{lstlisting}
+
+Para la ejecución de experimentos se utiliza la bandera \texttt{-e}. Esta opción despliega un menú interno desde el cual el usuario puede escoger si desea ejecutar el experimento de algoritmos de ordenamiento o el de algoritmos de búsqueda.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -e
+\end{lstlisting}
+
+Finalmente, la bandera \texttt{-h} permite desplegar la ayuda general del programa, incluyendo la sintaxis disponible y los algoritmos predeterminados definidos para ciertas operaciones.
+\begin{lstlisting}[language=bash, style=CodeStyle]
+./build/conquer.out -h
+\end{lstlisting}
+
+Cabe señalar que los argumentos escritos entre corchetes \texttt{[]} son opcionales. Cuando el usuario omite alguno de ellos, el programa recurre a valores predeterminados seleccionados por los autores, de acuerdo con los resultados obtenidos en el análisis teórico y experimental.
+
+\newpage
+\subsection{Justificación de la elección de algoritmos}\label{sec:justificacion}
+
+\subsubsection{Algoritmo de ordenamiento: Quick Sort}
+Aunque los resultados experimentales presentados en la Sección~\ref{sec:comparasion} demuestran que Merge Sort optimizado y Quick Sort exhiben tiempos de ejecución comparables en el caso promedio, la elección recae en \textbf{Quick Sort} por razones de uso de memoria. Merge Sort requiere un arreglo auxiliar del mismo tamaño que la entrada para realizar la fase de combinación, incurriendo en una complejidad espacial de $O(n)$. Quick Sort, en cambio, opera directamente sobre el arreglo original mediante intercambios in-place, con una complejidad espacial de $O(1)$ en cuanto a memoria adicional (sin considerar la pila de recursión). En un sistema donde el tamaño del conjunto de deportistas puede crecer arbitrariamente, esta diferencia resulta determinante para mantener un uso eficiente de la memoria disponible.
+
+\subsubsection{Algoritmo de búsqueda: búsqueda por interpolación y búsqueda por rangos}
+Para la búsqueda de un deportista por identificador se adopta la \textbf{búsqueda por interpolación} como algoritmo predeterminado, ya que, en el caso de este proyecto, la búsqueda de un elemento exacto se hace con el \texttt{id}, y este criterio al ser un tipo de dato que se puede distribuir númericamente y uniforme a lo largo del arreglo, es donde mejor se comporta este algoritmo a diferencia de los demás.
+
+Para la consulta por rango de puntaje, la \textbf{búsqueda binaria por rangos} es la única alternativa implementada capaz de retornar directamente los límites inferior y superior del intervalo en el arreglo ordenado, lo que la convierte en la elección natural para esta funcionalidad.

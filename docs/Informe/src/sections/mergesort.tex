@@ -1,0 +1,161 @@
+%===============================================================================
+%   MergeSort
+%===============================================================================
+\subsection{Merge Sort: versión clásica y versión optimizada}\label{sec:mergesort}
+
+Merge Sort es un algoritmo de ordenamiento basado en Divide y Vencerás. Su idea principal es dividir el arreglo en partes más pequeñas, ordenar esas partes y luego unirlas nuevamente de forma ordenada. En vez de ordenar todo directamente, primero separa el problema y después reconstruye la solución.
+
+En este proyecto se trabajó con dos versiones de Merge Sort. La primera es la versión clásica, que divide el arreglo hasta llegar a partes muy pequeñas y luego las mezcla. La segunda es una versión optimizada, que usa Insertion Sort cuando los subarreglos son pequeños para evitar llamadas recursivas innecesarias.
+
+\subsubsection{Función Merge: la operación clave}
+
+La función \textit{merge} es la parte más importante de Merge Sort. Su trabajo es unir dos subarreglos que ya están ordenados y formar con ellos un solo subarreglo también ordenado.
+
+La idea es sencilla: se compara el primer elemento disponible de cada subarreglo y se copia el menor al arreglo temporal. Luego se avanza en el subarreglo del cual se tomó ese elemento. Este proceso se repite hasta que uno de los dos subarreglos se termina. Finalmente, si quedan elementos en alguno de los lados, se copian directamente, porque ya estaban ordenados.
+
+\begin{algorithm}
+    \caption{Merge $\triangleright$ $V[left..right]$}
+    \label{alg:merge_function}
+    \begin{algorithmic}[1]
+        \Procedure{Merge}{$V, left, mid, right, comp\_f$}
+        \State $i \gets left$
+        \State $j \gets mid + 1$
+        \State $k \gets 0$
+        \State Crear arreglo temporal $temp$ de tamaño $(right - left + 1)$
+        \While{$i \leq mid$ \textbf{and} $j \leq right$}
+        \If{$comp\_f(V[i], V[j]) \leq 0$}
+        \State $temp[k] \gets V[i]$
+        \State $i \gets i + 1$
+        \Else
+        \State $temp[k] \gets V[j]$
+        \State $j \gets j + 1$
+        \EndIf
+        \State $k \gets k + 1$
+        \EndWhile
+        \While{$i \leq mid$}
+        \State $temp[k] \gets V[i]$
+        \State $i \gets i + 1$
+        \State $k \gets k + 1$
+        \EndWhile
+        \While{$j \leq right$}
+        \State $temp[k] \gets V[j]$
+        \State $j \gets j + 1$
+        \State $k \gets k + 1$
+        \EndWhile
+        \State $k \gets 0$
+        \For{$i \gets left$ \textbf{to} $right$}
+        \State $V[i] \gets temp[k]$
+        \State $k \gets k + 1$
+        \EndFor
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+La función \textit{merge} tiene costo $O(n)$, porque cada elemento se revisa y se copia una cantidad constante de veces. Si entre ambos subarreglos hay $n$ elementos, el trabajo total crece de forma lineal. Además, necesita memoria auxiliar para guardar temporalmente los elementos mientras se mezclan.
+
+\subsubsection{Merge Sort clásico}
+
+Merge Sort clásico sigue siempre el mismo procedimiento. Primero divide el arreglo en dos mitades. Después ordena cada mitad usando nuevamente Merge Sort. Finalmente, mezcla ambas mitades con la función \textit{merge}.
+
+El proceso se detiene cuando el subarreglo tiene tamaño $0$ o $1$, porque en ese caso ya está ordenado. A partir de ahí, las partes pequeñas se van mezclando hasta reconstruir el arreglo completo en orden.
+
+\begin{algorithm}
+    \caption{Merge Sort clásico $\triangleright$ $V[left..right]$}
+    \label{alg:merge_sort_classic}
+    \begin{algorithmic}[1]
+        \Procedure{MergeSortClassic}{$V, left, right, comp\_f$}
+        \If{$left \geq right$}
+        \State \Return \Comment{Caso base: arreglo de tamaño $0$ o $1$}
+        \EndIf
+        \State $mid \gets left + (right - left) / 2$
+        \State MergeSortClassic$(V, left, mid, comp\_f)$ \Comment{Ordenar mitad izquierda}
+        \State MergeSortClassic$(V, mid + 1, right, comp\_f)$ \Comment{Ordenar mitad derecha}
+        \State Merge$(V, left, mid, right, comp\_f)$ \Comment{Mezclar ambas mitades}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Su complejidad se puede explicar así: en cada nivel de recursión se procesan en total $n$ elementos, porque las mezclas recorren todos los datos de ese nivel. Además, como el arreglo se divide siempre a la mitad, se generan aproximadamente $\log n$ niveles.
+
+Por eso, el costo total es:
+
+\[
+    T(n)=2T\left(\frac{n}{2}\right)+cn
+\]
+
+Aplicando el Teorema Maestro (véase Anexo~\ref{sec:teorema-maestro}), se obtiene:
+
+\[
+    T(n) \in O(n \log n)
+\]
+
+En palabras simples, Merge Sort trabaja $O(n)$ por nivel y tiene alrededor de $\log n$ niveles. Por eso su complejidad final es $O(n \log n)$.
+
+Esta complejidad se mantiene en el mejor, promedio y peor caso. Esto ocurre porque Merge Sort siempre divide el arreglo en mitades y siempre realiza las mezclas, sin importar si los datos venían ordenados, invertidos o desordenados. Su principal desventaja es que necesita memoria adicional para la etapa de mezcla.
+
+\subsubsection{Merge Sort optimizado con \textit{threshold}}
+
+La versión optimizada mantiene la misma idea de Merge Sort, pero agrega una mejora práctica. Cuando el subarreglo es muy pequeño, seguir dividiendo puede no ser conveniente, porque se hacen muchas llamadas recursivas para ordenar muy pocos elementos.
+
+Para evitar eso se usa un \textit{threshold}, es decir, un tamaño límite. Si el subarreglo tiene un tamaño menor o igual a ese límite, se ordena directamente con Insertion Sort. Si el subarreglo es más grande, el algoritmo continúa como Merge Sort normal.
+
+\begin{algorithm}
+    \caption{Merge Sort optimizado con threshold $\triangleright$ $V[left..right]$}
+    \label{alg:merge_sort_optimized}
+    \begin{algorithmic}[1]
+        \Procedure{MergeSortOptimized}{$V, left, right, threshold, comp\_f$}
+        \If{$right - left + 1 \leq threshold$}
+        \State InsertionSort$(V, left, right, comp\_f)$
+        \State \Return \Comment{Caso optimizado para subarreglos pequeños}
+        \EndIf
+        \If{$left \geq right$}
+        \State \Return \Comment{Caso base: subarreglo vacío o de un elemento}
+        \EndIf
+        \State $mid \gets left + (right - left) / 2$
+        \State MergeSortOptimized$(V, left, mid, threshold, comp\_f)$ \Comment{Dividir izquierda}
+        \State MergeSortOptimized$(V, mid + 1, right, threshold, comp\_f)$ \Comment{Dividir derecha}
+        \State Merge$(V, left, mid, right, comp\_f)$ \Comment{Conquistar: mezclar}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+Esta optimización no cambia la complejidad teórica principal del algoritmo, que sigue siendo $O(n \log n)$. Sin embargo, puede mejorar los tiempos reales de ejecución, porque Insertion Sort suele funcionar bien en arreglos pequeños.
+
+\subsubsection{Análisis experimental del umbral}
+
+Para evaluar esta mejora, primero se comparó Insertion Sort con Merge Sort clásico en tamaños pequeños. La idea era comprobar si tenía sentido usar Insertion Sort como apoyo en subarreglos cortos. \footnote{El experimento que arroja los resultados mostrados en esta seccion puede ser replicado compilando \href{https://github.com/ProgramsMFHM/Conquer/commit/3ee9c78dad0f84d95c72f947d79d1de7ece8c74b}{este commit} del reopsitorio del proyecto.}
+
+En la primera comparación (Figura~\ref{fig:merge-classic-vs-insertion}) se observa que Insertion Sort puede ser competitivo cuando la entrada es pequeña. Sin embargo, cuando el tamaño crece, Merge Sort empieza a tener mejores tiempos. Esto muestra que Insertion Sort conviene solo para segmentos pequeños, no como algoritmo principal para entradas grandes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.64\textwidth]{src/figures/merge classic vs insertion.png}
+    \caption{Comparación entre Insertion Sort y Merge Sort clásico para tamaños de entrada pequeños (escala logarítmica).}
+    \label{fig:merge-classic-vs-insertion}
+\end{figure}
+
+Luego se comparó Merge Sort clásico con distintas versiones optimizadas usando varios valores de \textit{threshold}. En la Figura~\ref{fig:merge-thresholds} se puede ver que las versiones optimizadas tienden a estar por debajo de la versión clásica, lo que indica menores tiempos de ejecución.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.64\textwidth]{src/figures/todos los merge.png}
+    \caption{Comparación entre Merge Sort clásico y versiones optimizadas con distintos umbrales.}
+    \label{fig:merge-thresholds}
+\end{figure}
+
+A partir de estas pruebas se escogió el umbral usado en la versión optimizada. La elección se hizo observando los resultados experimentales, buscando un punto en que se redujera la recursión sin hacer que Insertion Sort trabajara con subarreglos demasiado grandes.
+
+Finalmente, se comparó Merge Sort clásico con Merge Sort optimizado usando el umbral seleccionado. En la Figura~\ref{fig:merge-classic-vs-optimized} se observa que ambos algoritmos mantienen una forma de crecimiento parecida, pero la versión optimizada obtiene tiempos menores dentro del rango evaluado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.64\textwidth]{src/figures/comparacion.png}
+    \caption{Comparación final entre Merge Sort clásico y Merge Sort optimizado.}
+    \label{fig:merge-classic-vs-optimized}
+\end{figure}
+
+En conjunto, los resultados muestran que usar un \textit{threshold} puede ser útil en la práctica. La mejora no cambia la complejidad $O(n \log n)$, pero sí ayuda a reducir tiempo de ejecución al evitar recursión innecesaria en subarreglos pequeños.
+
+\subsubsection{Comentario general}
+
+En conclusión, Merge Sort se puede entender a partir de tres ideas simples. Primero, divide el arreglo en mitades. Segundo, ordena esas mitades de forma recursiva. Tercero, las une con la función \textit{merge}. La versión clásica mantiene un comportamiento estable de $O(n \log n)$ en todos los casos. La versión optimizada conserva esa misma idea, pero usa Insertion Sort en subarreglos pequeños para mejorar el rendimiento práctico.

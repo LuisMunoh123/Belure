@@ -1,0 +1,30 @@
+\section{Conclusiones}\label{sec:conclusiones}
+A partir del análisis teórico y experimental realizado, se extraen las siguientes conclusiones respecto al comportamiento de los algoritmos estudiados.
+
+\subsubsection*{Superioridad asintótica de Divide y Vencerás en ordenamiento}
+
+Los resultados experimentales confirmaron de forma contundente la ventaja de los algoritmos $O(n \log n)$ frente a los algoritmos $O(n^2)$ del Proyecto~1. A medida que el tamaño de entrada crece, la brecha entre ambas familias se vuelve cada vez más pronunciada. Este comportamiento es consistente con la superioridad asintótica predicha por el análisis teórico y refuerza la importancia de seleccionar algoritmos de menor complejidad para conjuntos de datos de gran tamaño.
+
+\subsubsection*{Excepción en el mejor caso: la ventaja de los iterativos optimizados}
+
+El escenario de datos ya ordenados reveló un resultado llamativo: los algoritmos iterativos con detección temprana de terminación superan en velocidad a los algoritmos de Divide y Vencerás, alcanzando su mejor caso de $O(n)$ mediante un único recorrido lineal sin intercambios. Este resultado ilustra que la complejidad asintótica no es el único criterio relevante en la selección de algoritmos: el estado inicial de los datos puede invertir la jerarquía de rendimiento entre familias de distinto orden de complejidad.
+
+\subsubsection*{Impacto de las optimizaciones dentro de una misma clase de complejidad}
+
+Dentro de los algoritmos de Divide y Vencerás, los experimentos evidenciaron que las optimizaciones tienen un efecto práctico significativo sin alterar el orden asintótico. En Merge Sort, la incorporación de un umbral para delegar a Insertion Sort los subarreglos pequeños redujo los tiempos de ejecución de forma consistente. En Quick Sort, la elección del pivote demostró ser determinante: la estrategia de mediana de tres ofreció el mejor equilibrio entre rendimiento y estabilidad, mientras que los pivotes de primer y último elemento se degradaron a $O(n^2)$ frente a arreglos ya ordenados o en orden inverso.
+
+\subsubsection*{Comportamiento de los algoritmos de búsqueda}
+
+Los algoritmos de búsqueda basados en Divide y Vencerás demostraron ser significativamente más eficientes que la búsqueda secuencial del Proyecto~1. La búsqueda binaria recursiva e iterativa, la búsqueda exponencial y la búsqueda binaria para rangos exhibieron un comportamiento $O(\log n)$ consistente con sus análisis teóricos. La búsqueda por interpolación mostró ventajas sobre la búsqueda binaria en distribuciones uniformes de datos, estimando con mayor precisión la posición del elemento buscado; sin embargo, su rendimiento se degrada frente a distribuciones sesgadas, según la teoría.
+
+\subsubsection*{Quick Select como alternativa eficiente a la selección por ordenamiento}
+
+Quick Select demostró ser una alternativa eficiente para obtener el $k$-ésimo elemento, operando en tiempo promedio $O(n)$ frente al $O(n \log n)$ del ordenamiento previo. Su peor caso de $O(n^2)$, análogo al de Quick Sort con mala elección de pivote, puede mitigarse mediante estrategias de selección de pivote adecuadas, tal como se analizó en la sección correspondiente.
+
+\subsubsection*{Validación de la teoría en la práctica}
+
+El análisis experimental corroboró, en términos generales, las predicciones del análisis teórico de complejidad para los algoritmos estudiados. Las curvas de tiempo de ejecución se ajustaron a los órdenes asintóticos esperados, confirmando que el análisis de complejidad constituye una herramienta confiable para anticipar el comportamiento global de los algoritmos.
+
+La principal salvedad corresponde al peor caso de la búsqueda por interpolación. Aunque teóricamente este algoritmo puede degradarse hasta un comportamiento lineal, dicho escenario depende de distribuciones desfavorables de los criterios y no se reproduce necesariamente mediante la simple búsqueda de un identificador inexistente. En este trabajo, con el fin de mantener una comparación homogénea entre los algoritmos de búsqueda exacta, se evaluó dicho caso utilizando \texttt{id} como criterio de búsqueda, por lo que el peor caso experimental de interpolación debe interpretarse como una aproximación uniforme dentro del diseño experimental, más que como una reproducción estricta de su peor caso teórico.
+
+Los resultados obtenidos en ambos proyectos refuerzan, además, que la elección del algoritmo más adecuado no depende únicamente de su complejidad teórica, sino también de las características particulares de los datos de entrada y del contexto de aplicación.

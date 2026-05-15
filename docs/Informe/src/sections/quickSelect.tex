@@ -1,0 +1,87 @@
+%===============================================================================
+%   Quick Select
+%===============================================================================
+\subsection{Quick Select: búsqueda del \texorpdfstring{$k$}{k}-ésimo elemento}\label{sec:quickselect}
+
+Quick Select es un algoritmo que permite encontrar un elemento según la posición que tendría si el arreglo estuviera ordenado. Por ejemplo, puede encontrar el $k$-ésimo menor o el $k$-ésimo mayor elemento sin ordenar todos los datos.
+
+La idea principal es que, si solo se necesita un elemento, no hace falta ordenar el arreglo completo. El algoritmo va descartando las partes donde ese elemento no puede estar, hasta quedarse con la parte correcta.
+
+Para entenderlo, se pueden considerar estas ideas:
+
+\begin{enumerate}
+    \item Si el arreglo estuviera ordenado, el $k$-ésimo menor estaría en la posición $V[k-1]$.
+    \item Si se busca el $k$-ésimo mayor, estaría en la posición $V[n-k]$.
+    \item Después de particionar, el pivote queda en la posición que tendría dentro del arreglo ordenado.
+\end{enumerate}
+
+El funcionamiento es parecido al de Quick Sort (Sección~\ref{sec:quicksort}). Primero se escoge un pivote y se particiona el arreglo: los elementos menores quedan a un lado y los mayores al otro. Luego se revisa la posición final del pivote. Si esa posición es la que se busca, el algoritmo termina. Si la posición buscada está a la izquierda, se continúa solo por la izquierda. Si está a la derecha, se continúa solo por la derecha.
+
+La diferencia con Quick Sort es importante: Quick Sort debe ordenar ambas partes, mientras que Quick Select solo sigue trabajando en una. Por eso evita trabajo innecesario cuando solo se busca un elemento.
+
+
+A nivel de pseudocódigo, el algoritmo se resume de la siguiente forma:
+
+\begin{algorithm}
+    \caption{Quick Select $\triangleright$ $V[0..n-1]$}
+    \begin{algorithmic}[1]
+        \Procedure{QuickSelect}{$V, left, right, k$}
+        \If{$left = right$}
+        \State \Return $V[left]$
+        \EndIf
+        \State $pivot \gets$ MedianOfThree$(V, left, right)$ // Elección del pivote
+        \State $pivot \gets$ LomutoPartition$(V, left, right, pivot)$
+        \If{$k = pivot$}
+        \State \Return $V[pivot]$ // El pivote era el k-ésimo elemento
+        \ElsIf{$k < pivot$}
+        \State \Return QuickSelect$(V, left, pivot - 1, k)$ // Buscar a la izquierda
+        \Else
+        \State \Return QuickSelect$(V, pivot + 1, right, k)$ // Buscar a la derecha
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Mejor caso y caso promedio}
+
+El mejor caso ocurre cuando el pivote queda cerca del centro del arreglo. En ese caso, después de cada partición se descarta una parte grande de los datos y el problema se reduce rápidamente.
+
+El trabajo total puede representarse así:
+
+\[
+T(n)=n+\frac{n}{2}+\frac{n}{4}+\frac{n}{8}+\cdots
+\]
+
+Esto significa que primero se revisan $n$ elementos, luego aproximadamente la mitad, después un cuarto, y así sucesivamente. Al sumar esos costos, el crecimiento total es lineal. Por eso, en el mejor caso y en el caso promedio:
+
+\[
+T(n)\in O(n)
+\]
+
+En palabras simples, Quick Select puede ser muy rápido porque no ordena todo el arreglo, sino que elimina partes que ya no sirven para encontrar el elemento buscado.
+
+\subsubsection{Peor caso}
+
+El peor caso ocurre cuando el pivote queda siempre en una posición desfavorable, por ejemplo, como el menor o el mayor elemento. En esa situación casi no se descartan datos, por lo que el algoritmo debe seguir revisando casi todo el arreglo en cada paso.
+
+El costo se puede expresar como:
+
+\[
+T(n)=n+(n-1)+(n-2)+\cdots+1
+\]
+
+Esta suma crece de forma cuadrática, por lo que el peor caso es:
+
+\[
+T(n)\in O(n^2)
+\]
+
+Aunque este peor caso existe, en la práctica Quick Select suele funcionar bien, especialmente si se usa una estrategia de pivote más cuidadosa, como la mediana de tres.
+
+\subsubsection{Comentario general}
+
+En resumen, Quick Select busca un elemento por posición sin ordenar completamente el arreglo. Usa la misma idea de partición de Quick Sort, pero solo continúa por el lado donde puede estar la respuesta. Por eso, cuando los pivotes son razonables, su tiempo esperado es $O(n)$.
+
+\subsubsection*{Sobre la verificación experimental}
+
+No se realizó un experimento separado para Quick Select porque su comportamiento depende principalmente de la elección del pivote, igual que en Quick Sort. Como esa parte ya fue analizada en la Sección~\ref{sec:quicksort_seleccion}, sus conclusiones también ayudan a entender el comportamiento de Quick Select.

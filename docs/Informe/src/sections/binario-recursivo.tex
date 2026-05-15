@@ -1,0 +1,44 @@
+\subsection{Búsqueda Binaria Recursiva}\label{sec:binario-recursivo}
+La búsqueda binaria recursiva es una variante de la búsqueda binaria iterativa que resuelve el problema mediante la estrategia de divide y vencerás. Su aplicación requiere que los datos se encuentren previamente ordenados, ya que en cada paso el algoritmo decide en que mitad del arreglo continuar a partir de una comparación con el elemento central.
+
+En el sistema desarrollado del proyecto 1 ya se contaba con búsqueda secuencial y búsqueda binaria iterativa. En esta tarea se incorpora la versión recursiva, con el objetivo de analizar su comportamiento, y compararlo con los algoritmos de búsqueda del proyecto anterior, y los algoritmos de búsqueda implementados en el proyecto actual.
+
+Su funcionamiento consiste en comparar el elemento situado en la posición media del subarreglo actual. Si el elemento medio coincide con el valor buscado, la búsqueda termina exitosamente. Si el valor buscado es menor, la búsqueda continúa de manera recursiva en la mitad izquierda. Si es mayor, continúa en la mitad derecha. De esta forma, en cada llamada recursiva se deshace aproximadamente la mitad de los elementos del arreglo a evaluar.
+
+\begin{algorithm}
+    \caption{Búsqueda binaria recursiva de jugadores $\triangleright$ $V[beg..end]$}
+    \begin{algorithmic}[1]
+        \Procedure{BinarySearchRecursive}{$V, beg, end, x, comp\_f$}
+        
+        \If{$beg > end$}
+            \State \Return $-1$
+        \EndIf
+
+        \State $mid \gets beg + \dfrac{end - beg}{2}$
+        \State $cmp \gets comp\_f(\&V[mid], x)$
+
+        \If{$cmp = 0$}
+            \State \Return $mid$
+        \EndIf
+
+        \If{$cmp > 0$}
+            \State \Return \Call{BinarySearchRecursive}{$V, beg, mid - 1, x, comp\_f$}
+        \EndIf
+
+        \State \Return \Call{BinarySearchRecursive}{$V, mid + 1, end, x, comp\_f$}
+
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Análisis de complejidad}
+En cada llamada recursiva se genera un único subproblema de tamaño aproximado $\frac{n}{2}$, mientras que el trabajo adicional fuera de la llamada recursiva consiste en calcular la posición central y realizar una o dos comparaciones, obteniendo lo siguiente: $$T(n)=T(n/2)+O(1)$$ Esta recurrencia se ajusta a la forma general del Teorema maestro presentada en la sección \ref{sec:teorema-maestro}, entonces: $$T(n) = O(log\text{ }n)$$ Por tanto la complejidad temporal de la búsqueda binaria recursiva es:
+\begin{itemize}
+    \item Mejor caso: $O(1)$, cuando el elemento buscado se encuentra en la posición media.
+    \item Caso promedio: $O(log\text{ }n)$
+    \item Peor caso: $O(log\text{ }n)$
+\end{itemize} 
+En comparación con la versión iterativa, la complejidad temporal asintótica es la misma. La diferencia principal esta en que la versión recursiva utiliza la pila de llamadas del sistema, lo que genera una carga adicional, aunque sin modificar el crecimiento del algoritmo.
+
+\subsubsection{Comentario general}
+Desde el punto de vista teórico, se espera que este algoritmo implementado en su versión recursiva, mantenga un comportamiento claramente superior al de búsqueda secuencial a medida que va aumentando el tamaño de entrada, debido a su crecimiento logarítmico. Experimentalmente, sus tiempos deberían ser muy cercanos a los de su versión iterativa, ya que ambas aplican la misma idea de reducción por mitades, diferenciandose solo en la forma que fueron implementadas.

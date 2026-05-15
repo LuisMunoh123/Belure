@@ -1,0 +1,126 @@
+%===============================================================================
+%   Quicksort
+%===============================================================================
+\subsection{Quicksort}\label{sec:quicksort}
+
+Este algoritmo, al igual que Merge Sort, consta de dos elementos esenciales: la \textbf{partición} y el \textbf{ordenamiento} como tal. Partiendo de un arreglo desordenado, la manera de ordenarlo con este algoritmo es la siguiente:
+
+\begin{enumerate}
+    \item Se escoge un \textit{pivote} dentro del arreglo.
+    \item Se ordena el arreglo alrededor de ese pivote, generando ``dos nuevos arreglos'' (que en realidad son dos partes del original): a la izquierda del pivote quedan los elementos menores que él (no necesariamente ordenados) y a la derecha los mayores que él (tampoco ordenados).
+    \item Se repiten los dos primeros pasos sobre cada uno de estos subarreglos.
+    \item Así sucesivamente, de manera recursiva, hasta tener el arreglo completamente ordenado.
+\end{enumerate}
+
+A nivel de pseudocódigo, el ordenamiento sigue la siguiente estructura:
+
+\begin{algorithm}
+    \caption{Quicksort $\triangleright$ $V[0..n-1]$}
+    \begin{algorithmic}[1]
+        \Procedure{QuickSort}{$V, left, right$}
+        \If{$(right - left) + 1 < 2$}
+        \State \Return // Arreglos de 1 o 0 elementos ya estan ordenados
+        \EndIf
+        \State $p \gets$ Pivote$(V, left, right)$ // Por el metodo escogido
+        \State $p \gets$ LomutoPartition$(V, left, right, p)$
+        \State QuickSort$(V, left, p-1)$
+        \State QuickSort$(V, p+1, right)$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\subsubsection*{Selección del pivote}
+
+La elección del pivote impacta directamente en el rendimiento del algoritmo. Para este proyecto se implementaron las cuatro estrategias clásicas para esta selección:
+
+\begin{enumerate}
+    \item \textbf{Primer elemento del subarreglo}: se toma como pivote el elemento ubicado en la posición \texttt{left}. Es la opción más simple, pero degenera fácilmente cuando el arreglo se encuentra previamente ordenado o en orden inverso.
+    \item \textbf{Último elemento del subarreglo}: se toma el elemento en la posición \texttt{right}. Presenta el mismo problema que la opción anterior frente a entradas patológicas.
+    \item \textbf{Elemento aleatorio}: se selecciona una posición al azar dentro del rango $[left, right]$. Esta estrategia rompe la dependencia respecto al orden inicial del arreglo, ofreciendo un rendimiento esperado de $O(n \log n)$ con alta probabilidad.
+    \item \textbf{Mediana de tres}: se observan los valores en las posiciones \texttt{left}, \texttt{right} y la mitad del subarreglo, y se toma como pivote el que se encuentra en la mediana de los tres. Esta estrategia tiende a evitar pivotes extremos que produzcan particiones muy desbalanceadas.
+\end{enumerate}
+
+\subsubsection{Proceso de partición}\label{sec:lomuto}
+
+Existen distintos esquemas de partición para Quicksort, siendo los más conocidos los de \textit{Hoare} y \textit{Lomuto}. En el presente informe se utilizó el esquema de partición de Lomuto, por ser el solicitado en el enunciado del proyecto y por su simplicidad de implementación.
+
+El procedimiento ubica primero el pivote al final del subarreglo (mediante un intercambio inicial) y, a continuación, recorre el rango $[left, right-1]$ moviendo al inicio todos los elementos menores o iguales al pivote. Al finalizar el recorrido, el pivote se reubica entre los elementos menores y los mayores, retornando su posición final.
+
+\begin{algorithm}
+    \caption{Partición de Lomuto $\triangleright$ $V[0..n-1]$}
+    \begin{algorithmic}[1]
+        \Procedure{LomutoPartition}{$V, left, right, pivot$}
+        \State $\text{swap}(V[pivot], V[right])$
+        \State $l \gets left - 1$
+        \For{$i \gets left$ \To $right - 1$}
+        \If{$V[i] \leq V[right]$}
+        \State $l \gets l + 1$
+        \State $\text{swap}(V[l], V[i])$
+        \EndIf
+        \EndFor
+        \State $\text{swap}(V[l+1], V[right])$ // Pivote en su posicion final
+        \State \Return $l + 1$
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+%===============================================================================
+%   Selección de QuickSort para experimentación
+%===============================================================================
+\subsubsection{Selección de QuickSort para experimentación}\label{sec:quicksort_seleccion}
+
+Para comparar Quicksort con los demás algoritmos del proyecto resultaba inviable mantener las cuatro variantes de pivote en igualdad de condiciones, por lo que se decidió escoger una única variante representativa. Para tomar esta decisión de manera fundamentada, se diseñó el siguiente procedimiento experimental\footnote{Si desea experimentar con las distintas particiones puede ir a \href{https://github.com/ProgramsMFHM/Conquer/commit/9c24fd1de689c9f99110c28e60c8034d90bef471}{este commit} donde el experimento entrega resultados equivalentes a los usados en este proceso. Además el código fuente~\ref{lst:quicksort_pivot} muestra la implementación de la función de mediana de tres y la elección del pivote.}:
+
+\begin{enumerate}
+    \item \textbf{Arreglo desordenado}: se ejecutaron las cuatro variantes sobre un arreglo aleatorio de $1\,000\,000$ de elementos, evaluado en $25$ puntos equiespaciados, con $1000$ repeticiones por punto.
+    \item \textbf{Arreglo previamente ordenado}: se ejecutaron las cuatro variantes sobre un arreglo de $50\,000$ elementos en orden ascendente, evaluado en $25$ puntos equiespaciados, con $500$ repeticiones por punto. Este escenario se incluyó porque corresponde al peor caso documentado de Quicksort cuando se utilizan los pivotes \textit{primer elemento} o \textit{último elemento}.
+    \item \textbf{Arreglo en orden inverso}: con los mismos parámetros del experimento anterior, este escenario también constituye un peor caso para los pivotes \textit{primer elemento} y \textit{último elemento}.
+\end{enumerate}
+
+La razón por la que un arreglo ya ordenado fuerza un comportamiento $O(n^2)$ al usar el último elemento como pivote es que, en cada llamada recursiva, el pivote elegido resulta ser el mayor del subarreglo. La partición devuelve entonces un subarreglo izquierdo de tamaño $n-1$ y uno derecho vacío: el arreglo se recorre completo pero su estado no cambia, y este patrón se repite en todas las pasadas. La profundidad de la recursión escala linealmente con $n$ y el trabajo total se vuelve proporcional a $n^2$. Un razonamiento análogo aplica al caso del arreglo en orden inverso al usar el primer elemento como pivote.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{src/figures/quicksort_shuffled.png}
+        \caption{Arreglo desordenado}
+        \label{fig:quicksort_shuffled}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{src/figures/quicksort_sorted.png}
+        \caption{Arreglo ordenado (escala logarítmica)}~\label{fig:quicksort_sorted}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{src/figures/quicksort_inverse.png}
+        \caption{Arreglo en orden inverso (escala logarítmica)}~\label{fig:quicksort_inverse}
+    \end{subfigure}
+    \caption{Comparación de las cuatro variantes de pivote de Quicksort sobre los tres escenarios experimentales utilizados para la selección.}~\label{fig:quicksort_pivots}
+\end{figure}
+
+Los resultados completos de cada uno de estos experimentos se presentan en las tablas~\ref{tab:quicksort_shuffled},~\ref{tab:quicksort_sorted} y~\ref{tab:quicksort_inverse}, donde se reportan las tablas detalladas con los tiempos promedio por variante y por tamaño de entrada. A partir de estos datos se desprenden las siguientes observaciones:
+
+\begin{itemize}
+    \item En los casos de arreglo previamente ordenado y arreglo en orden inverso, los pivotes \textbf{primer elemento} y \textbf{último elemento} se degradan claramente a un comportamiento $O(n^2)$, mientras que las variantes de \textbf{mediana de tres} y \textbf{aleatorio} mantienen un comportamiento similar entre sí, conservando un orden de crecimiento del tipo $O(n \log n)$.
+    \item En el escenario de arreglo desordenado, la variante de \textbf{pivote aleatorio} muestra un rendimiento peor que el de las otras tres variantes.
+\end{itemize}
+
+A partir de estas observaciones, se decidió utilizar la variante de \textbf{mediana de tres} como pivote por defecto en la integración final del programa, dado que mantiene un buen comportamiento tanto en escenarios desordenados como en escenarios patológicos para los pivotes deterministas básicos\footnote{Si bien la mediana de tres es la opción más estable de las evaluadas, existe un patrón de entrada adversarial conocido como \textit{median-of-three killer}, descrito por McIlroy~\cite{mcilroy1999killer}, capaz de forzar a esta variante a un comportamiento $O(n^2)$. Se trata de un caso muy específico que excede el alcance del análisis experimental presentado.}.
+
+% ============================================================
+% Análisis de complejidad de Quick Sort
+% ============================================================
+
+\subsubsection{Análisis de complejidad mediante el Teorema Maestro}
+
+La complejidad temporal del Quick Sort puede determinarse formalmente a través del Teorema Maestro (véase Anexo~\ref{sec:teorema-maestro}). En su caso promedio, el esquema de partición de Lomuto divide el arreglo en dos subarreglos de tamaño aproximadamente $n/2$, generando así \textbf{dos subproblemas} ($a = 2$) cada uno de tamaño $n/2$ ($b = 2$). El costo adicional corresponde al recorrido completo del arreglo para realizar la partición, operación que tiene un costo de orden $O(n)$; es decir, $f(n) = cn^1$, por lo que $k = 1$. Identificados los parámetros, la recurrencia del caso promedio queda expresada como:
+
+\[T(n) = 2\,T\!\left(\frac{n}{2}\right) + cn\]
+
+Aplicando la versión simplificada del Teorema Maestro se calcula $\log_b a = \log_2 2 = 1 = k$. Al cumplirse $\log_b a = k$, se está ante el segundo caso del teorema, por lo que:
+
+\[T(n) \in O(n^k \log n) = O(n \log n)\]
+
+Este resultado coincide con el comportamiento observado experimentalmente y confirma que, bajo una elección de pivote que produce particiones equilibradas, Quick Sort exhibe una complejidad temporal de $O(n \log n)$ en el caso promedio. Cabe destacar que el peor caso (provocado por pivotes que generan particiones completamente desbalanceadas, como ocurre con el pivote del primer o último elemento sobre arreglos ya ordenados) produce la recurrencia $T(n) = T(n-1) + cn$, cuya solución es $O(n^2)$, comportamiento que no puede caracterizarse directamente mediante el Teorema Maestro al no satisfacer la forma $T(n/b)$.
