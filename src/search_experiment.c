@@ -103,8 +103,8 @@ void run_search_experiment()
 		clock_t start, end;
 		int missing_id;
 		float missing_score;
-		Player idWorstTarget = {0, "", "", 0.0f, 0};
-		Player scoreWorstTarget = {0, "", "", 0.0f, 0};
+		Player idWorstTarget = {0, "", "", 0.0f, 0, 0};
+		Player scoreWorstTarget = {0, "", "", 0.0f, 0, 0};
 		double timeLinearSearchWorst = 0.0;
 		double timeLinearSearchAverage = 0.0;
 		double timeBinarySearchWorst = 0.0;
@@ -127,8 +127,8 @@ void run_search_experiment()
 		scoreWorstTarget.score = missing_score;
 
 		for (int i = 0; i < NUM_TRIALS; i++) {
-			Player averageIdTarget = {idSortedPlayers[rand() % k].id, "", "", 0.0f, 0};
-			Player averageScoreTarget = {0, "", "", scoreRangePlayers[rand() % k].score, 0};
+			Player averageIdTarget = {idSortedPlayers[rand() % k].id, "", "", 0.0f, 0, 0};
+			Player averageScoreTarget = {0, "", "", scoreRangePlayers[rand() % k].score, 0, 0};
 			int averageInterpolationId = idSortedPlayers[rand() % k].id;
 			int first = -1;
 			int last = -1;

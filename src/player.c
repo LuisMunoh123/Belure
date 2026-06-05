@@ -93,7 +93,7 @@ int compare_score(Player *p1, Player *p2) {
  * @param p2 Pointer to the second player.
  * @return -1 if p1's competitions are fewer, 1 if they are greater, 0 if they are equal.
  */
-int compare_competitions(Player *p1, Player *p2) {
+int compare_competition(Player *p1, Player *p2) {
 	return p1->competitions - p2->competitions;
 }
 

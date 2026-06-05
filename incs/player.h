@@ -28,19 +28,20 @@
  */
 typedef struct {
     
-    int id;                       // Identificador numerico unico del jugador.
+    int id;    // Identificador numerico unico del jugador.		
     char name[MAX_NAME_LENGTH+1]; // Nombre del jugador
     char team[MAX_TEAM_LENGTH+1]; // Nombre del equipo al que pertenece el jugador.
     float score;                  // Puntuacion general o calificacion del jugador.
-    int competitions;             // Cantidad total de competiciones en las que ha participado.
-} Player;
+    int competitions;    // Cantidad total de competiciones en las que ha participado.
+    int costo;
+}Player;
 
 void swap_player(Player *p1, Player *p2);
 int compare_id(Player *p1, Player *p2);
 int compare_name(Player *p1, Player *p2);
 int compare_team(Player *p1, Player *p2);
 int compare_score(Player *p1, Player *p2);
-int compare_competitions(Player *p1, Player *p2);
+int compare_competition(Player *p1, Player *p2);
 void print_player_array(Player *players, int n);
 void print_player_array_more(Player *players, int n);
 void print_player(Player *player);

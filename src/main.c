@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 			else if (sortCriteria == NAME) comp_ptr = compare_name;
 			else if (sortCriteria == TEAM) comp_ptr = compare_team;
 		else if (sortCriteria == SCORE) comp_ptr = compare_score;
-		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competitions;
+		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competition;
 
 		if (sortOption == SWAP) {
 			printf(BG_GREEN "Sorting Players via Swap Sort:" RESET "\n");
@@ -305,7 +305,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-			Player target = {searchId, "", "", 0.0, 0};
+			Player target = {searchId, "", "", 0.0, 0, 0};
 			if (searchOption == LINEAR) {
 				result = linear_search(players, n, &target, compare_id);
 
@@ -445,8 +445,8 @@ int main(int argc, char *argv[])
 
 			quick_sort(players, 0, n - 1, compare_score);
 
-			Player minTarget = {0, "", "", minScore, 0};
-		Player maxTarget = {0, "", "", maxScore, 0};
+			Player minTarget = {0, "", "", minScore, 0, 0};
+		Player maxTarget = {0, "", "", maxScore, 0, 0};
 		int first = binary_search_lower_bound(players, 0, n - 1, &minTarget, compare_score);
 		int last = binary_search_upper_bound(players, 0, n - 1, &maxTarget, compare_score);
 
@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
 
 			quick_sort(players, 0, n - 1, compare_score);
 
-			Player exactTarget = {0, "", "", exactScore, 0};
+			Player exactTarget = {0, "", "", exactScore, 0, 0};
 		int first = binary_search_first(players, 0, n - 1, &exactTarget, compare_score);
 
 		if (first == -1) {
@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
  */
 static void print_usage(const char *progname){
 	printf(LIGHT_BLUE "╔════════════════════════════════════════════════════════════╗\n");
-	printf(LIGHT_BLUE "-" WHITE "                      CONQUER CLI USAGE                   " LIGHT_BLUE "  -\n");
+	printf(LIGHT_BLUE "-" WHITE "                       BELURE CLI USAGE                   " LIGHT_BLUE "  -\n");
 	printf(LIGHT_BLUE "╚════════════════════════════════════════════════════════════╝\n" RESET);
 
 	printf("\n" DARK_GRAY "Quick use:\n" RESET);
