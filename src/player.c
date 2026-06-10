@@ -137,8 +137,10 @@ void print_player_array(Player *players, int n)
 		DARK_GREEN "%4s" RESET " "
 		DARK_GRAY "|" RESET " "
 		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GRAY "%5s" RESET " "
 		DARK_GRAY "|" RESET "\n",
-		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+		"ID", "NAME", "TEAM", "SCORE", "COMPS", "COSTO"
 	);
 
 	// Imprimimos los datos
@@ -154,12 +156,15 @@ void print_player_array(Player *players, int n)
 			LIGHT_GREEN "%5.1f" RESET " "
 			DARK_GRAY "|" RESET " "
 			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET " "
+			WHITE "%5d" RESET " "
 			DARK_GRAY "|" RESET "\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions
+			players[i].competitions,
+			players[i].costo
 		);
 	}
 	printf(RESET"\n");
@@ -185,8 +190,10 @@ static void print_player_array_page(Player *players, int start, int end)
 		DARK_GREEN "%4s" RESET " "
 		DARK_GRAY "|" RESET " "
 		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GRAY "%5s" RESET " "
 		DARK_GRAY "|" RESET "\n",
-		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+		"ID", "NAME", "TEAM", "SCORE", "COMPS", "COSTO"
 	);
 
 	for (int i = start; i < end; i++) {
@@ -201,12 +208,15 @@ static void print_player_array_page(Player *players, int start, int end)
 			LIGHT_GREEN "%5.1f" RESET " "
 			DARK_GRAY "|" RESET " "
 			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET " "
+			WHITE "%5d" RESET " "
 			DARK_GRAY "|" RESET "\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions
+			players[i].competitions,
+			players[i].costo
 		);
 	}
 }

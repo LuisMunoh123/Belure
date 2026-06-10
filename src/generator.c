@@ -75,6 +75,7 @@ static void generate_player(int id, Player *player)
 	strcpy(player->team, teams[rand() % 9]);
 	player->score = (rand() % 100 + 1) / 10.0f;
 	player->competitions = rand() % 251;
+	player->costo = 100 + rand() % 901;
 }
 
 /**
@@ -117,16 +118,17 @@ int generate_csv(int n, GenerationType generationType)
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
-	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS\n");
+	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS COSTO\n");
 
 	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
-		fprintf(csv, "%d %s %s %.1f %d\n",
+		fprintf(csv, "%d %s %s %.1f %d %d\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions
+			players[i].competitions,
+			players[i].costo
 		);
 	}
 
@@ -176,7 +178,7 @@ Player* load_players(char* file, int* out_n)
 	}
 
 	// Leer cabecera
-	if (fscanf(csv, "%*s %*s %*s %*s %*s") == EOF) {
+	if (fscanf(csv, "%*s %*s %*s %*s %*s %*s") == EOF) {
 		free(playerArray);
 		fclose(csv);
 		print_error(101, file, "Could not read the header");
@@ -186,15 +188,16 @@ Player* load_players(char* file, int* out_n)
 	// Leer jugadores
 	for (int i = 0; i < n; i++) {
 		// Leemos los datos de la linea
-		int fields = fscanf(csv, "%d %10s %10s %f %d",
+		int fields = fscanf(csv, "%d %10s %10s %f %d %d",
 			&playerArray[i].id,
 			playerArray[i].name,
 			playerArray[i].team,
 			&playerArray[i].score,
-			&playerArray[i].competitions
+			&playerArray[i].competitions,
+			&playerArray[i].costo
 		);
 	
-		if (fields != 5) {
+		if (fields != 6) {
 			free(playerArray);
 			fclose(csv);
 			print_error(101, file, "Malformed CSV");
