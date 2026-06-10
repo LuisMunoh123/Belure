@@ -110,6 +110,7 @@ void print_player(Player *player) {
 	printf(EVEN_DARKER_GREEN "║ " DARK_BLUE"Team: "LIGHT_BLUE"%7s" EVEN_DARKER_GREEN "      ║\n", player->team);
 	printf(EVEN_DARKER_GREEN "║ " DARK_GREEN"Score: "LIGHT_GREEN"%.1f" EVEN_DARKER_GREEN "         ║\n", player->score);
 	printf(EVEN_DARKER_GREEN "║ " PURPLE"Competitions: "MAGENTA"%4d" EVEN_DARKER_GREEN " ║\n", player->competitions);
+	printf(EVEN_DARKER_GREEN "║ " WHITE"Costo: "LIGHT_GRAY"%7d" EVEN_DARKER_GREEN "      ║\n", player->costo);
 	printf(EVEN_DARKER_GREEN "╚════════════════════╝\n");
 	printf(RESET"\n");
 }
