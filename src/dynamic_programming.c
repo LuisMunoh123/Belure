@@ -68,6 +68,39 @@ static void free_dp_table(int **table, int rows)
 	free(table);
 }
 
+static void fill_dp_table(int **table, int rows, int cols, int value)
+{
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			table[i][j] = value;
+		}
+	}
+}
+
+static int solve_memo(Player players[], int i, int budget, int **memo)
+{
+	if (i == 0 || budget == 0) {
+		return 0;
+	}
+
+	if (memo[i][budget] != -1) {
+		return memo[i][budget];
+	}
+
+	int cost = players[i - 1].costo;
+	int value = score_to_int(players[i - 1].score);
+
+	if (cost > budget) {
+		memo[i][budget] = solve_memo(players, i - 1, budget, memo);
+	} else {
+		int without_player = solve_memo(players, i - 1, budget, memo);
+		int with_player = value + solve_memo(players, i - 1, budget - cost, memo);
+		memo[i][budget] = max_int(without_player, with_player);
+	}
+
+	return memo[i][budget];
+}
+
 DPResult dp_select_team_tabulation(Player players[], int n, int budget)
 {
 	if (players == NULL || n <= 0 || budget <= 0) {
@@ -120,6 +153,52 @@ DPResult dp_select_team_tabulation(Player players[], int n, int budget)
 	result.total_score = dp[n][budget];
 
 	free_dp_table(dp, n + 1);
+	return result;
+}
+
+DPResult dp_select_team_memoization(Player players[], int n, int budget)
+{
+	if (players == NULL || n <= 0 || budget <= 0) {
+		return empty_result();
+	}
+
+	int **memo = create_dp_table(n + 1, budget + 1);
+	Player *selected = malloc(n * sizeof(Player));
+
+	if (memo == NULL || selected == NULL) {
+		free_dp_table(memo, n + 1);
+		free(selected);
+		return empty_result();
+	}
+
+	fill_dp_table(memo, n + 1, budget + 1, -1);
+
+	DPResult result = empty_result();
+	result.total_score = solve_memo(players, n, budget, memo);
+
+	int current_budget = budget;
+
+	for (int i = n; i > 0; i--) {
+		int current_value = solve_memo(players, i, current_budget, memo);
+		int previous_value = solve_memo(players, i - 1, current_budget, memo);
+
+		if (current_value != previous_value) {
+			selected[result.selected_count] = players[i - 1];
+			result.selected_count++;
+			result.total_cost += players[i - 1].costo;
+			current_budget -= players[i - 1].costo;
+		}
+	}
+
+	for (int left = 0, right = result.selected_count - 1; left < right; left++, right--) {
+		Player temp = selected[left];
+		selected[left] = selected[right];
+		selected[right] = temp;
+	}
+
+	result.players = selected;
+
+	free_dp_table(memo, n + 1);
 	return result;
 }
 
