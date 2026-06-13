@@ -33,6 +33,7 @@ typedef struct {
     char team[MAX_TEAM_LENGTH+1]; // Nombre del equipo al que pertenece el jugador.
     float score;                  // Puntuacion general o calificacion del jugador.
     int competitions;             // Cantidad total de competiciones en las que ha participado.
+    int value;                    // Valor del jugador
 } Player;
 
 void swap_player(Player *p1, Player *p2);

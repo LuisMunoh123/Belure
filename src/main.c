@@ -18,6 +18,7 @@
 #include "experiment_config.h"
 #include "search_experiment.h"
 #include "sort_experiment.h"
+#include "greedy.h"
 
 static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
@@ -35,6 +36,7 @@ static struct option long_options[] = {
 	{"score-range", no_argument, 0, 'R'},
 	{"min-score", required_argument, 0, 'm'},
 	{"max-score", required_argument, 0, 'M'},
+	{"greedy", no_argument, 0, 'G'},
 	{"help", no_argument, 0, 'h'},
 	{0, 0, 0, 0}
 };
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsf::eht:a:c:i:j:p:q:Rm:M:", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsf::eht:a:c:i:j:p:q:Rm:M:G", long_options, NULL)) != -1) {
 		switch (opt) {
 			// generacion de datos
 			case 'g':
@@ -168,6 +170,11 @@ int main(int argc, char *argv[])
 			case 'M':
 				maxScore = (float)atof(optarg);
 				maxScoreSet = 1;
+				break;
+			
+			// Ejecuta experimento greedy sin restriccion
+			case 'G':
+				greedy_experiment();
 				break;
 
 			// muestra el menú de ayuda o ejemplo
@@ -305,7 +312,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-			Player target = {searchId, "", "", 0.0, 0};
+			Player target = {searchId, "", "", 0.0, 0, 0};
 			if (searchOption == LINEAR) {
 				result = linear_search(players, n, &target, compare_id);
 
@@ -445,8 +452,8 @@ int main(int argc, char *argv[])
 
 			quick_sort(players, 0, n - 1, compare_score);
 
-			Player minTarget = {0, "", "", minScore, 0};
-		Player maxTarget = {0, "", "", maxScore, 0};
+			Player minTarget = {0, "", "", minScore, 0, 0};
+		Player maxTarget = {0, "", "", maxScore, 0, 0};
 		int first = binary_search_lower_bound(players, 0, n - 1, &minTarget, compare_score);
 		int last = binary_search_upper_bound(players, 0, n - 1, &maxTarget, compare_score);
 
@@ -480,7 +487,7 @@ int main(int argc, char *argv[])
 
 			quick_sort(players, 0, n - 1, compare_score);
 
-			Player exactTarget = {0, "", "", exactScore, 0};
+			Player exactTarget = {0, "", "", exactScore, 0, 0};
 		int first = binary_search_first(players, 0, n - 1, &exactTarget, compare_score);
 
 		if (first == -1) {

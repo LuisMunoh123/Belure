@@ -33,6 +33,7 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 ./build/conquer.out -q <puntaje>                       Buscar por puntaje exacto
 ./build/conquer.out -R -m <min> -M <max>               Deportistas en rango de puntaje
 ./build/conquer.out -e                                 Ejecutar experimento
+./build/conquer.out -G                                 Ejecutar experimento greedy sin restriccion
 ./build/conquer.out -h                                 Mostrar ayuda
 ```
 
@@ -54,6 +55,7 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 | `-m, --min-score <min>` | Puntaje mínimo del rango |
 | `-M, --max-score <max>` | Puntaje máximo del rango |
 | `-e, --experiment` | Ejecuta el experimento y guarda los resultados en `build/db/` |
+| `-G, --greedy` | Ejecuta el experimento greedy y guarda los resultados en `build/db/` |
 | `-h, --help` | Muestra la ayuda |
 
 ## Ejemplos de uso
