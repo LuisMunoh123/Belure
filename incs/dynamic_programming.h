@@ -9,10 +9,10 @@
 #include "player.h"
 
 typedef struct {
-	Player *players;
-	int selected_count;
-	int total_cost;
-	int total_score;
+	Player *players;     // deportistas seleccionados
+	int selected_count;  // cantidad de deportistas seleccionados
+	int total_cost;      // suma de costos del equipo
+	int total_score;     // suma de puntajes multiplicada por 10
 } DPResult;
 
 DPResult dp_select_team_tabulation(Player players[], int n, int budget);
