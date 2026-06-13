@@ -2,7 +2,7 @@
 
 **Universidad de Magallanes - Diseño de Algoritmos - 2026**
 
-**Estudiantes:** Luis Muñoz , Renato Uribe , Benjamin Sanhueza.
+**Estudiantes:**
 
 **Docente:** [Jacqueline Aldridge ](mailto:jacqueline.aldridge@umag.cl)
 
