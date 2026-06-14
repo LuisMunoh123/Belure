@@ -8,6 +8,12 @@
 
 #include "player.h"
 
+typedef enum {
+	DP_INVALID = 0,
+	DP_TABULATION,
+	DP_MEMOIZATION
+} DPAlgorithm;
+
 typedef struct {
 	Player *players;     // deportistas seleccionados
 	int selected_count;  // cantidad de deportistas seleccionados

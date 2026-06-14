@@ -88,10 +88,4 @@ typedef enum {
     INTERPOLATION
 } SearchAlgorithm;
 
-typedef enum {
-    DP_INVALID = 0,
-    DP_TABULATION,
-    DP_MEMOIZATION
-} DPAlgorithm;
-
 #endif
