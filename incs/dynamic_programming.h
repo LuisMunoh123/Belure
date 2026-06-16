@@ -9,7 +9,7 @@
 #include "player.h"
 
 typedef enum {
-	DP_INVALID = 0,
+	DP_INVALID,
 	DP_TABULATION,
 	DP_MEMOIZATION
 } DPAlgorithm;
