@@ -56,7 +56,7 @@ static char random_letter()
 
 
 /**
- * @brief Generates a player with ID, name, team, score, number of competitions and value.
+ * @brief Generates a player with ID, name, team, score, and number of competitions.
  * 
  * @param id Unique identifier value.
  * @param player Pointer to the Player structure where generated data will be stored.
@@ -75,7 +75,7 @@ static void generate_player(int id, Player *player)
 	strcpy(player->team, teams[rand() % 9]);
 	player->score = (rand() % 100 + 1) / 10.0f;
 	player->competitions = rand() % 251;
-	player->value = rand() % 100 + 1;
+	player->costo = 100 + rand() % 901;
 }
 
 /**
@@ -118,7 +118,7 @@ int generate_csv(int n, GenerationType generationType)
 
 	// Imprimimos cabecera en el archivo csv
 	fprintf(csv, "%d\n", n);
-	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS VALUE\n");
+	fprintf(csv, "ID NAME TEAM SCORE COMPETITIONS COSTO\n");
 
 	// Imprimimos los datos en el archivo csv
 	for (int i = 0; i < n; i++) {
@@ -128,7 +128,7 @@ int generate_csv(int n, GenerationType generationType)
 			players[i].team,
 			players[i].score,
 			players[i].competitions,
-			players[i].value
+			players[i].costo
 		);
 	}
 
@@ -194,7 +194,7 @@ Player* load_players(char* file, int* out_n)
 			playerArray[i].team,
 			&playerArray[i].score,
 			&playerArray[i].competitions,
-			&playerArray[i].value
+			&playerArray[i].costo
 		);
 	
 		if (fields != 6) {

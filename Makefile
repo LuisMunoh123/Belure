@@ -1,5 +1,5 @@
 CC=gcc
-EXEC=conquer.out
+EXEC=belure.out
 GRUPO=FA-MH-LM
 NTAR=2
 

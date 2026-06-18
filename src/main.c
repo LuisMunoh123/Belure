@@ -19,6 +19,7 @@
 #include "search_experiment.h"
 #include "sort_experiment.h"
 #include "greedy.h"
+#include "dynamic_programming.h"
 
 static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
@@ -37,6 +38,8 @@ static struct option long_options[] = {
 	{"min-score", required_argument, 0, 'm'},
 	{"max-score", required_argument, 0, 'M'},
 	{"greedy", no_argument, 0, 'G'},
+	{"dynamic-programming", required_argument, 0, 'd'},
+	{"budget", required_argument, 0, 'b'},
 	{"help", no_argument, 0, 'h'},
 	{0, 0, 0, 0}
 };
@@ -46,6 +49,8 @@ static GenerationType parse_generation_type(const char *value);
 static SortAlgorithm parse_sort_algorithm(const char *value);
 static SortCriteria parse_sort_criteria(const char *value);
 static SearchAlgorithm parse_search_algorithm(const char *value);
+static DPAlgorithm parse_dp_algorithm(const char *value);
+static void print_dp_result(DPResult *result, int budget, const char *method_name);
 static int run_experiment_menu(void);
 
 int main(int argc, char *argv[])
@@ -75,10 +80,13 @@ int main(int argc, char *argv[])
 	int minScoreSet = 0;
 	int maxScoreSet = 0;
 	int exactScoreSet = 0;
+	DPAlgorithm dpOption = DP_INVALID;
+	int budget = -1;
+	int budgetSet = 0;
 
 	srand(time(0));
 
-	while ((opt = getopt_long(argc, argv, "g:rsf::eht:a:c:i:j:p:q:Rm:M:G", long_options, NULL)) != -1) {
+	while ((opt = getopt_long(argc, argv, "g:rsf::eht:a:c:i:j:p:q:Rm:M:d:b:G", long_options, NULL)) != -1) {
 		switch (opt) {
 			// generacion de datos
 			case 'g':
@@ -95,7 +103,7 @@ int main(int argc, char *argv[])
 			action = (char)opt;
 			action_count++;
 			break;
-
+			
 			// busqueda por ID
 			case 'f':
 				action = 'f';
@@ -160,6 +168,11 @@ int main(int argc, char *argv[])
 				action_count++;
 				break;
 
+			case 'G':
+    			action = 'G';
+    			action_count++;
+    			break;
+
 			// Puntaje minimo del rango
 			case 'm':
 				minScore = (float)atof(optarg);
@@ -171,17 +184,26 @@ int main(int argc, char *argv[])
 				maxScore = (float)atof(optarg);
 				maxScoreSet = 1;
 				break;
-			
-			// Ejecuta experimento greedy sin restriccion
-			case 'G':
-				greedy_experiment();
+
+			// metodo de programacion dinamica
+			case 'd':
+				action = 'd';
+				action_count++;
+				dpOption = parse_dp_algorithm(optarg);
+				break;
+
+			// presupuesto maximo
+			case 'b':
+				budget = atoi(optarg);
+				budgetSet = 1;
 				break;
 
 			// muestra el menú de ayuda o ejemplo
 			case 'h':
 				print_usage(argv[0]);
 				return 0;
-
+			
+		
 			default:
 				print_usage(argv[0]);
 				return 1;
@@ -200,7 +222,10 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
-
+	if (action == 'G') {
+    	greedy_experiment();
+    	return 0;
+	}
 	if (action == 'g') {
 		if (generationType == GEN_INVALID) {
 			print_error(105, NULL, NULL);
@@ -260,7 +285,7 @@ int main(int argc, char *argv[])
 			else if (sortCriteria == NAME) comp_ptr = compare_name;
 			else if (sortCriteria == TEAM) comp_ptr = compare_team;
 		else if (sortCriteria == SCORE) comp_ptr = compare_score;
-		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competitions;
+		else if (sortCriteria == COMPETITIONS) comp_ptr = compare_competition;
 
 		if (sortOption == SWAP) {
 			printf(BG_GREEN "Sorting Players via Swap Sort:" RESET "\n");
@@ -507,6 +532,33 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	if (action == 'd') {
+		if (dpOption == DP_INVALID || !budgetSet || budget <= 0) {
+			print_error(116, NULL, NULL);
+			printf("\n");
+			print_usage(argv[0]);
+			return 1;
+		}
+
+		if ((players = load_players("build/db/players.csv", &n)) == NULL) {
+			return 1;
+		}
+
+		DPResult dpResult;
+
+		if (dpOption == DP_TABULATION) {
+			dpResult = dp_select_team_tabulation(players, n, budget);
+			print_dp_result(&dpResult, budget, "tabulacion");
+		} else {
+			dpResult = dp_select_team_memoization(players, n, budget);
+			print_dp_result(&dpResult, budget, "memoizacion");
+		}
+
+		free_dp_result(&dpResult);
+		free(players);
+		return 0;
+	}
+
 	if (action == 'e') {
 		return run_experiment_menu();
 	}
@@ -522,7 +574,7 @@ int main(int argc, char *argv[])
  */
 static void print_usage(const char *progname){
 	printf(LIGHT_BLUE "╔════════════════════════════════════════════════════════════╗\n");
-	printf(LIGHT_BLUE "-" WHITE "                      CONQUER CLI USAGE                   " LIGHT_BLUE "  -\n");
+	printf(LIGHT_BLUE "-" WHITE "                       BELURE CLI USAGE                   " LIGHT_BLUE "  -\n");
 	printf(LIGHT_BLUE "╚════════════════════════════════════════════════════════════╝\n" RESET);
 
 	printf("\n" DARK_GRAY "Quick use:\n" RESET);
@@ -542,6 +594,8 @@ static void print_usage(const char *progname){
 		progname, "-q <score>", "Show players with an exact score");
 	printf("  " YELLOW "%s " MAGENTA "%-38s" RESET MAGENTA "%s\n" RESET,
 		progname, "-R -m <min> -M <max>", "Show players by score range");
+	printf("  " YELLOW "%s " LIGHT_GREEN "%-38s" RESET LIGHT_GREEN "%s\n" RESET,
+		progname, "-d <method> -b <budget>", "Seleccionar equipo con programacion dinamica");
 	printf("  " YELLOW "%s " PURPLE "%-38s" RESET MAGENTA "%s\n" RESET,
 		progname, "-e", "Run experiment");
 	printf("  " YELLOW "%s " WHITE "%-38s" RESET WHITE "%s\n" RESET,
@@ -592,6 +646,12 @@ static void print_usage(const char *progname){
 	printf("  " MAGENTA "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
 		"-M, --max-score <max>",
 		"Maximum score in the range");
+	printf("  " LIGHT_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-d, --dynamic-programming <method>",
+		"Method: tabulation, tabulacion, memoization, memoizacion");
+	printf("  " LIGHT_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-b, --budget <budget>",
+		"Maximum budget for team selection");
 	printf("  " PURPLE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
 		"-e, --experiment",
 		"Runs the experiment");
@@ -662,6 +722,43 @@ static SearchAlgorithm parse_search_algorithm(const char *value){
 	if (strcmp(value, "exponential") == 0) return EXPONENTIAL;
 	if (strcmp(value, "interpolation") == 0) return INTERPOLATION;
 	return SEARCH_INVALID;
+}
+
+/**
+ * @brief convierte el texto del metodo de programacion dinamica.
+ *
+ * @param value metodo escrito por consola.
+ * @return DPAlgorithm metodo encontrado o `DP_INVALID`.
+ */
+static DPAlgorithm parse_dp_algorithm(const char *value){
+	if (strcmp(value, "tabulation") == 0) return DP_TABULATION;
+	if (strcmp(value, "tabulacion") == 0) return DP_TABULATION;
+	if (strcmp(value, "memoization") == 0) return DP_MEMOIZATION;
+	if (strcmp(value, "memoizacion") == 0) return DP_MEMOIZATION;
+	return DP_INVALID;
+}
+
+/**
+ * @brief muestra el equipo seleccionado por programacion dinamica.
+ *
+ * @param result resultado de programacion dinamica.
+ * @param budget presupuesto ingresado.
+ * @param method_name nombre del metodo usado.
+ */
+static void print_dp_result(DPResult *result, int budget, const char *method_name)
+{
+	printf(BG_GREEN "Equipo seleccionado con programacion dinamica (%s):" RESET "\n\n", method_name);
+	printf(LIGHT_GRAY "Presupuesto: " WHITE "%d\n" RESET, budget);
+	printf(LIGHT_GRAY "Costo usado: " WHITE "%d\n" RESET, result->total_cost);
+	printf(LIGHT_GRAY "Puntaje total: " WHITE "%.1f\n" RESET, result->total_score / 10.0f);
+	printf(LIGHT_GRAY "Deportistas seleccionados: " WHITE "%d\n\n" RESET, result->selected_count);
+
+	if (result->selected_count == 0) {
+		printf(BG_RED "No se seleccionaron deportistas con el presupuesto ingresado." RESET "\n\n");
+		return;
+	}
+
+	print_player_array_more(result->players, result->selected_count);
 }
 
 /**

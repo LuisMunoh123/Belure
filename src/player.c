@@ -93,7 +93,7 @@ int compare_score(Player *p1, Player *p2) {
  * @param p2 Pointer to the second player.
  * @return -1 if p1's competitions are fewer, 1 if they are greater, 0 if they are equal.
  */
-int compare_competitions(Player *p1, Player *p2) {
+int compare_competition(Player *p1, Player *p2) {
 	return p1->competitions - p2->competitions;
 }
 
@@ -110,6 +110,7 @@ void print_player(Player *player) {
 	printf(EVEN_DARKER_GREEN "║ " DARK_BLUE"Team: "LIGHT_BLUE"%7s" EVEN_DARKER_GREEN "      ║\n", player->team);
 	printf(EVEN_DARKER_GREEN "║ " DARK_GREEN"Score: "LIGHT_GREEN"%.1f" EVEN_DARKER_GREEN "         ║\n", player->score);
 	printf(EVEN_DARKER_GREEN "║ " PURPLE"Competitions: "MAGENTA"%4d" EVEN_DARKER_GREEN " ║\n", player->competitions);
+	printf(EVEN_DARKER_GREEN "║ " WHITE"Costo: "LIGHT_GRAY"%7d" EVEN_DARKER_GREEN "      ║\n", player->costo);
 	printf(EVEN_DARKER_GREEN "╚════════════════════╝\n");
 	printf(RESET"\n");
 }
@@ -137,8 +138,10 @@ void print_player_array(Player *players, int n)
 		DARK_GREEN "%4s" RESET " "
 		DARK_GRAY "|" RESET " "
 		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GRAY "%5s" RESET " "
 		DARK_GRAY "|" RESET "\n",
-		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+		"ID", "NAME", "TEAM", "SCORE", "COMPS", "COSTO"
 	);
 
 	// Imprimimos los datos
@@ -154,12 +157,15 @@ void print_player_array(Player *players, int n)
 			LIGHT_GREEN "%5.1f" RESET " "
 			DARK_GRAY "|" RESET " "
 			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET " "
+			WHITE "%5d" RESET " "
 			DARK_GRAY "|" RESET "\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions
+			players[i].competitions,
+			players[i].costo
 		);
 	}
 	printf(RESET"\n");
@@ -185,8 +191,10 @@ static void print_player_array_page(Player *players, int start, int end)
 		DARK_GREEN "%4s" RESET " "
 		DARK_GRAY "|" RESET " "
 		PURPLE "%3s" RESET " "
+		DARK_GRAY "|" RESET " "
+		DARK_GRAY "%5s" RESET " "
 		DARK_GRAY "|" RESET "\n",
-		"ID", "NAME", "TEAM", "SCORE", "COMPS"
+		"ID", "NAME", "TEAM", "SCORE", "COMPS", "COSTO"
 	);
 
 	for (int i = start; i < end; i++) {
@@ -201,12 +209,15 @@ static void print_player_array_page(Player *players, int start, int end)
 			LIGHT_GREEN "%5.1f" RESET " "
 			DARK_GRAY "|" RESET " "
 			MAGENTA "%5d" RESET " "
+			DARK_GRAY "|" RESET " "
+			WHITE "%5d" RESET " "
 			DARK_GRAY "|" RESET "\n",
 			players[i].id,
 			players[i].name,
 			players[i].team,
 			players[i].score,
-			players[i].competitions
+			players[i].competitions,
+			players[i].costo
 		);
 	}
 }

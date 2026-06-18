@@ -1,8 +1,8 @@
-# Conquer
+# Belure
 
 **Universidad de Magallanes - Diseño de Algoritmos - 2026**
 
-**Estudiantes:**
+**Estudiantes:** [Franco Aguilar](mailto:fagucarc@umag.cl), [Milton Hernández](mailto:mhern@umag.cl), [Luis Muñoz](mailto:luimuoz@umag.cl).
 
 **Docente:** [Jacqueline Aldridge ](mailto:jacqueline.aldridge@umag.cl)
 
@@ -24,17 +24,16 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 
 ## Referencia de comandos
 ```
-./build/conquer.out -g <cantidad> -t <tipo>            Generar CSV
-./build/conquer.out -r                                 Leer CSV actual
-./build/conquer.out -s -a <algoritmo> -c <criterio>    Ordenar CSV
-./build/conquer.out -f <tipo_búsqueda> -i <id>         Buscar por ID
-./build/conquer.out -j <k>                             K-ésimo mejor deportista
-./build/conquer.out -p <N>                             Ranking de los N mejores
-./build/conquer.out -q <puntaje>                       Buscar por puntaje exacto
-./build/conquer.out -R -m <min> -M <max>               Deportistas en rango de puntaje
-./build/conquer.out -e                                 Ejecutar experimento
-./build/conquer.out -G                                 Ejecutar experimento greedy sin restriccion
-./build/conquer.out -h                                 Mostrar ayuda
+./build/belure.out -g <cantidad> -t <tipo>            Generar CSV
+./build/belure.out -r                                 Leer CSV actual
+./build/belure.out -s -a <algoritmo> -c <criterio>    Ordenar CSV
+./build/belure.out -f <tipo_búsqueda> -i <id>         Buscar por ID
+./build/belure.out -j <k>                             K-ésimo mejor deportista
+./build/belure.out -p <N>                             Ranking de los N mejores
+./build/belure.out -q <puntaje>                       Buscar por puntaje exacto
+./build/belure.out -R -m <min> -M <max>               Deportistas en rango de puntaje
+./build/belure.out -e                                 Ejecutar experimento
+./build/belure.out -h                                 Mostrar ayuda
 ```
 
 ### Opciones detalladas
@@ -55,44 +54,43 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 | `-m, --min-score <min>` | Puntaje mínimo del rango |
 | `-M, --max-score <max>` | Puntaje máximo del rango |
 | `-e, --experiment` | Ejecuta el experimento y guarda los resultados en `build/db/` |
-| `-G, --greedy` | Ejecuta el experimento greedy y guarda los resultados en `build/db/` |
 | `-h, --help` | Muestra la ayuda |
 
 ## Ejemplos de uso
 
 **Generar 5000 deportistas en orden aleatorio:**
 ```sh
-./build/conquer.out -g 5000 -t shuffled
+./build/belure.out -g 5000 -t shuffled
 ```
 
 **Ordenar por puntaje con Quick Sort:**
 ```sh
-./build/conquer.out -s -a quick -c score
+./build/belure.out -s -a quick -c score
 ```
 
 **Ordenar por nombre con Merge Sort optimizado:**
 ```sh
-./build/conquer.out -s -a merge-optimized -c name
+./build/belure.out -s -a merge-optimized -c name
 ```
 
 **Buscar al deportista con ID 42 usando búsqueda exponencial:**
 ```sh
-./build/conquer.out -f exponential -i 42
+./build/belure.out -f exponential -i 42
 ```
 
 **Ver el 3er mejor deportista:**
 ```sh
-./build/conquer.out -j 3
+./build/belure.out -j 3
 ```
 
 **Ver el ranking de los 10 mejores:**
 ```sh
-./build/conquer.out -p 10
+./build/belure.out -p 10
 ```
 
 **Ver deportistas con puntaje entre 80 y 95:**
 ```sh
-./build/conquer.out -R -m 80 -M 95
+./build/belure.out -R -m 80 -M 95
 ```
 
 > [!IMPORTANT]
