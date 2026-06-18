@@ -1,19 +1,19 @@
-# Belure
+# BELURE
 
 **Universidad de Magallanes - Diseño de Algoritmos - 2026**
 
-**Estudiantes:** [Franco Aguilar](mailto:fagucarc@umag.cl), [Milton Hernández](mailto:mhern@umag.cl), [Luis Muñoz](mailto:luimuoz@umag.cl).
+**Estudiantes:** Benjamin Sanhueza, Renato Uribe y Luis Muñoz.
 
 **Docente:** [Jacqueline Aldridge ](mailto:jacqueline.aldridge@umag.cl)
 
-El presente repositorio tiene como objetivo la comparación y comprobación de los órdenes de complejidad de distintos algoritmos recursivos de ordenamiento, búsqueda y selección, mediante su implementación y evaluación sobre datos artificialmente generados de deportistas.
+BELURE es un programa en C para probar y comparar algoritmos usando una base de datos ficticia de deportistas.
 
-El sistema se desarrolla en lenguaje C y considera la generación de registros que sirven como base para el análisis teórico y experimental del comportamiento de los algoritmos en distintos tamaños de entrada.
+El sistema permite generar datos, ordenarlos, buscar deportistas, seleccionar rankings y ejecutar experimentos. También incluye estrategias greedy y programación dinámica para resolver problemas con presupuesto.
 
-Este proyecto toma como base el trabajo realizado en [PALYER](https://github.com/AndrewhiteCode/PALYER), expandiendo su funcionalidad para incluir algoritmos de la estrategia Divide y Vencerás.
+Este proyecto toma como base el trabajo realizado en [PALYER](https://github.com/AndrewhiteCode/PALYER), agregando nuevas funciones y algoritmos.
 
 # Objetivo
-El objetivo del presente repositorio es implementar algoritmos de ordenamiento, búsqueda y selección basados en la estrategia Divide y Vencerás, contrastando su rendimiento sobre una base de datos ficticia de deportistas.
+Implementar y comparar algoritmos de ordenamiento, búsqueda, selección, greedy y programación dinámica sobre datos de deportistas.
 
 # Instalación y uso
 Una vez clonado el repositorio, se espera el siguiente flujo de comandos:
@@ -33,6 +33,9 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 ./build/belure.out -q <puntaje>                       Buscar por puntaje exacto
 ./build/belure.out -R -m <min> -M <max>               Deportistas en rango de puntaje
 ./build/belure.out -e                                 Ejecutar experimento
+./build/belure.out -G                                 Ejecutar estrategias Greedy
+./build/belure.out -d tabulation -b <presupuesto>     Programación dinámica por tabulación
+./build/belure.out -d memoization -b <presupuesto>    Programación dinámica por memoización
 ./build/belure.out -h                                 Mostrar ayuda
 ```
 
@@ -54,6 +57,9 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 | `-m, --min-score <min>` | Puntaje mínimo del rango |
 | `-M, --max-score <max>` | Puntaje máximo del rango |
 | `-e, --experiment` | Ejecuta el experimento y guarda los resultados en `build/db/` |
+| `-G, --greedy` | Ejecuta las estrategias greedy: mayor score, menor costo, mejor score/costo y sin presupuesto |
+| `-d, --dynamic-programming <método>` | Ejecuta programación dinámica: `tabulation` o `memoization` |
+| `-b, --budget <presupuesto>` | Define el presupuesto máximo para programación dinámica |
 | `-h, --help` | Muestra la ayuda |
 
 ## Ejemplos de uso
@@ -91,6 +97,21 @@ El programa se controla completamente desde la línea de comandos. No existe un 
 **Ver deportistas con puntaje entre 80 y 95:**
 ```sh
 ./build/belure.out -R -m 80 -M 95
+```
+
+**Ejecutar estrategias greedy:**
+```sh
+./build/belure.out -G
+```
+
+**Ejecutar programación dinámica por tabulación con presupuesto 5000:**
+```sh
+./build/belure.out -d tabulation -b 5000
+```
+
+**Ejecutar programación dinámica por memoización con presupuesto 5000:**
+```sh
+./build/belure.out -d memoization -b 5000
 ```
 
 > [!IMPORTANT]
