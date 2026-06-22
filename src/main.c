@@ -596,6 +596,8 @@ static void print_usage(const char *progname){
 		progname, "-R -m <min> -M <max>", "Show players by score range");
 	printf("  " YELLOW "%s " LIGHT_GREEN "%-38s" RESET LIGHT_GREEN "%s\n" RESET,
 		progname, "-d <method> -b <budget>", "Seleccionar equipo con programacion dinamica");
+	printf("  " YELLOW "%s " LIGHT_GREEN "%-38s" RESET LIGHT_GREEN "%s\n" RESET,
+		progname, "-G", "Ejecutar estrategias greedy");
 	printf("  " YELLOW "%s " PURPLE "%-38s" RESET MAGENTA "%s\n" RESET,
 		progname, "-e", "Run experiment");
 	printf("  " YELLOW "%s " WHITE "%-38s" RESET WHITE "%s\n" RESET,
@@ -652,6 +654,9 @@ static void print_usage(const char *progname){
 	printf("  " LIGHT_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
 		"-b, --budget <budget>",
 		"Maximum budget for team selection");
+	printf("  " LIGHT_GREEN "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
+		"-G, --greedy",
+		"Runs greedy strategies: score, cost, ratio and no budget");
 	printf("  " PURPLE "%-34s" RESET LIGHT_GRAY "%s\n" RESET,
 		"-e, --experiment",
 		"Runs the experiment");
