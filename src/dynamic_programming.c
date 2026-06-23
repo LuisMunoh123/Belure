@@ -13,7 +13,7 @@ static DPResult empty_result(void)
 	result.players = NULL;
 	result.selected_count = 0;
 	result.total_cost = 0;
-	result.total_score = 0;
+	result.total_score = 0.0f;
 	return result;
 }
 
@@ -77,7 +77,7 @@ static void fill_dp_table(int **table, int rows, int cols, int value)
 	}
 }
 
-static int solve_memo(Player players[], int i, int budget, int **memo)
+static int solve_memo(const Player *players, int i, int budget, int **memo)
 {
 	if (i == 0 || budget == 0) {
 		return 0;
@@ -101,7 +101,7 @@ static int solve_memo(Player players[], int i, int budget, int **memo)
 	return memo[i][budget];
 }
 
-DPResult dp_select_team_tabulation(Player players[], int n, int budget)
+DPResult dp_select_team_tabulation(const Player *players, int n, int budget)
 {
 	if (players == NULL || n <= 0 || budget <= 0) {
 		return empty_result();
@@ -150,13 +150,13 @@ DPResult dp_select_team_tabulation(Player players[], int n, int budget)
 	}
 
 	result.players = selected;
-	result.total_score = dp[n][budget];
+	result.total_score = dp[n][budget] / 10.0f;
 
 	free_dp_table(dp, n + 1);
 	return result;
 }
 
-DPResult dp_select_team_memoization(Player players[], int n, int budget)
+DPResult dp_select_team_memoization(const Player *players, int n, int budget)
 {
 	if (players == NULL || n <= 0 || budget <= 0) {
 		return empty_result();
@@ -174,7 +174,7 @@ DPResult dp_select_team_memoization(Player players[], int n, int budget)
 	fill_dp_table(memo, n + 1, budget + 1, -1);
 
 	DPResult result = empty_result();
-	result.total_score = solve_memo(players, n, budget, memo);
+	result.total_score = solve_memo(players, n, budget, memo) / 10.0f;
 
 	int current_budget = budget;
 
@@ -202,7 +202,7 @@ DPResult dp_select_team_memoization(Player players[], int n, int budget)
 	return result;
 }
 
-void free_dp_result(DPResult *result)
+void dp_free_result(DPResult *result)
 {
 	if (result == NULL) {
 		return;
@@ -212,5 +212,10 @@ void free_dp_result(DPResult *result)
 	result->players = NULL;
 	result->selected_count = 0;
 	result->total_cost = 0;
-	result->total_score = 0;
+	result->total_score = 0.0f;
+}
+
+void free_dp_result(DPResult *result)
+{
+	dp_free_result(result);
 }

@@ -18,11 +18,12 @@ typedef struct {
 	Player *players;     // deportistas seleccionados
 	int selected_count;  // cantidad de deportistas seleccionados
 	int total_cost;      // suma de costos del equipo
-	int total_score;     // suma de puntajes multiplicada por 10
+	float total_score;   // suma de puntajes del equipo
 } DPResult;
 
-DPResult dp_select_team_tabulation(Player players[], int n, int budget);
-DPResult dp_select_team_memoization(Player players[], int n, int budget);
+DPResult dp_select_team_tabulation(const Player *players, int n, int budget);
+DPResult dp_select_team_memoization(const Player *players, int n, int budget);
+void dp_free_result(DPResult *result);
 void free_dp_result(DPResult *result);
 
 #endif // DYNAMIC_PROGRAMMING_H

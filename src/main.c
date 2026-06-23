@@ -20,6 +20,7 @@
 #include "sort_experiment.h"
 #include "greedy.h"
 #include "dynamic_programming.h"
+#include "team_experiment.h"
 
 static struct option long_options[] = {
 	{"generate", required_argument, 0, 'g'},
@@ -755,7 +756,7 @@ static void print_dp_result(DPResult *result, int budget, const char *method_nam
 	printf(BG_GREEN "Equipo seleccionado con programacion dinamica (%s):" RESET "\n\n", method_name);
 	printf(LIGHT_GRAY "Presupuesto: " WHITE "%d\n" RESET, budget);
 	printf(LIGHT_GRAY "Costo usado: " WHITE "%d\n" RESET, result->total_cost);
-	printf(LIGHT_GRAY "Puntaje total: " WHITE "%.1f\n" RESET, result->total_score / 10.0f);
+	printf(LIGHT_GRAY "Puntaje total: " WHITE "%.1f\n" RESET, result->total_score);
 	printf(LIGHT_GRAY "Deportistas seleccionados: " WHITE "%d\n\n" RESET, result->selected_count);
 
 	if (result->selected_count == 0) {
@@ -780,6 +781,7 @@ static int run_experiment_menu(void)
 	printf(PURPLE "╠════════════════════════════════════╣\n");
 	printf(PURPLE "║" LIGHT_BLUE " 1. Ordenamiento                    " PURPLE "║\n");
 	printf(PURPLE "║" LIGHT_GREEN " 2. Busqueda                        " PURPLE "║\n");
+	printf(PURPLE "║" LIGHT_GREEN " 3. PD y Greedy - Tarea 3           " PURPLE "║\n");
 	printf(PURPLE "╚════════════════════════════════════╝\n" RESET);
 	printf("Selecciona una opcion: ");
 
@@ -796,6 +798,10 @@ static int run_experiment_menu(void)
 	if (option == 2) {
 		run_search_experiment();
 		return 0;
+	}
+
+	if (option == 3) {
+		return run_team_experiment_menu();
 	}
 
 	print_error(116, NULL, NULL);

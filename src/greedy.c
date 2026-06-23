@@ -6,11 +6,6 @@
 #include "generator.h"
 #include "sorting.h"
 
-static int score_to_int(float score)
-{
-    return (int)(score * 10.0f + 0.5f);
-}
-
 static int compare_greedy_score(const void *a, const void *b)
 {
     const Player *p1 = (const Player *)a;
@@ -34,8 +29,16 @@ static int compare_greedy_ratio(const void *a, const void *b)
     const Player *p1 = (const Player *)a;
     const Player *p2 = (const Player *)b;
 
-    float ratio1 = p1->score / p1->costo;
-    float ratio2 = p2->score / p2->costo;
+    float ratio1 = 0.0f;
+    float ratio2 = 0.0f;
+
+    if (p1->costo > 0) {
+        ratio1 = p1->score / (float)p1->costo;
+    }
+
+    if (p2->costo > 0) {
+        ratio2 = p2->score / (float)p2->costo;
+    }
 
     if (ratio2 > ratio1) return 1;
     if (ratio2 < ratio1) return -1;
@@ -48,13 +51,29 @@ static GreedyResult empty_greedy_result(void)
     result.players = NULL;
     result.selected_count = 0;
     result.total_cost = 0;
-    result.total_score = 0;
+    result.total_score = 0.0f;
     return result;
 }
 
-GreedyResult greedy_select_team(Player players[], int n, int budget, GreedyStrategy strategy)
+static int is_valid_budget_strategy(GreedyStrategy strategy)
 {
-    if (players == NULL || n <= 0) {
+    return strategy == GREEDY_SCORE || strategy == GREEDY_COST || strategy == GREEDY_RATIO;
+}
+
+static void sort_players_for_strategy(Player *players, int n, GreedyStrategy strategy)
+{
+    if (strategy == GREEDY_SCORE) {
+        qsort(players, n, sizeof(Player), compare_greedy_score);
+    } else if (strategy == GREEDY_COST) {
+        qsort(players, n, sizeof(Player), compare_greedy_cost);
+    } else if (strategy == GREEDY_RATIO) {
+        qsort(players, n, sizeof(Player), compare_greedy_ratio);
+    }
+}
+
+GreedyResult greedy_select_team(const Player *players, int n, int budget, GreedyStrategy strategy)
+{
+    if (players == NULL || n <= 0 || budget <= 0 || !is_valid_budget_strategy(strategy)) {
         return empty_greedy_result();
     }
 
@@ -68,23 +87,16 @@ GreedyResult greedy_select_team(Player players[], int n, int budget, GreedyStrat
     }
 
     memcpy(copy, players, n * sizeof(Player));
-
-    if (strategy == GREEDY_SCORE || strategy == GREEDY_NO_BUDGET) {
-        qsort(copy, n, sizeof(Player), compare_greedy_score);
-    } else if (strategy == GREEDY_COST) {
-        qsort(copy, n, sizeof(Player), compare_greedy_cost);
-    } else if (strategy == GREEDY_RATIO) {
-        qsort(copy, n, sizeof(Player), compare_greedy_ratio);
-    }
+    sort_players_for_strategy(copy, n, strategy);
 
     GreedyResult result = empty_greedy_result();
 
     for (int i = 0; i < n; i++) {
-        if (strategy == GREEDY_NO_BUDGET || result.total_cost + copy[i].costo <= budget) {
+        if (result.total_cost + copy[i].costo <= budget) {
             selected[result.selected_count] = copy[i];
             result.selected_count++;
             result.total_cost += copy[i].costo;
-            result.total_score += score_to_int(copy[i].score);
+            result.total_score += copy[i].score;
         }
     }
 
@@ -94,7 +106,39 @@ GreedyResult greedy_select_team(Player players[], int n, int budget, GreedyStrat
     return result;
 }
 
-void free_greedy_result(GreedyResult *result)
+GreedyResult greedy_select_top_k(const Player *players, int n, int k)
+{
+    if (players == NULL || n <= 0 || k <= 0 || k > n) {
+        return empty_greedy_result();
+    }
+
+    Player *copy = malloc(n * sizeof(Player));
+    Player *selected = malloc(k * sizeof(Player));
+
+    if (copy == NULL || selected == NULL) {
+        free(copy);
+        free(selected);
+        return empty_greedy_result();
+    }
+
+    memcpy(copy, players, n * sizeof(Player));
+    qsort(copy, n, sizeof(Player), compare_greedy_score);
+
+    GreedyResult result = empty_greedy_result();
+    result.players = selected;
+
+    for (int i = 0; i < k; i++) {
+        result.players[i] = copy[i];
+        result.selected_count++;
+        result.total_cost += copy[i].costo;
+        result.total_score += copy[i].score;
+    }
+
+    free(copy);
+    return result;
+}
+
+void greedy_free_result(GreedyResult *result)
 {
     if (result == NULL) {
         return;
@@ -104,7 +148,12 @@ void free_greedy_result(GreedyResult *result)
     result->players = NULL;
     result->selected_count = 0;
     result->total_cost = 0;
-    result->total_score = 0;
+    result->total_score = 0.0f;
+}
+
+void free_greedy_result(GreedyResult *result)
+{
+    greedy_free_result(result);
 }
 
 static void print_greedy_result(GreedyResult *result, const char *name, int budget)
@@ -118,7 +167,7 @@ static void print_greedy_result(GreedyResult *result, const char *name, int budg
     }
 
     printf("Costo usado: %d\n", result->total_cost);
-    printf("Puntaje total: %.1f\n", result->total_score / 10.0f);
+    printf("Puntaje total: %.1f\n", result->total_score);
     printf("Deportistas seleccionados: %d\n\n", result->selected_count);
 
     print_player_array_more(result->players, result->selected_count);
@@ -127,7 +176,7 @@ static void print_greedy_result(GreedyResult *result, const char *name, int budg
 void greedy_experiment(void)
 {
     int n;
-    int budget = 3000;
+    int budget = GREEDY_DEFAULT_BUDGET;
 
     Player *players = load_players("build/db/players.csv", &n);
 
@@ -139,27 +188,27 @@ void greedy_experiment(void)
     GreedyResult by_score = greedy_select_team(players, n, budget, GREEDY_SCORE);
     GreedyResult by_cost = greedy_select_team(players, n, budget, GREEDY_COST);
     GreedyResult by_ratio = greedy_select_team(players, n, budget, GREEDY_RATIO);
-    GreedyResult no_budget = greedy_select_team(players, n, 0, GREEDY_NO_BUDGET);
+    GreedyResult no_budget = greedy_select_top_k(players, n, n);
 
     print_greedy_result(&by_score, "mayor score", budget);
     print_greedy_result(&by_cost, "menor costo", budget);
     print_greedy_result(&by_ratio, "mejor relacion score/costo", budget);
-    print_greedy_result(&no_budget, "sin presupuesto", 0);
+    print_greedy_result(&no_budget, "sin presupuesto (top n)", 0);
 
     FILE *csv = fopen("build/db/greedy_results.csv", "w");
 
     if (csv != NULL) {
         fprintf(csv, "strategy,selected_count,total_cost,total_score\n");
-        fprintf(csv, "score,%d,%d,%.1f\n", by_score.selected_count, by_score.total_cost, by_score.total_score / 10.0f);
-        fprintf(csv, "cost,%d,%d,%.1f\n", by_cost.selected_count, by_cost.total_cost, by_cost.total_score / 10.0f);
-        fprintf(csv, "ratio,%d,%d,%.1f\n", by_ratio.selected_count, by_ratio.total_cost, by_ratio.total_score / 10.0f);
-        fprintf(csv, "no_budget,%d,%d,%.1f\n", no_budget.selected_count, no_budget.total_cost, no_budget.total_score / 10.0f);
+        fprintf(csv, "score,%d,%d,%.1f\n", by_score.selected_count, by_score.total_cost, by_score.total_score);
+        fprintf(csv, "cost,%d,%d,%.1f\n", by_cost.selected_count, by_cost.total_cost, by_cost.total_score);
+        fprintf(csv, "ratio,%d,%d,%.1f\n", by_ratio.selected_count, by_ratio.total_cost, by_ratio.total_score);
+        fprintf(csv, "no_budget,%d,%d,%.1f\n", no_budget.selected_count, no_budget.total_cost, no_budget.total_score);
         fclose(csv);
     }
 
-    free_greedy_result(&by_score);
-    free_greedy_result(&by_cost);
-    free_greedy_result(&by_ratio);
-    free_greedy_result(&no_budget);
+    greedy_free_result(&by_score);
+    greedy_free_result(&by_cost);
+    greedy_free_result(&by_ratio);
+    greedy_free_result(&no_budget);
     free(players);
 }
