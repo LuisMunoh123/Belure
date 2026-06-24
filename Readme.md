@@ -14,7 +14,7 @@ BELURE es un programa desarrollado en C para generar, administrar y analizar una
 
 El sistema permite generar datos, leer archivos CSV, ordenar deportistas, ejecutar algoritmos de búsqueda, obtener rankings, encontrar el k-ésimo mejor deportista y realizar experimentos de rendimiento.
 
-Además, incorpora estrategias **Greedy** y **Programación Dinámica** para resolver un problema de selección de deportistas con restricción de presupuesto.
+Además, incorpora estrategias Greedy y Programación Dinámica para resolver un problema de selección de deportistas con restricción de presupuesto.
 
 Este proyecto toma como base el trabajo realizado en [PALYER](https://github.com/AndrewhiteCode/PALYER), ampliándolo con nuevos algoritmos, experimentos y funcionalidades.
 
@@ -43,22 +43,13 @@ El sistema puede utilizarse de la siguiente forma:
 
 En el escenario con presupuesto, el objetivo es obtener el mayor puntaje total posible sin superar un presupuesto máximo.
 
-Cada deportista se selecciona completo o no se selecciona, por lo que el problema se modela como una variante de la mochila 0/1.
+Cada deportista se selecciona completo o no se selecciona. Por esta razón, el problema se modela como una variante de mochila 0/1.
 
-[
-\max \sum_{i=1}^{n} puntaje_i \cdot x_i
-]
+En palabras simples, el programa busca combinar deportistas de manera que:
 
-Sujeto a:
-
-[
-\sum_{i=1}^{n} costo_i \cdot x_i \leq presupuesto
-]
-
-donde:
-
-* (x_i = 1) si el deportista es seleccionado.
-* (x_i = 0) si el deportista no es seleccionado.
+* el costo total no supere el presupuesto;
+* el puntaje total sea lo más alto posible;
+* cada deportista sea seleccionado completo o descartado.
 
 ---
 
@@ -363,11 +354,19 @@ Los criterios implementados son:
 | Menor costo         | Prioriza deportistas de menor costo.                             |
 | Razón puntaje/costo | Prioriza mayor puntaje por cada unidad de presupuesto utilizada. |
 
-La razón puntaje/costo se calcula como:
+La razón puntaje/costo se calcula así:
 
-[
-\frac{puntaje}{costo}
-]
+```text
+Razón puntaje/costo = puntaje / costo
+```
+
+Por ejemplo, si un deportista tiene puntaje 80 y costo 20:
+
+```text
+80 / 20 = 4
+```
+
+Esto significa que aporta 4 puntos por cada unidad de presupuesto utilizada.
 
 Ejecutar las estrategias Greedy:
 
@@ -497,11 +496,18 @@ Los indicadores principales del experimento son:
 * Puntaje promedio obtenido.
 * Diferencia porcentual de Greedy respecto del óptimo de Programación Dinámica.
 
-La diferencia porcentual se calcula mediante:
+La diferencia porcentual se calcula así:
 
-[
-\frac{puntaje_PD - puntaje_Greedy}{puntaje_PD} \cdot 100
-]
+```text
+Diferencia (%) = ((puntaje_PD - puntaje_Greedy) / puntaje_PD) x 100
+```
+
+Por ejemplo, si Programación Dinámica obtiene 500 puntos y una estrategia Greedy obtiene 400:
+
+```text
+Diferencia (%) = ((500 - 400) / 500) x 100
+Diferencia (%) = 20%
+```
 
 Una diferencia de `0%` indica que Greedy obtuvo el mismo puntaje que Programación Dinámica para esa instancia. Una diferencia alta indica que Greedy encontró una solución de menor calidad.
 
