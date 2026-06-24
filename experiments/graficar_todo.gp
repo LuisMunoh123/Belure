@@ -7,6 +7,7 @@ set ylabel "Tiempo promedio (microsegundos)"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 set yrange [0:*]
 
 plot \
@@ -32,6 +33,7 @@ set ylabel "Puntaje promedio"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 unset logscale y
 set yrange [0:*]
 
@@ -55,6 +57,7 @@ set ylabel "Brecha respecto al optimo (%)"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 unset logscale y
 set yrange [0:*]
 
@@ -76,6 +79,7 @@ set ylabel "Tiempo promedio (microsegundos)"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 set logscale y
 set yrange [0.1:*]
 
@@ -99,6 +103,7 @@ set ylabel "Presupuesto no utilizado"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 unset logscale y
 set yrange [0:*]
 
@@ -122,6 +127,7 @@ set ylabel "Tiempo de ejecucion (microsegundos)"
 set grid
 set key outside right center
 set logscale x
+set xrange [10:2000]
 set logscale y
 set yrange [1:*]
 
